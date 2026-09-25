@@ -5,156 +5,178 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Onest:wght@400;500;600&family=Caveat:wght@600&display=swap">
 
 <!--
-  ============================================================
-  КОНТЕНТ (только из конспектов).
-  Чтобы добавить раздел — допиши объект в COURSE.sections.
-  Логика приложения ниже контент не трогает.
-  ============================================================
+  ================================================================
+  КОНТЕНТ — только из конспектов. Логика ниже его не трогает.
+
+  Как пополнять:
+  • Глагол:  COURSE.verbs.push({ inf, group: 1|2|3, ru, forms: {je,tu,il,nous,vous,ils}, examples: [...] })
+      elle/elles берут форму il/ils автоматически. j' ставится само перед гласной.
+      Пример предложения: { fr, p: "je" }  — p = местоимение, с которого начинается фраза
+                          { fr, v: "vas" } — v = глагольная форма внутри фразы
+                          ru — перевод, если есть; fixed: true — не менять местоимение
+  • Слово/фраза: COURSE.vocab.push({ fr, ru, tag })
+  • Существительное для артиклей: COURSE.nouns.push({ w, g: "m"|"f", pl })
+  • Страна/город: COURSE.places.push({ name, prep })
+  • Числа: COURSE.numbers.max (сейчас 69)
+  Упражнения генерируются из этих данных сами.
+  ================================================================
 -->
 <script>
 window.COURSE = {
-  sections: [
-    {
-      id: "aller",
-      title: "ALLER",
-      gloss: "идти / ехать",
-      lessons: [
-        {
-          id: "aller-1",
-          title: "Спряжение",
-          rule: [
-            { t: "text", ru: "<b>aller</b> — идти / ехать. Глагол III группы." },
-            { t: "note", ru: "единственное исключение" },
-            { t: "conj", rows: [["je vais", "nous allons"], ["tu vas", "vous allez"], ["il va", "ils vont"]] }
-          ],
-          exercises: [
-            { id: "a1-1", type: "match", kind: "Соедини пары",
-              prompt: "Соедини местоимение и форму глагола aller",
-              pairs: [["je", "vais"], ["tu", "vas"], ["il", "va"], ["nous", "allons"], ["vous", "allez"], ["ils", "vont"]],
-              explain: "Спряжение aller: je vais, tu vas, il va, nous allons, vous allez, ils vont." },
-            { id: "a1-2", type: "choice", kind: "Выбери ответ",
-              prompt: "nous ___", options: ["allons", "allez", "vont", "vais"], answer: "allons",
-              explain: "nous → <b>allons</b>. Форма allez — для vous." },
-            { id: "a1-3", type: "input", kind: "Спрягай глагол",
-              prompt: "aller: vous ___", answers: ["allez"],
-              explain: "vous → <b>allez</b>." },
-            { id: "a1-4", type: "input", kind: "Спрягай глагол",
-              prompt: "aller: ils ___", answers: ["vont"],
-              explain: "ils → <b>vont</b>. Не путай с il → va." },
-            { id: "a1-5", type: "choice", kind: "Выбери по контексту",
-              prompt: "Tu ___ à Paris.", options: ["vas", "va", "vais"], answer: "vas",
-              explain: "tu → <b>vas</b>. va — для il, vais — для je." },
-            { id: "a1-6", type: "choice", kind: "Что ты услышала?", audio: "il va",
-              prompt: "Послушай и выбери", options: ["je vais", "tu vas", "il va"], answer: "il va",
-              explain: "Прозвучало <b>il va</b>." },
-            { id: "a1-7", type: "find", kind: "Найди ошибку",
-              prompt: "Нажми на слово с ошибкой", words: ["Nous", "allez", "en", "France."], wrong: 1, fix: "allons",
-              explain: "nous → <b>allons</b>. allez — это форма для vous." },
-            { id: "a1-8", type: "input", kind: "Исправь ошибку",
-              prompt: "Ils va à Paris.", answers: ["Ils vont à Paris."],
-              explain: "ils → <b>vont</b>. va — это форма для il." },
-            { id: "a1-9", type: "input", kind: "Диктант", audio: "nous allons",
-              prompt: "Послушай и запиши", answers: ["nous allons"],
-              explain: "nous <b>allons</b>." }
-          ]
-        },
-        {
-          id: "aller-2",
-          title: "Je vais en France",
-          rule: [
-            { t: "text", ru: "Примеры из конспекта:" },
-            { t: "ex", fr: "Je vais en France." },
-            { t: "ex", fr: "Il va à Paris." },
-            { t: "note", ru: "en France · à Paris" }
-          ],
-          exercises: [
-            { id: "a2-1", type: "choice", kind: "Выбери предлог",
-              prompt: "Je vais ___ France.", options: ["en", "à"], answer: "en",
-              explain: "Как в конспекте: Je vais <b>en</b> France." },
-            { id: "a2-2", type: "choice", kind: "Выбери предлог",
-              prompt: "Il va ___ Paris.", options: ["en", "à"], answer: "à",
-              explain: "Как в конспекте: Il va <b>à</b> Paris." },
-            { id: "a2-3", type: "order", kind: "Собери предложение",
-              prompt: "Собери фразу из конспекта", tokens: ["Il", "va", "à", "Paris."],
-              explain: "Il va à Paris." },
-            { id: "a2-4", type: "choice", kind: "Выбери предлог",
-              prompt: "Nous allons ___ Paris.", options: ["en", "à"], answer: "à",
-              explain: "Paris → <b>à</b> Paris, как в «Il va à Paris»." },
-            { id: "a2-5", type: "choice", kind: "Переведи ключевое слово",
-              prompt: "идти / ехать", options: ["aller", "avoir"], answer: "aller",
-              explain: "В конспекте: ALLER — идти / ехать." },
-            { id: "a2-6", type: "choice", kind: "Аудирование", audio: "Je vais en France.",
-              prompt: "Послушай и выбери фразу", options: ["Je vais en France.", "Il va à Paris.", "Ils vont à Paris."], answer: "Je vais en France.",
-              explain: "Прозвучало: Je vais en France." },
-            { id: "a2-7", type: "choice", kind: "Выбери предлог",
-              prompt: "Vous allez ___ France.", options: ["en", "à"], answer: "en",
-              explain: "France → <b>en</b> France, как в «Je vais en France»." },
-            { id: "a2-8", type: "input", kind: "Диктант", audio: "Il va à Paris.",
-              prompt: "Послушай и запиши", answers: ["Il va à Paris."],
-              explain: "Il va à Paris." },
-            { id: "a2-9", type: "order", kind: "Поставь слова по порядку",
-              prompt: "Собери фразу из конспекта", tokens: ["Je", "vais", "en", "France."],
-              explain: "Je vais en France." }
-          ]
-        },
-        {
-          id: "aller-3",
-          title: "Comment ça va ?",
-          rule: [
-            { t: "text", ru: "Спрашиваем «как дела?»:" },
-            { t: "ex", fr: "Comment vas-tu ?" },
-            { t: "ex", fr: "Comment allez-vous ?" },
-            { t: "ex", fr: "Comment va-t-il ?" },
-            { t: "note", ru: "va-t-il — t выделен · comment‿allez-vous" },
-            { t: "text", ru: "Ответ: <b>Je vais</b> super / très bien / bien / mal." },
-            { t: "text", ru: "Безлично (ça va — «это идёт»):" },
-            { t: "ex", fr: "Comment ça va ?" },
-            { t: "ex", fr: "Ça va ?" },
-            { t: "text", ru: "Ответ: ça va ___ / comme ci, comme ça / ça va aller." }
-          ],
-          exercises: [
-            { id: "a3-1", type: "choice", kind: "Закончи диалог",
-              prompt: "— Comment vas-tu ?\n— Je ___ bien.", options: ["vais", "vas", "va"], answer: "vais",
-              explain: "Отвечаем о себе: je → <b>vais</b>. Je vais bien." },
-            { id: "a3-2", type: "input", kind: "Вставь пропуск",
-              prompt: "Comment va-_-il ?", answers: ["t"],
-              explain: "В конспекте: comment va-<b>t</b>-il ? — буква t выделена." },
-            { id: "a3-3", type: "choice", kind: "Выбери по контексту",
-              prompt: "Как спросить «как дела?» безлично?", options: ["Comment ça va ?", "Comment vas-tu ?", "Comment allez-vous ?"], answer: "Comment ça va ?",
-              explain: "Безлично: <b>comment ça va ?</b> или <b>ça va ?</b>" },
-            { id: "a3-4", type: "order", kind: "Собери предложение",
-              prompt: "Ответь, что всё очень хорошо", tokens: ["Je", "vais", "très", "bien."],
-              explain: "Je vais très bien." },
-            { id: "a3-5", type: "choice", kind: "Закончи диалог",
-              prompt: "— Ça va ?\n— ___", options: ["Comme ci, comme ça.", "Comment vas-tu ?", "Il va à Paris."], answer: "Comme ci, comme ça.",
-              explain: "На «Ça va ?» отвечают: ça va ___ / comme ci, comme ça / ça va aller." },
-            { id: "a3-6", type: "choice", kind: "Что ты услышала?", audio: "Comment allez-vous ?",
-              prompt: "Послушай и выбери", options: ["Comment allez-vous ?", "Comment vas-tu ?", "Comment va-t-il ?"], answer: "Comment allez-vous ?",
-              explain: "Прозвучало: comment allez-vous ? — со связкой comment‿allez." },
-            { id: "a3-7", type: "input", kind: "Переформулируй",
-              prompt: "Спроси то же самое безлично:\nComment vas-tu ?", answers: ["Comment ça va ?", "Ça va ?"],
-              explain: "Безлично: <b>Comment ça va ?</b> или <b>Ça va ?</b>" },
-            { id: "a3-8", type: "input", kind: "Переведи фразу",
-              prompt: "«это идёт» (безлично)", answers: ["ça va"],
-              explain: "В конспекте: ça va — «это идёт»." },
-            { id: "a3-9", type: "open", kind: "Ответь своими словами",
-              prompt: "Comment vas-tu ?", refs: ["Je vais super.", "Je vais très bien.", "Je vais bien.", "Je vais mal."],
-              explain: "Ответ по конспекту: Je vais super / très bien / bien / mal." },
-            { id: "a3-10", type: "input", kind: "Диктант", audio: "Comme ci, comme ça.",
-              prompt: "Послушай и запиши", answers: ["Comme ci, comme ça."],
-              explain: "Comme ci, comme ça." }
-          ]
-        }
-      ]
-    }
+  verbs: [
+    { inf: "travailler", group: 1, ru: "",
+      forms: { je: "travaille", tu: "travailles", il: "travaille", nous: "travaillons", vous: "travaillez", ils: "travaillent" },
+      examples: [
+        { fr: "Je travaille comme dentiste.", p: "je" },
+        { fr: "Je travaille en tant que dentiste.", p: "je" }
+      ] },
+    { inf: "aller", group: 3, ru: "идти / ехать", note: "единственное исключение",
+      forms: { je: "vais", tu: "vas", il: "va", nous: "allons", vous: "allez", ils: "vont" },
+      examples: [
+        { fr: "Je vais en France.", p: "je" },
+        { fr: "Il va à Paris.", p: "il" },
+        { fr: "Comment vas-tu ?", v: "vas" },
+        { fr: "Comment allez-vous ?", v: "allez" }
+      ] },
+    { inf: "avoir", group: 3, ru: "",
+      forms: { je: "ai", tu: "as", il: "a", nous: "avons", vous: "avez", ils: "ont" },
+      examples: [
+        { fr: "J'ai une voiture.", p: "je" },
+        { fr: "J'ai des amis.", ru: "У меня есть друзья.", p: "je" },
+        { fr: "J'ai beaucoup d'amis.", p: "je" },
+        { fr: "J'ai 29 ans.", p: "je" },
+        { fr: "Il a 1 an.", p: "il", fixed: true }
+      ] }
   ],
-  // Темы из тетради, которые ещё не собраны в уроки
-  upcoming: [
-    { title: "AVOIR", gloss: "j'ai, tu as… · J'ai 29 ans." },
-    { title: "Числа 11–60", gloss: "onze… soixante" },
-    { title: "Артикли", gloss: "un, une, des · le, la, l', les" },
-    { title: "Притяжательные", gloss: "mon, ton, son · notre, votre, leur" }
-  ]
+
+  groups: {
+    1: [{ t: "text", ru: "Окончания, выделенные в конспекте:" }, { t: "note", ru: "nous -ons · vous -ez · ils -ent" }],
+    2: [{ t: "text", ru: "Пока пусто — пришли глаголы II группы." }],
+    3: [{ t: "text", ru: "aller и avoir — глаголы III группы." }]
+  },
+
+  numbers: {
+    max: 69,
+    rule: [
+      { t: "text", ru: "11–16 — отдельные слова: <b>onze, douze, treize, quatorze, quinze, seize</b>." },
+      { t: "text", ru: "17–19: <b>dix-sept, dix-huit, dix-neuf</b>." },
+      { t: "text", ru: "Десятки: <b>vingt, trente, quarante, cinquante, soixante</b>." },
+      { t: "note", ru: "et un — когда на конце 1: vingt et un" },
+      { t: "text", ru: "Остальное через дефис: <b>vingt-deux, trente-deux, quarante-deux</b>." },
+      { t: "ex", fr: "J'ai 29 ans." },
+      { t: "ex", fr: "Il a 1 an." }
+    ]
+  },
+
+  articles: {
+    rule: [
+      { t: "text", ru: "<b>Неопределённые:</b> un (м.р.) · une (ж.р.) · des (мн.)" },
+      { t: "text", ru: "<b>Определённые:</b> le (м.р.) · la (ж.р.) · l' (ед.ч. перед гласной) · les (мн.ч.) [ле]" },
+      { t: "ex", fr: "C'est un secrétaire." },
+      { t: "ex", fr: "C'est le secrétaire de Pierre." },
+      { t: "note", ru: "кого? Р.п. → de · нет падежей!" },
+      { t: "ex", fr: "Ce sont des acteurs." },
+      { t: "note", ru: "acteurs — мн.ч., + s" },
+      { t: "ex", fr: "Ce sont les acteurs de mon film préféré." }
+    ],
+    sentences: [
+      "C'est un secrétaire.",
+      "C'est le secrétaire de Pierre.",
+      "Ce sont des acteurs.",
+      "Ce sont les acteurs de mon film préféré."
+    ]
+  },
+
+  nouns: [
+    { w: "voiture", g: "f", pl: "voitures" },
+    { w: "ami", g: "m", pl: "amis" },
+    { w: "secrétaire", g: "m", pl: "secrétaires" },
+    { w: "acteur", g: "m", pl: "acteurs" },
+    { w: "film", g: "m", pl: "films" }
+  ],
+
+  places: {
+    rule: [
+      { t: "ex", fr: "Je vais en France." },
+      { t: "ex", fr: "Il va à Paris." },
+      { t: "text", ru: "Правила выбора предлога в конспекте пока нет — только эти примеры." }
+    ],
+    list: [
+      { name: "France", prep: "en" },
+      { name: "Paris", prep: "à" }
+    ]
+  },
+
+  vocab: [
+    { fr: "beaucoup", ru: "много", tag: "Слова" },
+    { fr: "mal", ru: "плохо", tag: "Слова" },
+    { fr: "comme", ru: "как", tag: "Слова" },
+    { fr: "en tant que", ru: "в качестве", tag: "Слова" },
+    { fr: "préféré", ru: "любимый, предпочитаемый", tag: "Слова" },
+    { fr: "de", ru: "из (les acteurs de mon film)", tag: "Слова" },
+    { fr: "ça va", ru: "«это идёт» (безлично)", tag: "Слова" },
+    { fr: "mon", ru: "мой", tag: "Притяжательные (м.р. ед.ч.)" },
+    { fr: "ton", ru: "твой", tag: "Притяжательные (м.р. ед.ч.)" },
+    { fr: "son", ru: "его / её", tag: "Притяжательные (м.р. ед.ч.)" },
+    { fr: "notre", ru: "наш", tag: "Притяжательные (м.р. ед.ч.)" },
+    { fr: "votre", ru: "ваш", tag: "Притяжательные (м.р. ед.ч.)" },
+    { fr: "leur", ru: "их", tag: "Притяжательные (м.р. ед.ч.)" },
+    { fr: "J'ai des amis.", ru: "У меня есть друзья.", tag: "Фразы" }
+  ],
+
+  // Уроки с готовыми заданиями (из конспекта), по разделам
+  lessons: {
+    vocab: [
+      {
+        id: "cava",
+        title: "Comment ça va ?",
+        rule: [
+          { t: "text", ru: "Спрашиваем «как дела?»:" },
+          { t: "ex", fr: "Comment vas-tu ?" },
+          { t: "ex", fr: "Comment allez-vous ?" },
+          { t: "ex", fr: "Comment va-t-il ?" },
+          { t: "note", ru: "va-t-il — t выделен · comment‿allez-vous" },
+          { t: "text", ru: "Ответ: <b>Je vais</b> super / très bien / bien / mal (плохо)." },
+          { t: "text", ru: "Безлично (ça va — «это идёт»):" },
+          { t: "ex", fr: "Comment ça va ?" },
+          { t: "ex", fr: "Ça va ?" },
+          { t: "text", ru: "Ответ: ça va ___ / comme ci, comme ça / ça va aller." }
+        ],
+        exercises: [
+          { id: "a3-1", type: "choice", kind: "Закончи диалог",
+            prompt: "— Comment vas-tu ?\n— Je ___ bien.", options: ["vais", "vas", "va"], answer: "vais",
+            explain: "Отвечаем о себе: je → <b>vais</b>. Je vais bien." },
+          { id: "a3-2", type: "input", kind: "Вставь пропуск",
+            prompt: "Comment va-_-il ?", answers: ["t"],
+            explain: "В конспекте: comment va-<b>t</b>-il ? — буква t выделена." },
+          { id: "a3-3", type: "choice", kind: "Выбери по контексту",
+            prompt: "Как спросить «как дела?» безлично?", options: ["Comment ça va ?", "Comment vas-tu ?", "Comment allez-vous ?"], answer: "Comment ça va ?",
+            explain: "Безлично: <b>comment ça va ?</b> или <b>ça va ?</b>" },
+          { id: "a3-4", type: "order", kind: "Собери предложение",
+            prompt: "Ответь, что всё очень хорошо", tokens: ["Je", "vais", "très", "bien."],
+            explain: "Je vais très bien." },
+          { id: "a3-5", type: "choice", kind: "Закончи диалог",
+            prompt: "— Ça va ?\n— ___", options: ["Comme ci, comme ça.", "Comment vas-tu ?", "Il va à Paris."], answer: "Comme ci, comme ça.",
+            explain: "На «Ça va ?» отвечают: ça va ___ / comme ci, comme ça / ça va aller." },
+          { id: "a3-6", type: "choice", kind: "Что ты услышала?", audio: "Comment allez-vous ?",
+            prompt: "Послушай и выбери", options: ["Comment allez-vous ?", "Comment vas-tu ?", "Comment va-t-il ?"], answer: "Comment allez-vous ?",
+            explain: "Прозвучало: comment allez-vous ? — со связкой comment‿allez." },
+          { id: "a3-7", type: "input", kind: "Переформулируй",
+            prompt: "Спроси то же самое безлично:\nComment vas-tu ?", answers: ["Comment ça va ?", "Ça va ?"],
+            explain: "Безлично: <b>Comment ça va ?</b> или <b>Ça va ?</b>" },
+          { id: "a3-8", type: "choice", kind: "Закончи диалог",
+            prompt: "— Comment allez-vous ?\n— Je vais ___.", options: ["mal", "comme", "de"], answer: "mal",
+            explain: "Je vais super / très bien / bien / <b>mal</b> (плохо)." },
+          { id: "a3-9", type: "open", kind: "Ответь своими словами",
+            prompt: "Comment vas-tu ?", refs: ["Je vais super.", "Je vais très bien.", "Je vais bien.", "Je vais mal."],
+            explain: "Ответ по конспекту: Je vais super / très bien / bien / mal." },
+          { id: "a3-10", type: "input", kind: "Диктант", audio: "Comme ci, comme ça.",
+            prompt: "Послушай и запиши", answers: ["Comme ci, comme ça."],
+            explain: "Comme ci, comme ça." }
+        ]
+      }
+    ]
+  }
 };
 </script>
 
@@ -169,11 +191,15 @@ window.COURSE = {
   --blue-deep: #1731a8;
   --blue-tint: #e3e9ff;
   --red: #e0344c;
+  --red-deep: #a81f33;
   --red-tint: #ffe3e7;
   --green: #129c5c;
   --green-deep: #0b7a47;
   --green-tint: #dcf6e8;
-  --amber: #f39a12;
+  --violet: #7b3fe4;
+  --violet-tint: #efe6ff;
+  --amber: #e08a00;
+  --amber-tint: #fff1d6;
   --shadow: 0 3px 0 #c9d0ee;
   color-scheme: light;
 }
@@ -181,16 +207,18 @@ window.COURSE = {
   :root:not([data-theme="light"]) {
     --bg: #10122a; --paper: #1a1d3d; --ink: #eef0ff; --ink-soft: #a3a8d4; --line: #2e3363;
     --blue: #5b7cff; --blue-deep: #3a5ae8; --blue-tint: #232a5e;
-    --red: #ff5f75; --red-tint: #3d1a2a; --green: #2fcf83; --green-deep: #1ea567; --green-tint: #163a2d;
-    --amber: #ffb03b; --shadow: 0 3px 0 #0a0c20;
+    --red: #ff5f75; --red-deep: #c23a50; --red-tint: #3d1a2a; --green: #2fcf83; --green-deep: #1ea567; --green-tint: #163a2d;
+    --violet: #a57bff; --violet-tint: #2c2356; --amber: #ffb03b; --amber-tint: #3a2c12;
+    --shadow: 0 3px 0 #0a0c20;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #10122a; --paper: #1a1d3d; --ink: #eef0ff; --ink-soft: #a3a8d4; --line: #2e3363;
   --blue: #5b7cff; --blue-deep: #3a5ae8; --blue-tint: #232a5e;
-  --red: #ff5f75; --red-tint: #3d1a2a; --green: #2fcf83; --green-deep: #1ea567; --green-tint: #163a2d;
-  --amber: #ffb03b; --shadow: 0 3px 0 #0a0c20;
+  --red: #ff5f75; --red-deep: #c23a50; --red-tint: #3d1a2a; --green: #2fcf83; --green-deep: #1ea567; --green-tint: #163a2d;
+  --violet: #a57bff; --violet-tint: #2c2356; --amber: #ffb03b; --amber-tint: #3a2c12;
+  --shadow: 0 3px 0 #0a0c20;
   color-scheme: dark;
 }
 
@@ -202,13 +230,14 @@ body {
   padding-inline: 16px;
 }
 button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
-.app { max-width: 560px; margin: 0 auto; padding-block: 16px 140px; }
-h1, h2, h3, .display { font-family: "Rubik", "Onest", system-ui, sans-serif; text-wrap: balance; margin: 0; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.app { max-width: 560px; margin: 0 auto; padding-block: 16px 150px; }
+h1, h2, h3 { font-family: "Rubik", "Onest", system-ui, sans-serif; text-wrap: balance; margin: 0; }
 .fr { font-family: "Rubik", system-ui, sans-serif; font-weight: 500; }
-.hand { font-family: "Caveat", "Segoe Print", cursive; color: var(--red); font-size: 1.3em; line-height: 1.1; }
+.hand { font-family: "Caveat", "Segoe Print", cursive; color: var(--red); font-size: 1.3em; line-height: 1.15; }
+.muted { color: var(--ink-soft); }
 
-/* Top stats */
+/* top */
 .stats { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin-bottom: 20px; }
 .brand { font-family: "Rubik", sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.02em; }
 .brand span { color: var(--red); }
@@ -217,64 +246,91 @@ h1, h2, h3, .display { font-family: "Rubik", "Onest", system-ui, sans-serif; tex
   background: var(--paper); font-weight: 600; font-variant-numeric: tabular-nums; box-shadow: var(--shadow); }
 .chip svg { width: 18px; height: 18px; }
 
-/* Home */
 .revise { width: 100%; display: flex; align-items: center; gap: 14px; text-align: left; border: 0;
   background: var(--blue); color: #fff; border-radius: 18px; padding: 16px 18px; box-shadow: 0 4px 0 var(--blue-deep); margin-bottom: 24px; }
-.revise:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--blue-deep); }
+.revise:active, .big:active, .play:active { transform: translateY(2px); }
 .revise b { font-family: "Rubik", sans-serif; font-size: 19px; display: block; }
 .revise small { opacity: .85; font-size: 14px; }
 .revise .count { margin-left: auto; min-width: 40px; height: 40px; border-radius: 12px; background: rgba(255,255,255,.18);
   display: grid; place-items: center; font-family: "Rubik", sans-serif; font-weight: 700; font-size: 18px; }
-.label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 600; margin: 0 0 10px; }
-.section { background: var(--paper); border-radius: 20px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 24px; }
-.section-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
-.section-head h2 { font-size: 28px; font-weight: 800; letter-spacing: -0.01em; }
-.bar { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; margin: 10px 0 16px; }
-.bar i { display: block; height: 100%; background: var(--green); border-radius: inherit; transition: width .4s; }
-.lessons { display: grid; gap: 10px; }
-.lesson { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 2px solid var(--line);
-  background: var(--paper); border-radius: 16px; padding: 12px 14px; }
-.lesson:hover { border-color: var(--blue); }
-.lesson .dot { width: 44px; height: 44px; flex: none; border-radius: 50%; display: grid; place-items: center;
-  background: var(--blue-tint); color: var(--blue); font-family: "Rubik", sans-serif; font-weight: 700; }
-.lesson.done .dot { background: var(--green); color: #fff; }
-.lesson .t { font-weight: 600; }
-.lesson .s { font-size: 13px; color: var(--ink-soft); }
-.upcoming { display: grid; gap: 8px; }
-.up { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px 14px; border-radius: 14px;
-  border: 2px dashed var(--line); color: var(--ink-soft); }
-.up b { color: var(--ink); font-family: "Rubik", sans-serif; font-weight: 500; }
-.up span { font-size: 13px; }
-.foot { display: flex; justify-content: center; margin-top: 8px; }
-.linkbtn { background: none; border: 0; color: var(--ink-soft); text-decoration: underline; font-size: 13px; padding: 8px; }
+.label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-soft); font-weight: 600; margin: 24px 0 10px; }
 
-/* Lesson top */
-.lesson-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+/* home section cards */
+.secs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sec { text-align: left; border: 0; border-radius: 20px; padding: 16px; background: var(--paper); box-shadow: var(--shadow);
+  display: grid; gap: 6px; align-content: start; border-top: 6px solid var(--c); }
+.sec .n { font-family: "Rubik", sans-serif; font-weight: 800; font-size: 20px; }
+.sec .g { font-size: 13px; color: var(--ink-soft); min-height: 2.6em; }
+.sec .pc { font-size: 13px; font-weight: 600; color: var(--c); font-variant-numeric: tabular-nums; }
+.bar { height: 10px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--c, var(--green)); border-radius: inherit; transition: width .4s; }
+@media (max-width: 360px) { .secs { grid-template-columns: 1fr; } }
+
+/* section page */
+.head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.head h1 { font-size: 28px; font-weight: 800; }
 .iconbtn { width: 40px; height: 40px; border-radius: 12px; border: 0; background: var(--paper); box-shadow: var(--shadow);
   display: grid; place-items: center; flex: none; }
 .iconbtn svg { width: 20px; height: 20px; }
-.lesson-top .bar { flex: 1; margin: 0; height: 14px; }
+.filters { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 4px; }
+.filters button { border: 2px solid var(--line); background: var(--paper); border-radius: 99px; padding: 6px 14px; font-weight: 600; font-size: 14px; }
+.filters button.on { border-color: var(--c); background: var(--c); color: #fff; }
+.drills { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.drill { text-align: left; border: 2px solid var(--line); border-bottom-width: 4px; background: var(--paper); border-radius: 16px; padding: 12px 14px; display: grid; gap: 2px; }
+.drill:hover { border-color: var(--c); }
+.drill b { font-family: "Rubik", sans-serif; font-weight: 700; font-size: 16px; }
+.drill span { font-size: 13px; color: var(--ink-soft); }
+.drill:disabled { opacity: .5; cursor: default; }
+@media (max-width: 360px) { .drills { grid-template-columns: 1fr; } }
+.lesson { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; border: 2px solid var(--line);
+  background: var(--paper); border-radius: 16px; padding: 12px 14px; }
+.lesson .dot { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center;
+  background: var(--blue-tint); color: var(--blue); font-family: "Rubik", sans-serif; font-weight: 700; }
+.lesson.done .dot { background: var(--green); color: #fff; }
+.lesson .s { font-size: 13px; color: var(--ink-soft); }
 
-/* Rule card: notebook page */
-.page { background: var(--paper); border-radius: 18px; box-shadow: var(--shadow); padding: 20px 18px 20px 34px; position: relative;
-  background-image: repeating-linear-gradient(to bottom, transparent 0 35px, var(--line) 35px 36px); background-position: 0 18px; }
+/* notebook page */
+.page { background: var(--paper); border-radius: 18px; box-shadow: var(--shadow); padding: 16px 16px 16px 34px; position: relative;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 35px, var(--line) 35px 36px); background-position: 0 14px; }
 .page::before { content: ""; position: absolute; left: 22px; top: 0; bottom: 0; width: 2px; background: var(--red); opacity: .55; }
-.page h2 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+.page h2 { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
 .page .blk { margin: 8px 0; }
-.page .ex { display: flex; align-items: center; gap: 10px; font-size: 19px; }
-.conj { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; font-size: 19px; margin: 12px 0; }
+.page .ex { display: flex; align-items: center; gap: 10px; font-size: 18px; }
+.stack { display: grid; gap: 12px; }
+.conj { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; font-size: 18px; margin: 10px 0; }
 .conj div { display: flex; align-items: center; gap: 8px; }
 .say { width: 32px; height: 32px; flex: none; border-radius: 10px; border: 0; background: var(--blue-tint); color: var(--blue);
   display: grid; place-items: center; }
 .say svg { width: 18px; height: 18px; }
-.warn { font-size: 13px; color: var(--ink-soft); margin-top: 12px; }
 
-/* Exercise */
+details.verb { background: var(--paper); border-radius: 16px; box-shadow: var(--shadow); }
+details.verb summary { list-style: none; display: flex; align-items: center; gap: 10px; padding: 12px 16px; cursor: pointer; }
+details.verb summary::-webkit-details-marker { display: none; }
+details.verb summary b { font-family: "Rubik", sans-serif; font-size: 19px; }
+details.verb summary .gr { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--c); background: var(--violet-tint); border-radius: 99px; padding: 2px 10px; }
+details.verb .body { padding: 0 16px 14px; }
+.ask-ru { font-size: 13px; color: var(--amber); }
+
+.numgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; }
+.numgrid button { height: 44px; border-radius: 10px; border: 2px solid var(--line); background: var(--paper); font: 600 16px "Rubik", sans-serif; font-variant-numeric: tabular-nums; }
+.numgrid button.on { border-color: var(--c); background: var(--amber-tint); }
+.numsay { min-height: 52px; display: flex; align-items: center; gap: 10px; font-size: 22px; margin-bottom: 10px; }
+
+.vlist { background: var(--paper); border-radius: 16px; box-shadow: var(--shadow); padding: 6px 14px; }
+.vrow { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.vrow:last-child { border-bottom: 0; }
+.vrow .fr { font-size: 17px; }
+.vrow .ru { margin-left: auto; color: var(--ink-soft); text-align: right; font-size: 14px; }
+
+/* exercise */
+.lesson-top { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.lesson-top .bar { flex: 1; height: 14px; --c: var(--green); }
 .kind { display: inline-block; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; font-weight: 700;
-  color: var(--blue); background: var(--blue-tint); padding: 4px 10px; border-radius: 99px; margin-bottom: 12px; }
-.prompt { font-size: 24px; line-height: 1.35; white-space: pre-line; margin-bottom: 20px; font-weight: 700; }
-.prompt.ru { font-family: "Onest", sans-serif; font-weight: 600; font-size: 19px; }
-.audio-row { display: flex; gap: 10px; margin-bottom: 20px; }
+  color: var(--blue); background: var(--blue-tint); padding: 4px 10px; border-radius: 99px; margin-bottom: 10px; }
+.ask { color: var(--ink-soft); margin-bottom: 6px; font-weight: 500; }
+.prompt { font-size: 24px; line-height: 1.35; white-space: pre-line; margin-bottom: 20px; font-family: "Rubik", sans-serif; font-weight: 700; }
+.prompt.ru { font-family: "Onest", sans-serif; font-weight: 600; font-size: 20px; }
+.audio-row { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
 .play { display: flex; align-items: center; gap: 10px; border: 0; border-radius: 18px; padding: 16px 22px; background: var(--blue);
   color: #fff; box-shadow: 0 4px 0 var(--blue-deep); font-weight: 600; }
 .play svg { width: 26px; height: 26px; }
@@ -298,36 +354,36 @@ textarea.field { min-height: 110px; resize: vertical; }
 .tok { border: 2px solid var(--line); border-bottom-width: 4px; background: var(--paper); border-radius: 12px; padding: 8px 14px;
   font: 500 19px "Rubik", sans-serif; }
 .tok.used { visibility: hidden; }
-.words { display: flex; flex-wrap: wrap; gap: 8px; font-size: 22px; }
+.words { display: flex; flex-wrap: wrap; gap: 8px; }
+.words .opt { padding: 10px 14px; }
 .match { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .match .col { display: grid; gap: 10px; align-content: start; }
+.match .opt { font-size: 16px; padding: 12px; }
 .shake { animation: shake .35s; }
 @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 .refs { display: grid; gap: 8px; margin-top: 14px; }
 .ref { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--blue-tint); border-radius: 12px; font-size: 18px; }
 
-/* Bottom bar & feedback */
+/* dock */
 .dock { position: fixed; left: 0; right: 0; bottom: 0; background: var(--paper); border-top: 2px solid var(--line);
-  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); }
+  padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 5; }
 .dock.ok { background: var(--green-tint); border-color: var(--green); }
 .dock.bad { background: var(--red-tint); border-color: var(--red); }
 .dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 12px; }
-.fb-title { font-family: "Rubik", sans-serif; font-weight: 800; font-size: 22px; }
+.fb-title { font-family: "Rubik", sans-serif; font-weight: 800; font-size: 22px; display: flex; align-items: center; gap: 10px; }
 .dock.ok .fb-title { color: var(--green-deep); }
 .dock.bad .fb-title { color: var(--red); }
-.fb-body { font-size: 15px; }
+.fb-body { font-size: 15px; display: grid; gap: 4px; }
 .fb-body .why { color: var(--ink-soft); }
 .fb-body .why b { color: var(--ink); }
 .big { width: 100%; border: 0; border-radius: 16px; padding: 15px; font: 700 17px "Rubik", sans-serif; text-transform: uppercase; letter-spacing: .04em;
   background: var(--green); color: #fff; box-shadow: 0 4px 0 var(--green-deep); }
-.big:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--green-deep); }
-.big:disabled { background: var(--line); color: var(--ink-soft); box-shadow: none; cursor: default; }
-.big.red { background: var(--red); box-shadow: 0 4px 0 #a81f33; }
+.big:disabled { background: var(--line); color: var(--ink-soft); box-shadow: none; cursor: default; transform: none; }
+.big.red { background: var(--red); box-shadow: 0 4px 0 var(--red-deep); }
 .big.blue { background: var(--blue); box-shadow: 0 4px 0 var(--blue-deep); }
 .big.ghost { background: var(--paper); color: var(--ink); box-shadow: var(--shadow); border: 2px solid var(--line); }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-/* Result */
 .result { text-align: center; padding-top: 30px; display: grid; gap: 18px; justify-items: center; }
 .result h2 { font-size: 32px; font-weight: 800; }
 .tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 150px)); gap: 12px; }
@@ -335,6 +391,8 @@ textarea.field { min-height: 110px; resize: vertical; }
 .tile b { display: block; font: 800 28px "Rubik", sans-serif; font-variant-numeric: tabular-nums; }
 .tile small { color: var(--ink-soft); }
 .empty { text-align: center; color: var(--ink-soft); padding: 30px 0; }
+.foot { display: flex; justify-content: center; margin-top: 16px; }
+.linkbtn { background: none; border: 0; color: var(--ink-soft); text-decoration: underline; font-size: 13px; padding: 8px; }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
@@ -354,96 +412,352 @@ textarea.field { min-height: 110px; resize: vertical; }
     star: '<svg viewBox="0 0 24 24" fill="#2346e0"><path d="M12 2l2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>',
     speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
     book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>',
     repeat: '<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9"/><path d="M20 4v5h-5"/><path d="M20 12a8 8 0 0 1-14 5.3L4 15"/><path d="M4 20v-5h5"/></svg>'
   };
 
   // ---------- storage ----------
   const KEY = "cahierA1.v1";
-  const blank = () => ({ xp: 0, streak: 0, lastDay: null, lessons: {}, srs: {} });
+  const blank = () => ({ xp: 0, streak: 0, lastDay: null, lessons: {}, srs: {}, items: {}, prefs: {} });
   let S = blank();
   try { S = Object.assign(blank(), JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 
   const dayStr = (d = new Date()) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-  const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return dayStr(d); };
+  const addDays = n => { const d = new Date(); d.setDate(d.getDate() + n); return dayStr(d); };
   function touchDay() {
     const today = dayStr();
     if (S.lastDay === today) return;
     S.streak = S.lastDay === addDays(-1) ? S.streak + 1 : 1;
     S.lastDay = today;
   }
-  function liveStreak() { return (S.lastDay === dayStr() || S.lastDay === addDays(-1)) ? S.streak : 0; }
+  const liveStreak = () => (S.lastDay === dayStr() || S.lastDay === addDays(-1)) ? S.streak : 0;
 
-  // Leitner boxes: 1→1 день, 2→2, 3→4, 4→7, потом выучено
+  // Интервальные повторения: 1 → 2 → 4 → 7 дней, потом «выучено»
   const GAPS = [1, 2, 4, 7];
-  function srsWrong(id) { S.srs[id] = { box: 0, due: dayStr() }; }
-  function srsRight(id) {
-    const it = S.srs[id]; if (!it) return;
+  function srsWrong(k) { S.srs[k] = { box: 0, due: dayStr() }; }
+  function srsRight(k) {
+    const it = S.srs[k]; if (!it) return;
     it.box++;
-    if (it.box > GAPS.length) delete S.srs[id]; else it.due = addDays(GAPS[it.box - 1]);
+    if (it.box > GAPS.length) delete S.srs[k]; else it.due = addDays(GAPS[it.box - 1]);
   }
-  const dueIds = () => Object.keys(S.srs).filter(id => S.srs[id].due <= dayStr() && EX[id]);
-
-  // index of exercises
-  const EX = {};
-  C.sections.forEach(sec => sec.lessons.forEach(l => l.exercises.forEach(ex => { EX[ex.id] = { ex, lesson: l }; })));
 
   // ---------- helpers ----------
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  const norm = s => String(s).toLowerCase().replace(/[’`]/g, "'").replace(/[.,!?«»;:]/g, " ").replace(/\s*-\s*/g, "-").replace(/\s+/g, " ").trim();
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+  const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const uniq = a => [...new Set(a)];
+  const norm = s => String(s).toLowerCase().replace(/[’`]/g, "'").replace(/[.,!?«»;:—]/g, " ").replace(/\s*-\s*/g, "-").replace(/\s*'\s*/g, "'").replace(/\s+/g, " ").trim();
   const bare = s => norm(s).normalize("NFD").replace(/[̀-ͯ]/g, "");
+  const tokenize = s => s.split(" ").reduce((a, t) => { if (/^[?!.]+$/.test(t) && a.length) a[a.length - 1] += " " + t; else a.push(t); return a; }, []);
 
   // ---------- speech ----------
   let frVoice = null;
-  function pickVoice() {
-    if (!("speechSynthesis" in window)) return;
-    const vs = speechSynthesis.getVoices();
-    frVoice = vs.find(v => /^fr[-_]FR/i.test(v.lang)) || vs.find(v => /^fr/i.test(v.lang)) || null;
-  }
-  if ("speechSynthesis" in window) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+  const hasTTS = "speechSynthesis" in window;
+  function pickVoice() { const vs = speechSynthesis.getVoices(); frVoice = vs.find(v => /^fr[-_]FR/i.test(v.lang)) || vs.find(v => /^fr/i.test(v.lang)) || null; }
+  if (hasTTS) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
   function speak(text, slow) {
-    if (!("speechSynthesis" in window)) return;
+    if (!hasTTS) return;
     speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
+    const u = new SpeechSynthesisUtterance(String(text));
     u.lang = "fr-FR"; if (frVoice) u.voice = frVoice;
     u.rate = slow ? 0.6 : 0.9;
     speechSynthesis.speak(u);
   }
-  const sayBtn = text => `<button class="say" data-say="${esc(text)}" aria-label="Послушать">${ICON.speak}</button>`;
+  const sayBtn = t => `<button class="say" data-say="${esc(t)}" aria-label="Послушать">${ICON.speak}</button>`;
   document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) speak(b.dataset.say, b.dataset.slow === "1"); });
 
-  // ---------- HOME ----------
+  // ================================================================
+  //  ДАННЫЕ → ГЕНЕРАТОРЫ ЗАДАНИЙ
+  // ================================================================
+  const PRON = ["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"];
+  const GROUP = { 1: "I группа", 2: "II группа", 3: "III группа" };
+  const VERB = Object.fromEntries(C.verbs.map(v => [v.inf, v]));
+  const formOf = (v, p) => v.forms[p] || v.forms[{ elle: "il", elles: "ils" }[p]];
+  const elides = (p, f) => p === "je" && /^[aeiouéèêâh]/i.test(f);
+  const pdisp = (p, f) => elides(p, f) ? "j'" : p;
+  const pf = (p, f) => elides(p, f) ? "j'" + f : p + " " + f;
+  const prons = v => PRON.filter(p => formOf(v, p));
+  const whoHas = (v, f) => prons(v).filter(p => formOf(v, p) === f).map(p => pdisp(p, f)).join(", ");
+  const headOf = (v, ex) => cap(pf(ex.p, formOf(v, ex.p)));
+
+  // numbers
+  const UNITS = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"];
+  const TENS = { 2: "vingt", 3: "trente", 4: "quarante", 5: "cinquante", 6: "soixante" };
+  function nword(n) {
+    if (n < 20) return UNITS[n];
+    const t = TENS[Math.floor(n / 10)], u = n % 10;
+    return u === 0 ? t : u === 1 ? t + " et un" : t + "-" + UNITS[u];
+  }
+  const nAnswers = n => { const w = nword(n); return w.includes(" et ") ? [w, w.replace(/ /g, "-")] : [w]; };
+  function nExplain(n) {
+    const w = `<b>${nword(n)}</b>`;
+    if (n <= 16) return `${n} = ${w}.`;
+    if (n < 20) return `${n} = dix + ${UNITS[n - 10]} → ${w}.`;
+    if (n % 10 === 0) return `Десятки: ${n} = ${w}.`;
+    if (n % 10 === 1) return `На конце 1 → «et un»: ${w}.`;
+    return `Десятки и единицы через дефис: ${w}.`;
+  }
+  const NMAX = C.numbers.max;
+
+  // articles
+  const NOUN = Object.fromEntries(C.nouns.map(n => [n.w, n]));
+  const vowel = w => /^[aeiouéèêâh]/i.test(w);
+  const indefOf = n => n.g === "f" ? "une" : "un";
+  const defOf = n => vowel(n.w) ? "l'" : n.g === "f" ? "la" : "le";
+  const G_RU = { m: "м.р.", f: "ж.р." };
+  const PLACE = Object.fromEntries(C.places.list.map(p => [p.name, p]));
+  const WORD = Object.fromEntries(C.vocab.map(w => [w.fr, w]));
+
+  const pickMode = (avail, modes) => { const m = modes ? avail.filter(x => modes.includes(x)) : avail; return m.length ? pick(m) : null; };
+
+  // Каждый генератор: (части ключа, допустимые режимы) → задание или null
+  const GEN = {
+    // форма глагола: vf|inf|pronoun
+    vf(inf, p, modes) {
+      const v = VERB[inf]; if (!v) return null;
+      const f = formOf(v, p); if (!f) return null;
+      const m = pickMode(["conj", "conjc", "pron", "dict"], modes); if (!m) return null;
+      const full = pf(p, f), why = `${inf}, ${GROUP[v.group]}: <b>${esc(full)}</b>.`;
+      const blankP = elides(p, f) ? "j'___" : p + " ___";
+      if (m === "conj") return { type: "input", kind: "Спрягай глагол", ask: `Глагол ${inf}`, prompt: blankP, answers: [f], say: full, explain: why };
+      if (m === "conjc") {
+        const others = shuffle(uniq(prons(v).map(q => formOf(v, q))).filter(x => x !== f)).slice(0, 3);
+        return { type: "choice", kind: "Выбери форму", ask: `Глагол ${inf}`, prompt: blankP, options: [f, ...others], answer: f, say: full, explain: why };
+      }
+      if (m === "pron") {
+        const me = pdisp(p, f);
+        const others = shuffle(uniq(prons(v).filter(q => formOf(v, q) !== f).map(q => pdisp(q, formOf(v, q))))).slice(0, 3);
+        return { type: "choice", kind: "Выбери местоимение", ask: `Глагол ${inf}`, prompt: "___ " + f, options: [me, ...others], answer: me, say: full,
+          explain: `${esc(f)} — форма для: <b>${esc(whoHas(v, f))}</b>.` };
+      }
+      return { type: "input", kind: "Правописание", ask: `Послушай и запиши (глагол ${inf})`, audio: full, prompt: "", answers: [full], say: full, explain: why };
+    },
+    // перевод инфинитива: vt|inf
+    vt(inf, _, modes) {
+      const v = VERB[inf]; if (!v || !v.ru) return null;
+      const m = pickMode(["fr2ru", "ru2fr"], modes); if (!m) return null;
+      const why = `${inf} — ${esc(v.ru)}.`;
+      if (m === "fr2ru") {
+        const opts = C.verbs.filter(x => x.ru && x !== v).map(x => x.ru).concat(C.vocab.map(w => w.ru));
+        return { type: "choice", kind: "Переведи глагол", prompt: inf, options: [v.ru, ...shuffle(uniq(opts).filter(x => x !== v.ru)).slice(0, 2)], answer: v.ru, say: inf, explain: why };
+      }
+      return { type: "input", kind: "Переведи ключевое слово", ask: "Напиши глагол по-французски", prompt: v.ru, answers: [inf], say: inf, explain: why };
+    },
+    // пары местоимение–форма: vm|inf
+    vm(inf, _, modes) {
+      const v = VERB[inf]; if (!v || pickMode(["match"], modes) === null) return null;
+      const seen = new Set(), pairs = [];
+      ["je", "tu", "il", "nous", "vous", "ils"].forEach(p => { const f = formOf(v, p); if (f && !seen.has(f)) { seen.add(f); pairs.push([pdisp(p, f), f]); } });
+      return { type: "match", kind: "Соедини пары", prompt: `Спряжение: ${inf}`, pairs, explain: pairs.map(p => (p[0].endsWith("'") ? p[0] : p[0] + " ") + p[1]).join(", ") + "." };
+    },
+    // предложение: vs|inf|index
+    vs(inf, i, modes) {
+      const v = VERB[inf]; const ex = v && v.examples[+i]; if (!ex) return null;
+      const form = ex.v || (ex.p && formOf(v, ex.p));
+      const avail = ["order", "dict"];
+      if (form) avail.push("fill");
+      if (ex.ru) avail.push("translate");
+      if (ex.p && !ex.fixed && ex.fr.startsWith(headOf(v, ex))) avail.push("transform", "find", "fix");
+      const m = pickMode(avail, modes); if (!m) return null;
+      const fr = ex.fr;
+      if (m === "order") return { type: "order", kind: "Собери предложение", prompt: ex.ru || "Собери фразу из конспекта", tokens: tokenize(fr), say: fr, explain: esc(fr) };
+      if (m === "dict") return { type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: fr, prompt: "", answers: [fr], say: fr, explain: esc(fr) };
+      if (m === "translate") return { type: "input", kind: "Переведи фразу", prompt: ex.ru, answers: [fr], say: fr, explain: `${esc(ex.ru)} — <b>${esc(fr)}</b>` };
+      if (m === "fill") {
+        const re = new RegExp("(^|[\\s'])" + form + "(?=[\\s.,?!-]|$)");
+        return { type: "input", kind: "Вставь пропуск", ask: `Вставь глагол ${inf}`, prompt: fr.replace(re, "$1___"), answers: [form], say: fr,
+          explain: `<b>${esc(fr)}</b>` + (ex.p ? ` — ${esc(pf(ex.p, form))}.` : "") };
+      }
+      const old = headOf(v, ex), rest = fr.slice(old.length);
+      const qs = prons(v).filter(q => q !== ex.p && formOf(v, q) !== formOf(v, ex.p) && q !== "je");
+      const q = pick(qs); if (!q) return null;
+      const right = cap(pf(q, formOf(v, q))) + rest;
+      if (m === "transform") return { type: "input", kind: "Переформулируй", ask: `Замени местоимение на «${q}»`, prompt: fr, answers: [right], say: right,
+        explain: `${q} → <b>${esc(formOf(v, q))}</b>: ${esc(right)}` };
+      const wrongs = uniq(prons(v).map(r => formOf(v, r))).filter(f => f !== formOf(v, q));
+      const wf = pick(wrongs);
+      const bad = cap(q) + " " + wf + rest;
+      const why = `${q} → <b>${esc(formOf(v, q))}</b>. ${esc(wf)} — форма для: ${esc(whoHas(v, wf))}.`;
+      if (m === "find") {
+        const words = tokenize(bad);
+        return { type: "find", kind: "Найди ошибку", prompt: "Нажми на слово с ошибкой", words, wrong: 1, fix: formOf(v, q), say: right, explain: why };
+      }
+      return { type: "input", kind: "Исправь ошибку", prompt: bad, answers: [right], say: right, explain: why };
+    },
+    // число: n|N
+    n(nStr, _, modes) {
+      const n = +nStr; if (!(n >= 1 && n <= NMAX)) return null;
+      const m = pickMode(["d2w", "w2d", "hear", "hearc", "calc", "age", "ageh"], modes); if (!m) return null;
+      const w = nword(n), why = nExplain(n);
+      if (m === "d2w") return { type: "input", kind: "Напиши буквами", prompt: String(n), answers: nAnswers(n), say: n, explain: why };
+      if (m === "w2d") return { type: "input", digits: true, kind: "Напиши цифрами", prompt: w, answers: [String(n)], say: n, explain: why };
+      if (m === "hear") return { type: "input", digits: true, kind: "Аудирование", ask: "Какое число прозвучало? Напиши цифрами", audio: String(n), prompt: "", answers: [String(n)], say: n, explain: why };
+      if (m === "hearc") {
+        const u = n % 10;
+        const c = uniq([n + 1, n - 1, n + 10, n - 10, u, u + 10, u * 10, Math.floor(n / 10) * 10 + (u + 5) % 10].filter(x => x >= 1 && x <= NMAX && x !== n));
+        return { type: "choice", kind: "Что ты услышала?", audio: String(n), prompt: "", options: [String(n), ...shuffle(c).slice(0, 3).map(String)], answer: String(n), say: n, explain: why };
+      }
+      if (m === "calc") {
+        let a, b, op;
+        if (n >= 2 && (n === NMAX || Math.random() < .5)) { op = "+"; a = rnd(1, n - 1); b = n - a; } else { op = "−"; b = rnd(1, NMAX - n); a = n + b; }
+        const line = `${a} ${op} ${b} = ${n}  ·  ${nword(a)} ${op} ${nword(b)} = <b>${w}</b>`;
+        if (Math.random() < .5) return { type: "input", digits: true, kind: "Реши пример", ask: "Ответ цифрами", prompt: `${nword(a)} ${op} ${nword(b)} = ?`, answers: [String(n)], say: n, explain: line };
+        return { type: "input", kind: "Реши пример", ask: "Ответ буквами", prompt: `${a} ${op} ${b} = ?`, answers: nAnswers(n), say: n, explain: line };
+      }
+      const sent = n === 1 ? "Il a 1 an." : `J'ai ${n} ans.`;
+      const sentW = n === 1 ? "Il a un an." : `J'ai ${w} ans.`;
+      const ageWhy = `${why} В конспекте: J'ai 29 ans · Il a 1 an.`;
+      if (m === "age") return { type: "input", kind: "Возраст", ask: "Напиши число буквами", prompt: sent, answers: [...nAnswers(n), sentW], say: sentW, explain: ageWhy };
+      return { type: "input", digits: true, kind: "Возраст на слух", ask: "Сколько лет? Напиши цифрами", audio: sentW, prompt: "", answers: [String(n)], say: sentW, explain: ageWhy };
+    },
+    // существительное: a|mot
+    a(w, _, modes) {
+      const n = NOUN[w]; if (!n) return null;
+      const avail = ["indef", "def", "gender", "plural"];
+      const m = pickMode(avail, modes); if (!m) return null;
+      const pl = Math.random() < .35;
+      if (m === "indef") {
+        const ans = pl ? "des" : indefOf(n), word = pl ? n.pl : n.w;
+        return { type: "choice", kind: "Неопределённый артикль", ask: "Выбери артикль", prompt: `___ ${word}`, options: ["un", "une", "des"], answer: ans, say: `${ans} ${word}`,
+          explain: pl ? `мн.ч. → <b>des ${esc(n.pl)}</b>` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${ans} ${esc(n.w)}</b>` };
+      }
+      if (m === "def") {
+        const ans = pl ? "les" : defOf(n), word = pl ? n.pl : n.w;
+        const shown = ans === "l'" ? "l'" + word : ans + " " + word;
+        const why = pl ? `мн.ч. → <b>les</b> ${esc(n.pl)}` : ans === "l'" ? `ед.ч. перед гласной → <b>${esc(shown)}</b>` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${esc(shown)}</b>`;
+        return { type: "choice", kind: "Определённый артикль", ask: "Выбери артикль", prompt: `___ ${word}`, options: ["le", "la", "l'", "les"], answer: ans, say: shown, explain: why };
+      }
+      if (m === "gender") return { type: "choice", kind: "Выбери род", prompt: `${n.w}`, options: ["м.р.", "ж.р."], answer: G_RU[n.g], say: `${indefOf(n)} ${n.w}`,
+        explain: `<b>${indefOf(n)} ${esc(n.w)}</b> → ${G_RU[n.g]}` };
+      return { type: "input", kind: "Множественное число", ask: "Поставь во мн.ч.", prompt: `${indefOf(n)} ${n.w} → des ___`, answers: [n.pl], say: `des ${n.pl}`,
+        explain: `мн.ч. + s, как acteur → acteur<b>s</b>: des <b>${esc(n.pl)}</b>` };
+    },
+    // страна/город: p|Nom
+    p(name, _, modes) {
+      const pl = PLACE[name]; if (!pl || pickMode(["prep"], modes) === null) return null;
+      const v = VERB.aller, q = pick(prons(v));
+      const head = cap(pf(q, formOf(v, q)));
+      const opts = uniq(["en", "à", ...C.places.list.map(x => x.prep)]);
+      return { type: "choice", kind: "Выбери предлог", ask: "Что ставится перед названием?", prompt: `${head} ___ ${name}.`, options: opts, answer: pl.prep, say: `${head} ${pl.prep} ${name}.`,
+        explain: `${esc(name)} → <b>${esc(pl.prep)} ${esc(name)}</b>. ${esc(pl.note || "В конспекте: Je vais en France · Il va à Paris.")}` };
+    },
+    // фразы про артикли: as|index
+    as(i, _, modes) {
+      const fr = C.articles.sentences[+i]; if (!fr) return null;
+      const m = pickMode(["order", "dict"], modes); if (!m) return null;
+      if (m === "order") return { type: "order", kind: "Собери предложение", prompt: "Собери фразу из конспекта", tokens: tokenize(fr), say: fr, explain: esc(fr) };
+      return { type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: fr, prompt: "", answers: [fr], say: fr, explain: esc(fr) };
+    },
+    // слово: w|mot
+    w(fr, _, modes) {
+      const w = WORD[fr]; if (!w) return null;
+      const m = pickMode(["fr2ru", "ru2fr", "write", "hear", "dict"], modes); if (!m) return null;
+      const why = `<b>${esc(w.fr)}</b> — ${esc(w.ru)}`;
+      const others = k => shuffle(C.vocab.filter(x => x !== w).map(x => x[k])).filter((x, i, a) => a.indexOf(x) === i && x !== w[k]).slice(0, 3);
+      if (m === "fr2ru") return { type: "choice", kind: "Переведи", prompt: w.fr, options: [w.ru, ...others("ru")], answer: w.ru, say: w.fr, explain: why };
+      if (m === "ru2fr") return { type: "choice", kind: "Переведи ключевое слово", prompt: w.ru, options: [w.fr, ...others("fr")], answer: w.fr, say: w.fr, explain: why };
+      if (m === "write") return { type: "input", kind: "Правописание", ask: "Напиши по-французски", prompt: w.ru, answers: [w.fr], say: w.fr, explain: why };
+      if (m === "hear") return { type: "choice", kind: "Что ты услышала?", audio: w.fr, prompt: "", options: [w.fr, ...others("fr")], answer: w.fr, say: w.fr, explain: why };
+      return { type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: w.fr, prompt: "", answers: [w.fr], say: w.fr, explain: why };
+    },
+    // пары слов (без повторений в Révision)
+    wm(tag, _, modes) {
+      if (pickMode(["match"], modes) === null) return null;
+      const pool = C.vocab.filter(w => !tag || w.tag === tag);
+      const pairs = shuffle(pool).slice(0, 5).map(w => [w.fr, w.ru]);
+      if (pairs.length < 3) return null;
+      return { type: "match", kind: "Соедини пары", prompt: "Слово и перевод", pairs, noKey: true, explain: pairs.map(p => `${esc(p[0])} — ${esc(p[1])}`).join(" · ") };
+    },
+    // упражнение из урока: L|id
+    L(id) { const x = LESSON_EX[id]; return x ? { ...x.ex } : null; }
+  };
+
+  const LESSON_EX = {};
+  Object.values(C.lessons).forEach(ls => ls.forEach(l => l.exercises.forEach(ex => { LESSON_EX[ex.id] = { ex, lesson: l }; })));
+
+  function exFor(key, modes) {
+    const [t, a, b] = key.split("|");
+    const g = GEN[t]; if (!g) return null;
+    const ex = g(a, b, modes);
+    if (ex) ex.key = ex.noKey ? null : key;
+    return ex;
+  }
+
+  // ================================================================
+  //  РАЗДЕЛЫ
+  // ================================================================
+  const verbKeys = g => C.verbs.filter(v => !g || v.group === g).flatMap(v => prons(v).map(p => `vf|${v.inf}|${p}`));
+  const sentKeys = g => C.verbs.filter(v => !g || v.group === g).flatMap(v => v.examples.map((_, i) => `vs|${v.inf}|${i}`));
+  const numKeys = () => { const [a, b] = numRange(); const k = []; for (let n = a; n <= b; n++) k.push("n|" + n); return k; };
+  const numRange = () => ({ "1-20": [1, 20], "21-69": [21, NMAX], all: [1, NMAX] })[S.prefs.nr || "all"];
+  const vGroup = () => S.prefs.vg || 0;
+
+  const SECTIONS = [
+    { id: "verbs", title: "Глаголы", gloss: "I · II · III группы", color: "var(--violet)",
+      mastery: () => [...verbKeys(0), ...sentKeys(0)],
+      drills: () => [
+        { t: "Спряжение", d: "формы с разными местоимениями",
+          keys: () => [...verbKeys(vGroup()), ...C.verbs.filter(v => !vGroup() || v.group === vGroup()).flatMap(v => [`vm|${v.inf}`, `vm|${v.inf}`].concat(v.ru ? [`vt|${v.inf}`] : []))],
+          modes: ["conj", "conjc", "pron", "match", "fr2ru", "ru2fr"] },
+        { t: "Правописание", d: "диктант форм и фраз", keys: () => [...verbKeys(vGroup()), ...sentKeys(vGroup())], modes: ["dict", "fill"] },
+        { t: "Предложения", d: "собрать, переделать, перевести", keys: () => sentKeys(vGroup()), modes: ["order", "fill", "transform", "translate"] },
+        { t: "Найди ошибку", d: "найти и исправить", keys: () => sentKeys(vGroup()), modes: ["find", "fix"] }
+      ] },
+    { id: "numbers", title: "Числа", gloss: `1–${NMAX}, на слух и письменно`, color: "var(--amber)",
+      mastery: () => { const k = []; for (let n = 1; n <= NMAX; n++) k.push("n|" + n); return k; },
+      drills: () => [
+        { t: "Цифры ↔ буквы", d: "42 ↔ quarante-deux", keys: numKeys, modes: ["d2w", "w2d"] },
+        { t: "На слух", d: "услышать и записать", keys: numKeys, modes: ["hear", "hearc"] },
+        { t: "Примеры", d: "реши: цифрами или буквами", keys: numKeys, modes: ["calc"] },
+        { t: "Возраст", d: "J'ai 29 ans · Il a 1 an", keys: numKeys, modes: ["age", "ageh"] }
+      ] },
+    { id: "articles", title: "Артикли", gloss: "un · le · страны и города", color: "var(--red)",
+      mastery: () => [...C.nouns.map(n => "a|" + n.w), ...C.places.list.map(p => "p|" + p.name), ...C.articles.sentences.map((_, i) => "as|" + i)],
+      drills: () => [
+        { t: "Неопределённые", d: "un · une · des", keys: () => C.nouns.map(n => "a|" + n.w), modes: ["indef"] },
+        { t: "Определённые", d: "le · la · l' · les", keys: () => C.nouns.map(n => "a|" + n.w), modes: ["def"] },
+        { t: "Род и мн. число", d: "м.р. / ж.р., + s", keys: () => C.nouns.map(n => "a|" + n.w), modes: ["gender", "plural"] },
+        { t: "Страны и города", d: "en France · à Paris", keys: () => C.places.list.map(p => "p|" + p.name), modes: ["prep"] },
+        { t: "Фразы из конспекта", d: "C'est un… · Ce sont des…", keys: () => C.articles.sentences.map((_, i) => "as|" + i), modes: ["order", "dict"] }
+      ] },
+    { id: "vocab", title: "Словарик", gloss: "слова и фразы из тетради", color: "var(--green)",
+      mastery: () => [...C.vocab.map(w => "w|" + w.fr), ...(C.lessons.vocab || []).flatMap(l => l.exercises.map(e => "L|" + e.id))],
+      drills: () => [
+        { t: "Слова", d: "перевод туда и обратно", keys: () => [...C.vocab.map(w => "w|" + w.fr), "wm|", "wm|"], modes: ["fr2ru", "ru2fr", "match"] },
+        { t: "На слух", d: "услышать и узнать", keys: () => C.vocab.map(w => "w|" + w.fr), modes: ["hear", "dict"] },
+        { t: "Правописание", d: "русский → французский", keys: () => C.vocab.map(w => "w|" + w.fr), modes: ["write"] }
+      ] }
+  ];
+  const SEC = Object.fromEntries(SECTIONS.map(s => [s.id, s]));
+  const mastery = s => { const k = uniq(s.mastery()); const ok = k.filter(x => S.items[x] && S.items[x].ok > 0 && !S.srs[x]).length; return { ok, total: k.length }; };
+  const dueKeys = () => Object.keys(S.srs).filter(k => S.srs[k].due <= dayStr() && exFor(k));
+
+  // ================================================================
+  //  ЭКРАНЫ
+  // ================================================================
   function home() {
     hideDock();
-    const due = dueIds().length;
+    const due = dueKeys().length;
     let h = `<div class="stats"><div class="brand">Cahier <span>A1</span></div>
       <div class="chips"><span class="chip" title="Серия дней">${ICON.fire}${liveStreak()}</span><span class="chip" title="Баллы">${ICON.star}${S.xp}</span></div></div>
-      <button class="revise" id="rev">${ICON.repeat}<span><b>Révision</b><small>${due ? "Ошибки, которые пора повторить" : "Сегодня повторять нечего"}</small></span><span class="count">${due}</span></button>`;
-    C.sections.forEach(sec => {
-      const done = sec.lessons.filter(l => S.lessons[l.id]).length;
-      h += `<p class="label">Раздел</p><div class="section"><div class="section-head"><h2>${esc(sec.title)}</h2><span class="hand">${esc(sec.gloss)}</span></div>
-        <div class="bar" aria-label="Пройдено ${done} из ${sec.lessons.length}"><i style="width:${done / sec.lessons.length * 100}%"></i></div><div class="lessons">`;
-      sec.lessons.forEach((l, i) => {
-        const r = S.lessons[l.id];
-        h += `<button class="lesson${r ? " done" : ""}" data-lesson="${l.id}"><span class="dot">${r ? "✓" : i + 1}</span>
-          <span><span class="t fr">${esc(l.title)}</span><br><span class="s">${l.exercises.length} заданий${r ? " · лучший результат " + Math.round(r.best * 100) + "%" : ""}</span></span></button>`;
-      });
-      h += `</div></div>`;
+      <button class="revise" id="rev">${ICON.repeat}<span><b>Révision</b><small>${due ? "Ошибки, которые пора повторить" : "Сегодня повторять нечего"}</small></span><span class="count">${due}</span></button>
+      <div class="secs">`;
+    SECTIONS.forEach(s => {
+      const m = mastery(s), pc = m.total ? Math.round(m.ok / m.total * 100) : 0;
+      h += `<button class="sec" data-sec="${s.id}" style="--c:${s.color}"><span class="n">${s.title}</span><span class="g">${esc(s.gloss)}</span>
+        <div class="bar"><i style="width:${pc}%"></i></div><span class="pc">освоено ${pc}%</span></button>`;
     });
-    if (C.upcoming && C.upcoming.length) {
-      h += `<p class="label">Дальше в тетради</p><div class="upcoming">` +
-        C.upcoming.map(u => `<div class="up"><b>${esc(u.title)}</b><span>${esc(u.gloss)}</span></div>`).join("") + `</div>`;
-    }
-    h += `<div class="foot"><button class="linkbtn" id="reset">Сбросить прогресс</button></div>`;
+    h += `</div><div class="foot"><button class="linkbtn" id="reset">Сбросить прогресс</button></div>`;
     $app.innerHTML = h;
-    $app.querySelectorAll("[data-lesson]").forEach(b => b.onclick = () => openRule(findLesson(b.dataset.lesson)));
+    $app.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => section(b.dataset.sec));
     document.getElementById("rev").onclick = startRevision;
     document.getElementById("reset").onclick = confirmReset;
     window.scrollTo(0, 0);
   }
-  const findLesson = id => { for (const s of C.sections) for (const l of s.lessons) if (l.id === id) return l; };
 
   function confirmReset() {
     showDock("", `<div class="fb-title">Сбросить весь прогресс?</div><div class="fb-body">Баллы, серия и ошибки для повторения удалятся.</div>
@@ -452,142 +766,223 @@ textarea.field { min-height: 110px; resize: vertical; }
     document.getElementById("yes").onclick = () => { S = blank(); save(); home(); };
   }
 
-  // ---------- RULE ----------
-  function ruleHtml(l) {
-    let h = `<div class="page"><h2 class="fr">${esc(l.title)}</h2>`;
-    l.rule.forEach(b => {
-      if (b.t === "text") h += `<div class="blk">${b.ru}</div>`;
-      if (b.t === "note") h += `<div class="blk hand">${esc(b.ru)}</div>`;
-      if (b.t === "ex") h += `<div class="blk ex">${sayBtn(b.fr)}<span class="fr">${esc(b.fr)}</span></div>`;
-      if (b.t === "conj") h += `<div class="conj">` + b.rows.map(r => r.map(f => `<div>${sayBtn(f)}<span class="fr">${esc(f)}</span></div>`).join("")).join("") + `</div>`;
-    });
-    h += `</div>`;
-    if (!("speechSynthesis" in window)) h += `<p class="warn">Этот браузер не поддерживает озвучку — задания на слух будут без звука.</p>`;
-    return h;
+  function blocksHtml(blocks) {
+    return blocks.map(b => {
+      if (b.t === "text") return `<div class="blk">${b.ru}</div>`;
+      if (b.t === "note") return `<div class="blk hand">${esc(b.ru)}</div>`;
+      if (b.t === "ex") return `<div class="blk ex">${sayBtn(b.fr)}<span class="fr">${esc(b.fr)}</span></div>`;
+      return "";
+    }).join("");
   }
-  function openRule(l) {
-    $app.innerHTML = `<div class="lesson-top"><button class="iconbtn" id="x" aria-label="Закрыть">${ICON.close}</button><span class="label" style="margin:0">Правило из конспекта</span></div>` + ruleHtml(l);
-    document.getElementById("x").onclick = home;
-    showDock("", `<button class="big blue" id="go">Начать упражнения</button>`);
-    document.getElementById("go").onclick = () => startSession(l.exercises.map(ex => ({ ex, lesson: l })), { lesson: l });
+  const page = (title, blocks, extra = "") => `<div class="page">${title ? `<h2>${title}</h2>` : ""}${blocksHtml(blocks)}${extra}</div>`;
+
+  function conjHtml(v) {
+    const rows = [["je", "nous"], ["tu", "vous"], ["il", "ils"], ["elle", "elles"]];
+    return `<div class="conj">` + rows.flat().map(p => { const f = formOf(v, p); return f ? `<div>${sayBtn(pf(p, f))}<span class="fr">${esc(pf(p, f))}</span></div>` : "<div></div>"; }).join("") + `</div>`;
+  }
+
+  function section(id) {
+    hideDock();
+    const s = SEC[id];
+    let h = `<div class="head" style="--c:${s.color}"><button class="iconbtn" id="bk" aria-label="Назад">${ICON.back}</button><h1>${s.title}</h1></div>`;
+    const m = mastery(s);
+    h += `<div class="bar" style="--c:${s.color}"><i style="width:${m.total ? m.ok / m.total * 100 : 0}%"></i></div>
+      <p class="muted" style="margin:6px 0 0;font-size:13px">Освоено ${m.ok} из ${m.total}: задание засчитывается, когда решено верно и нет долга в Révision.</p>`;
+
+    if (id === "verbs") h += filters("vg", [[0, "Все"], [1, "I"], [2, "II"], [3, "III"]], s.color);
+    if (id === "numbers") h += filters("nr", [["all", `1–${NMAX}`], ["1-20", "1–20"], ["21-69", `21–${NMAX}`]], s.color);
+
+    h += `<p class="label">Тренировки · 10 заданий</p><div class="drills" style="--c:${s.color}">` +
+      s.drills().map((d, i) => `<button class="drill" data-drill="${i}" ${d.keys().length ? "" : "disabled"}><b>${d.t}</b><span>${d.d}</span></button>`).join("") + `</div>`;
+
+    const ls = C.lessons[id] || [];
+    if (ls.length) h += `<p class="label">Уроки из конспекта</p><div class="stack">` + ls.map(l => {
+      const r = S.lessons[l.id];
+      return `<button class="lesson${r ? " done" : ""}" data-lesson="${l.id}"><span class="dot">${r ? "✓" : "▸"}</span><span><span class="fr">${esc(l.title)}</span><br><span class="s">${l.exercises.length} заданий${r ? " · лучший результат " + Math.round(r.best * 100) + "%" : ""}</span></span></button>`;
+    }).join("") + `</div>`;
+
+    h += `<p class="label">Шпаргалка</p>` + reference(id, s);
+    $app.innerHTML = h;
+    document.getElementById("bk").onclick = home;
+    $app.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { S.prefs[b.dataset.f] = isNaN(+b.dataset.v) ? b.dataset.v : +b.dataset.v; save(); section(id); });
+    $app.querySelectorAll("[data-drill]").forEach(b => b.onclick = () => runDrill(id, +b.dataset.drill));
+    $app.querySelectorAll("[data-lesson]").forEach(b => b.onclick = () => openLesson(id, ls.find(l => l.id === b.dataset.lesson)));
+    $app.querySelectorAll("[data-num]").forEach(b => b.onclick = () => {
+      const n = +b.dataset.num; speak(String(n));
+      $app.querySelectorAll("[data-num]").forEach(x => x.classList.toggle("on", x === b));
+      document.getElementById("numsay").innerHTML = `<b class="fr" style="font-variant-numeric:tabular-nums">${n}</b><span class="fr">${esc(nword(n))}</span>`;
+    });
     window.scrollTo(0, 0);
   }
 
-  // ---------- SESSION ----------
-  let R = null; // running session
-  function startSession(items, opt) {
-    R = { queue: items.map(it => ({ ...it, retry: false })), total: items.length, done: 0, firstOk: 0, xp: 0,
-          lesson: opt.lesson || null, revision: !!opt.revision, missed: new Set() };
-    next();
+  function filters(key, opts, color) {
+    const cur = S.prefs[key] ?? opts[0][0];
+    return `<div class="filters" style="--c:${color}">` + opts.map(([v, t]) => `<button data-f="${key}" data-v="${v}" class="${cur == v ? "on" : ""}">${t}</button>`).join("") + `</div>`;
   }
+
+  function reference(id, s) {
+    if (id === "verbs") {
+      return `<div class="stack">` + [1, 2, 3].filter(g => !vGroup() || g === vGroup()).map(g => {
+        const vs = C.verbs.filter(v => v.group === g);
+        return page(GROUP[g], C.groups[g] || []) + vs.map(v => `<details class="verb" style="--c:${s.color}"><summary><b>${v.inf}</b><span class="hand">${esc(v.ru || "")}</span><span class="gr">${GROUP[g]}</span></summary>
+          <div class="body">${v.ru ? "" : `<div class="ask-ru">Перевода нет в конспекте</div>`}${v.note ? `<div class="hand">${esc(v.note)}</div>` : ""}${conjHtml(v)}
+          ${v.examples.map(e => `<div class="blk ex" style="display:flex;gap:10px;align-items:center;margin:6px 0">${sayBtn(e.fr)}<span class="fr">${esc(e.fr)}</span>${e.ru ? `<span class="muted" style="font-size:14px">— ${esc(e.ru)}</span>` : ""}</div>`).join("")}</div></details>`).join("");
+      }).join("") + `</div>`;
+    }
+    if (id === "numbers") {
+      let g = ""; for (let n = 1; n <= NMAX; n++) g += `<button data-num="${n}">${n}</button>`;
+      return `<div class="stack">${page("", C.numbers.rule)}<div class="page"><div class="numsay" id="numsay"><span class="muted">Нажми на число, чтобы услышать</span></div><div class="numgrid" style="--c:${s.color}">${g}</div></div></div>`;
+    }
+    if (id === "articles") {
+      const nouns = `<div class="vlist">` + C.nouns.map(n => { const d = defOf(n), sd = d === "l'" ? "l'" + n.w : d + " " + n.w;
+        return `<div class="vrow">${sayBtn(`${indefOf(n)} ${n.w}`)}<span class="fr">${indefOf(n)} ${esc(n.w)} · ${esc(sd)}</span><span class="ru">${G_RU[n.g]} · мн. ${esc(n.pl)}</span></div>`; }).join("") + `</div>`;
+      return `<div class="stack">${page("Артикли", C.articles.rule)}${nouns}${page("Страны и города", C.places.rule)}</div>`;
+    }
+    const tags = uniq(C.vocab.map(w => w.tag));
+    return `<div class="stack">` + tags.map(t => `<div><p class="label" style="margin-top:0">${esc(t)}</p><div class="vlist">` +
+      C.vocab.filter(w => w.tag === t).map(w => `<div class="vrow">${sayBtn(w.fr)}<span class="fr">${esc(w.fr)}</span><span class="ru">${esc(w.ru)}</span></div>`).join("") + `</div></div>`).join("") + `</div>`;
+  }
+
+  // ---------- сборка сессий ----------
+  function buildSet(keys, modes, n = 10) {
+    const out = [], seen = new Set();
+    for (let tries = 0; out.length < n && tries < 200; tries++) {
+      // ошибки из Révision выпадают чаще
+      const weighted = keys.flatMap(k => S.srs[k] ? [k, k, k] : [k]);
+      const ex = exFor(pick(weighted), modes);
+      if (!ex) continue;
+      const sig = ex.type + ex.prompt + (ex.audio || "") + (ex.pairs ? ex.pairs.join() : "");
+      if (seen.has(sig)) continue;
+      seen.add(sig); out.push(ex);
+    }
+    return out;
+  }
+
+  function runDrill(secId, i) {
+    const d = SEC[secId].drills()[i];
+    const set = buildSet(d.keys(), d.modes);
+    if (!set.length) return;
+    startSession(set, { title: d.t, back: () => section(secId), again: () => runDrill(secId, i) });
+  }
+
+  function openLesson(secId, l) {
+    $app.innerHTML = `<div class="lesson-top"><button class="iconbtn" id="x" aria-label="Закрыть">${ICON.close}</button><span class="label" style="margin:0">Правило из конспекта</span></div>` + page(esc(l.title), l.rule);
+    document.getElementById("x").onclick = () => section(secId);
+    showDock("", `<button class="big blue" id="go">Начать упражнения</button>`);
+    document.getElementById("go").onclick = () => startSession(l.exercises.map(ex => ({ ...ex, key: "L|" + ex.id })),
+      { title: l.title, lesson: l, back: () => section(secId), again: () => openLesson(secId, l) });
+    window.scrollTo(0, 0);
+  }
+
   function startRevision() {
-    let ids = dueIds().sort((a, b) => S.srs[a].box - S.srs[b].box).slice(0, 10);
-    if (!ids.length) {
-      const pool = [];
-      C.sections.forEach(s => s.lessons.forEach(l => { if (S.lessons[l.id]) l.exercises.forEach(ex => pool.push(ex.id)); }));
-      if (!pool.length) {
+    const due = dueKeys().sort((a, b) => S.srs[a].box - S.srs[b].box).slice(0, 10);
+    let set = due.map(k => exFor(k)).filter(Boolean), revision = true;
+    if (!set.length) {
+      const seen = Object.keys(S.items).filter(k => exFor(k));
+      if (!seen.length) {
         $app.innerHTML = `<div class="lesson-top"><button class="iconbtn" id="x" aria-label="Закрыть">${ICON.close}</button></div>
-          <div class="empty"><h2>Пока нечего повторять</h2><p>Пройди хотя бы один урок. Задания с ошибками будут появляться здесь.</p></div>`;
+          <div class="empty"><h2>Пока нечего повторять</h2><p>Сделай пару тренировок. Задания с ошибками будут появляться здесь.</p></div>`;
         document.getElementById("x").onclick = home; hideDock(); return;
       }
-      ids = shuffle(pool).slice(0, 8);
+      set = buildSet(seen, null, 8); revision = false;
     }
-    startSession(ids.map(id => EX[id]), { revision: true });
+    startSession(set, { title: "Révision", revision, back: home, again: startRevision });
+  }
+
+  // ---------- сессия ----------
+  let R = null;
+  function startSession(list, opt) {
+    R = { queue: list.map(ex => ({ ex, retry: false })), total: list.length, done: 0, firstOk: 0, xp: 0, missed: new Set(), ...opt };
+    next();
   }
 
   function next() {
     if (!R.queue.length) return finish();
-    const it = R.queue[0];
-    const pct = R.done / R.total * 100;
-    const ex = it.ex;
-    const ruBig = /[а-яё]/i.test(ex.prompt) && !ex.audio;
+    const { ex, retry } = R.queue[0];
+    const ruPrompt = /[а-яё]/i.test(ex.prompt) || ex.type === "match" || ex.type === "find";
+    const rule = ex.key && ex.key.startsWith("L|") ? LESSON_EX[ex.key.slice(2)].lesson : null;
     let h = `<div class="lesson-top"><button class="iconbtn" id="x" aria-label="Выйти">${ICON.close}</button>
-      <div class="bar"><i style="width:${pct}%"></i></div>
-      <button class="iconbtn" id="rule" aria-label="Правило">${ICON.book}</button></div>
-      <span class="kind">${esc(ex.kind)}${it.retry ? " · ещё раз" : ""}</span>`;
+      <div class="bar"><i style="width:${R.done / R.total * 100}%"></i></div>
+      ${rule ? `<button class="iconbtn" id="rule" aria-label="Правило">${ICON.book}</button>` : ""}</div>
+      <span class="kind">${esc(ex.kind)}${retry ? " · ещё раз" : ""}</span>`;
+    if (ex.ask) h += `<div class="ask">${esc(ex.ask)}</div>`;
     if (ex.audio) h += `<div class="audio-row"><button class="play" data-say="${esc(ex.audio)}">${ICON.speak}Слушать</button>
       <button class="play slow" data-say="${esc(ex.audio)}" data-slow="1">Медленно</button></div>`;
-    h += `<div class="prompt ${ruBig || ex.type === "match" || ex.type === "find" || ex.type === "order" ? "ru" : "fr"}">${esc(ex.prompt)}</div><div id="work"></div>`;
+    if (ex.prompt) h += `<div class="prompt ${ruPrompt ? "ru" : ""}">${esc(ex.prompt)}</div>`;
+    h += `<div id="work"></div>`;
+    if (ex.audio && !hasTTS) h += `<p class="muted">Браузер не поддерживает озвучку.</p>`;
     $app.innerHTML = h;
-    document.getElementById("x").onclick = () => { window.speechSynthesis && speechSynthesis.cancel(); home(); };
-    document.getElementById("rule").onclick = () => peekRule(it.lesson);
+    document.getElementById("x").onclick = () => { if (hasTTS) speechSynthesis.cancel(); R.back(); };
+    if (rule) document.getElementById("rule").onclick = () => {
+      showDock("", `<div style="max-height:55vh;overflow:auto">${page(esc(rule.title), rule.rule)}</div><button class="big ghost" id="bk2">Вернуться к заданию</button>`);
+      document.getElementById("bk2").onclick = () => { hideDock(); next(); };
+    };
     RENDER[ex.type](ex, document.getElementById("work"));
     if (ex.audio) setTimeout(() => speak(ex.audio), 250);
     window.scrollTo(0, 0);
   }
 
-  function peekRule(l) {
-    showDock("", `<div style="max-height:55vh;overflow:auto">${ruleHtml(l)}</div><button class="big ghost" id="back">Вернуться к заданию</button>`);
-    document.getElementById("back").onclick = () => { hideDock(); next(); };
-  }
-
-  function checkDock(enabled, onCheck, label = "Проверить") {
-    showDock("", `<button class="big" id="chk" ${enabled ? "" : "disabled"}>${label}</button>`);
+  function checkDock(onCheck) {
+    showDock("", `<button class="big" id="chk" disabled>Проверить</button>`);
     const b = document.getElementById("chk"); b.onclick = onCheck; return b;
   }
 
-  // result: ok (bool), shown answer html, extra note
   function grade(ok, correctHtml, note) {
-    const it = R.queue.shift();
-    const id = it.ex.id;
+    const it = R.queue.shift(), ex = it.ex, k = ex.key;
+    if (k) { S.items[k] = S.items[k] || { ok: 0, bad: 0 }; S.items[k][ok ? "ok" : "bad"]++; }
     if (ok) {
       touchDay();
       const gain = it.retry ? 5 : 10; S.xp += gain; R.xp += gain;
       if (!it.retry) R.firstOk++;
       R.done++;
-      if (R.revision && !R.missed.has(id)) srsRight(id);
+      if (k && R.revision && !R.missed.has(k)) srsRight(k);
     } else {
-      srsWrong(id); R.missed.add(id);
-      R.queue.push({ ...it, retry: true });
+      if (k) { srsWrong(k); R.missed.add(k); }
+      R.queue.push({ ex, retry: true });
     }
     save();
-    const title = ok ? (note ? "Почти!" : "Верно!") : "Не совсем";
     let body = "";
     if (!ok) body += `<div>Правильно: <b class="fr">${correctHtml}</b></div>`;
     if (note) body += `<div>${note}</div>`;
-    body += `<div class="why">Почему: ${it.ex.explain}</div>`;
-    showDock(ok ? "ok" : "bad", `<div class="fb-title">${title}</div><div class="fb-body">${body}</div>
+    body += `<div class="why">Почему: ${ex.explain}</div>`;
+    showDock(ok ? "ok" : "bad", `<div class="fb-title">${ok ? (note ? "Почти!" : "Верно!") : "Не совсем"}${ex.say != null ? sayBtn(ex.say) : ""}</div><div class="fb-body">${body}</div>
       <button class="big ${ok ? "" : "red"}" id="nx">Дальше</button>`);
     const nx = document.getElementById("nx"); nx.onclick = () => { hideDock(); next(); }; nx.focus();
   }
 
   function finish() {
     const pct = R.total ? R.firstOk / R.total : 1;
-    if (R.lesson) {
-      const prev = S.lessons[R.lesson.id];
-      S.lessons[R.lesson.id] = { best: Math.max(pct, prev ? prev.best : 0) };
-      S.xp += 20; R.xp += 20;
-    }
-    save();
-    $app.innerHTML = `<div class="result"><span class="kind">${R.revision ? "Révision" : "Урок пройден"}</span>
+    if (R.lesson) { const p = S.lessons[R.lesson.id]; S.lessons[R.lesson.id] = { best: Math.max(pct, p ? p.best : 0) }; }
+    S.xp += 20; R.xp += 20; save();
+    $app.innerHTML = `<div class="result"><span class="kind">${esc(R.title)}</span>
       <h2>${pct === 1 ? "Parfait !" : pct >= 0.7 ? "Très bien !" : "Bien !"}</h2>
       <div class="tiles"><div class="tile"><b>${Math.round(pct * 100)}%</b><small>с первой попытки</small></div>
       <div class="tile"><b>+${R.xp}</b><small>баллов</small></div></div>
       ${R.missed.size ? `<p>Задания с ошибками (${R.missed.size}) попадут в Révision.</p>` : ""}</div>`;
-    showDock("", `<button class="big blue" id="hm">На главную</button>`);
-    document.getElementById("hm").onclick = home;
+    showDock("", `<div class="row2"><button class="big ghost" id="bk">Назад</button><button class="big blue" id="ag">Ещё раз</button></div>`);
+    document.getElementById("bk").onclick = R.back;
+    document.getElementById("ag").onclick = R.again;
   }
 
   function showDock(cls, html) { $dock.className = "dock" + (cls ? " " + cls : ""); $dockIn.innerHTML = html; $dock.hidden = false; }
   function hideDock() { $dock.hidden = true; $dockIn.innerHTML = ""; }
 
-  // ---------- exercise renderers ----------
+  // ---------- типы заданий ----------
   const RENDER = {
     choice(ex, w) {
       let sel = null;
-      w.innerHTML = `<div class="options">` + shuffle(ex.options).map(o => `<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("") + `</div>`;
+      w.innerHTML = `<div class="options">` + shuffle(uniq(ex.options)).map(o => `<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join("") + `</div>`;
       const btns = [...w.querySelectorAll(".opt")];
-      const chk = checkDock(false, () => {
-        const ok = sel === ex.answer;
+      const chk = checkDock(() => {
         btns.forEach(b => { b.disabled = true; if (b.dataset.o === ex.answer) b.classList.add("ok"); else if (b.dataset.o === sel) b.classList.add("bad"); });
-        grade(ok, esc(ex.answer));
+        grade(sel === ex.answer, esc(ex.answer));
       });
       btns.forEach(b => b.onclick = () => { sel = b.dataset.o; btns.forEach(x => x.classList.toggle("sel", x === b)); chk.disabled = false; });
     },
 
     input(ex, w) {
-      w.innerHTML = `<input class="field" id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Напиши по-французски">
-        <div class="accents">${["é", "è", "ê", "à", "ç", "'"].map(c => `<button data-c="${c}" type="button">${c}</button>`).join("")}</div>`;
+      w.innerHTML = `<input class="field" id="inp" autocomplete="off" autocapitalize="off" spellcheck="false" ${ex.digits ? 'inputmode="numeric" placeholder="Цифрами"' : 'placeholder="По-французски"'}>` +
+        (ex.digits ? "" : `<div class="accents">${["é", "è", "ê", "à", "ç", "'", "-"].map(c => `<button data-c="${c}" type="button">${c}</button>`).join("")}</div>`);
       const inp = w.querySelector("#inp");
       w.querySelectorAll("[data-c]").forEach(b => b.onclick = () => {
         const p = inp.selectionStart ?? inp.value.length;
@@ -595,14 +990,14 @@ textarea.field { min-height: 110px; resize: vertical; }
         inp.focus(); inp.setSelectionRange(p + 1, p + 1); chk.disabled = !inp.value.trim();
       });
       const run = () => {
-        if (!inp.value.trim()) return;
+        if (!inp.value.trim() || inp.disabled) return;
         inp.disabled = true;
         const v = inp.value;
         if (ex.answers.some(a => norm(a) === norm(v))) return grade(true);
         if (ex.answers.some(a => bare(a) === bare(v))) return grade(true, null, "Проверь надстрочные знаки: <b class='fr'>" + esc(ex.answers[0]) + "</b>");
         grade(false, esc(ex.answers[0]));
       };
-      const chk = checkDock(false, run);
+      const chk = checkDock(run);
       inp.oninput = () => chk.disabled = !inp.value.trim();
       inp.onkeydown = e => { if (e.key === "Enter") run(); };
       if (!matchMedia("(pointer: coarse)").matches) inp.focus();
@@ -610,23 +1005,22 @@ textarea.field { min-height: 110px; resize: vertical; }
 
     order(ex, w) {
       const answer = ex.tokens.join(" ");
-      const bank = shuffle(ex.tokens.map((t, i) => ({ t, i })));
+      let bank = shuffle(ex.tokens.map((t, i) => ({ t, i })));
+      if (bank.map(b => b.t).join(" ") === answer && bank.length > 1) bank = bank.slice(1).concat(bank[0]);
       const picked = [];
       w.innerHTML = `<div class="tray" id="tray"></div><div class="bank" id="bank"></div>`;
       const tray = w.querySelector("#tray"), bk = w.querySelector("#bank");
+      const chk = checkDock(() => {
+        w.querySelectorAll(".tok").forEach(b => b.disabled = true);
+        grade(norm(picked.map(p => p.t).join(" ")) === norm(answer), esc(answer));
+      });
       const draw = () => {
         tray.innerHTML = picked.map(p => `<button class="tok" data-i="${p.i}">${esc(p.t)}</button>`).join("");
         bk.innerHTML = bank.map(p => `<button class="tok${picked.includes(p) ? " used" : ""}" data-i="${p.i}">${esc(p.t)}</button>`).join("");
         tray.querySelectorAll(".tok").forEach(b => b.onclick = () => { picked.splice(picked.findIndex(p => p.i == b.dataset.i), 1); draw(); });
-        bk.querySelectorAll(".tok:not(.used)").forEach(b => b.onclick = () => { speakTok(b.textContent); picked.push(bank.find(p => p.i == b.dataset.i)); draw(); });
+        bk.querySelectorAll(".tok:not(.used)").forEach(b => b.onclick = () => { speak(b.textContent.replace(/[.?!]/g, "")); picked.push(bank.find(p => p.i == b.dataset.i)); draw(); });
         chk.disabled = picked.length !== ex.tokens.length;
       };
-      const speakTok = t => speak(t.replace(/[.?!]/g, ""));
-      const chk = checkDock(false, () => {
-        const got = picked.map(p => p.t).join(" ");
-        w.querySelectorAll(".tok").forEach(b => b.disabled = true);
-        grade(norm(got) === norm(answer), esc(answer));
-      });
       draw();
     },
 
@@ -634,10 +1028,9 @@ textarea.field { min-height: 110px; resize: vertical; }
       let sel = null;
       w.innerHTML = `<div class="words">` + ex.words.map((t, i) => `<button class="opt" data-i="${i}">${esc(t)}</button>`).join("") + `</div>`;
       const btns = [...w.querySelectorAll(".opt")];
-      const chk = checkDock(false, () => {
+      const chk = checkDock(() => {
         btns.forEach(b => { b.disabled = true; if (+b.dataset.i === ex.wrong) b.classList.add("bad"); });
-        const fixed = ex.words.map((t, i) => i === ex.wrong ? "<u>" + esc(ex.fix) + "</u>" : esc(t)).join(" ");
-        grade(sel === ex.wrong, fixed);
+        grade(sel === ex.wrong, ex.words.map((t, i) => i === ex.wrong ? "<u>" + esc(ex.fix) + "</u>" : esc(t)).join(" "));
       });
       btns.forEach(b => b.onclick = () => { sel = +b.dataset.i; btns.forEach(x => x.classList.toggle("sel", x === b)); chk.disabled = false; });
     },
@@ -650,15 +1043,14 @@ textarea.field { min-height: 110px; resize: vertical; }
         <div class="col">${right.map(r => `<button class="opt" data-r="${esc(r)}">${esc(r)}</button>`).join("")}</div></div>`;
       hideDock();
       w.querySelectorAll("[data-l]").forEach(b => b.onclick = () => {
-        w.querySelectorAll("[data-l]").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); pick = b;
+        w.querySelectorAll("[data-l]").forEach(x => x.classList.remove("sel")); b.classList.add("sel"); pick = b; speak(b.dataset.l);
       });
       w.querySelectorAll("[data-r]").forEach(b => b.onclick = () => {
         if (!pick) return;
         if (map[pick.dataset.l] === b.dataset.r) {
-          speak(pick.dataset.l + " " + b.dataset.r);
           [pick, b].forEach(x => { x.classList.remove("sel"); x.classList.add("ok"); x.disabled = true; });
           pick = null;
-          if (++matched === ex.pairs.length) grade(errors === 0, ex.pairs.map(p => p.join(" ")).join(", "));
+          if (++matched === ex.pairs.length) grade(errors === 0, ex.pairs.map(p => esc(p.join(" — "))).join(", "));
         } else {
           errors++;
           [pick, b].forEach(x => { x.classList.remove("shake"); void x.offsetWidth; x.classList.add("shake"); });
@@ -672,7 +1064,7 @@ textarea.field { min-height: 110px; resize: vertical; }
       showDock("", `<button class="big blue" id="show">Сравнить с конспектом</button>`);
       document.getElementById("show").onclick = () => {
         inp.disabled = true;
-        w.querySelector("#refs").innerHTML = `<p class="label" style="margin-top:16px">Эталон из конспекта</p><div class="refs">` +
+        w.querySelector("#refs").innerHTML = `<p class="label">Эталон из конспекта</p><div class="refs">` +
           ex.refs.map(r => `<div class="ref">${sayBtn(r)}<span class="fr">${esc(r)}</span></div>`).join("") + `</div>`;
         showDock("", `<div class="fb-body">Самопроверка: твой ответ совпадает с одним из вариантов?</div>
           <div class="row2"><button class="big ghost" id="no">Нужно повторить</button><button class="big" id="yes">Совпадает</button></div>`);
