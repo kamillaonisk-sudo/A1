@@ -12,9 +12,11 @@
       elle/elles берут форму il/ils автоматически, j' ставится само перед гласной.
       Пример: { fr, ru, p:"je" } — фраза начинается с местоимения p
               { fr, ru, v:"sont" } — v = глагольная форма внутри фразы
-              fixed:true — не менять местоимение (иначе ломается согласование)
-  • Слово/фраза: { fr, ru, tag }
-  • Существительное: { w, g:"m"|"f", pl, ru, rupl }
+              fixed:true — не менять местоимение
+  • Существительное: { w, g:"m"|"f", pl, ru, rupl, theme,
+                       rg: род по-русски (m|f|n), pair: слово противоположного рода,
+                       ins: «кем?» для профессий, both: одинаково в м.р. и ж.р., noPl: нет мн.ч. }
+  • Слово/фраза: { fr, ru, theme }
   • Страна/город: { name, kind:"f"|"m"|"pl"|"city", ru:"во Францию" }
   ================================================================
 -->
@@ -57,35 +59,9 @@ window.COURSE = {
       ] }
   ],
 
-  groups: {
-    1: [{ t: "text", ru: "Окончания: je <b>-e</b> · tu <b>-es</b> · il <b>-e</b> · nous <b>-ons</b> · vous <b>-ez</b> · ils <b>-ent</b>" }],
-    2: [{ t: "text", ru: "Пока пусто — пришли глаголы II группы." }],
-    3: [{ t: "text", ru: "Неправильные глаголы: формы учим наизусть." }]
-  },
-
-  numbers: {
-    max: 69,
-    rule: [
-      { t: "text", ru: "11–16 — отдельные слова: <b>onze, douze, treize, quatorze, quinze, seize</b>." },
-      { t: "text", ru: "17–19: <b>dix-sept, dix-huit, dix-neuf</b>." },
-      { t: "text", ru: "Десятки: <b>vingt, trente, quarante, cinquante, soixante</b>." },
-      { t: "text", ru: "На конце 1 → <b>et un</b>: vingt et un, trente et un." },
-      { t: "text", ru: "Остальное через дефис: <b>vingt-deux, trente-deux</b>." },
-      { t: "ex", fr: "J'ai 29 ans.", ru: "Мне 29 лет." },
-      { t: "ex", fr: "Il a 1 an.", ru: "Ему 1 год." }
-    ]
-  },
+  numbers: { max: 69 },
 
   articles: {
-    rule: [
-      { t: "text", ru: "<b>Неопределённые:</b> un (м.р.) · une (ж.р.) · des (мн.ч.)" },
-      { t: "text", ru: "<b>Определённые:</b> le (м.р.) · la (ж.р.) · l' (ед.ч. перед гласной) · les (мн.ч.)" },
-      { t: "ex", fr: "C'est un secrétaire.", ru: "Это секретарь." },
-      { t: "ex", fr: "C'est le secrétaire de Pierre.", ru: "Это секретарь Пьера." },
-      { t: "text", ru: "Падежей нет: «чей?» → <b>de</b>." },
-      { t: "ex", fr: "Ce sont des acteurs.", ru: "Это актёры." },
-      { t: "ex", fr: "Ce sont les acteurs de mon film préféré.", ru: "Это актёры из моего любимого фильма." }
-    ],
     sentences: [
       { fr: "C'est un secrétaire.", ru: "Это секретарь." },
       { fr: "C'est le secrétaire de Pierre.", ru: "Это секретарь Пьера." },
@@ -94,63 +70,125 @@ window.COURSE = {
     ]
   },
 
+  themes: ["Приветствия", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Полезные слова", "Притяжательные", "Фразы"],
+
   nouns: [
-    { w: "voiture", g: "f", pl: "voitures", ru: "машина", rupl: "машины" },
-    { w: "ami", g: "m", pl: "amis", ru: "друг", rupl: "друзья" },
-    { w: "secrétaire", g: "m", pl: "secrétaires", ru: "секретарь", rupl: "секретари" },
-    { w: "acteur", g: "m", pl: "acteurs", ru: "актёр", rupl: "актёры" },
-    { w: "film", g: "m", pl: "films", ru: "фильм", rupl: "фильмы" }
+    { theme: "Семья", w: "père", g: "m", pl: "pères", ru: "отец", rupl: "отцы", rg: "m", pair: "mère" },
+    { theme: "Семья", w: "mère", g: "f", pl: "mères", ru: "мать", rupl: "матери", pair: "père" },
+    { theme: "Семья", w: "frère", g: "m", pl: "frères", ru: "брат", rupl: "братья", rg: "m", pair: "sœur" },
+    { theme: "Семья", w: "sœur", g: "f", pl: "sœurs", ru: "сестра", rupl: "сёстры", pair: "frère" },
+    { theme: "Семья", w: "fils", g: "m", pl: "fils", ru: "сын", rupl: "сыновья", rg: "m", pair: "fille" },
+    { theme: "Семья", w: "fille", g: "f", pl: "filles", ru: "дочь", rupl: "дочери", pair: "fils" },
+    { theme: "Семья", w: "mari", g: "m", pl: "maris", ru: "муж", rupl: "мужья", rg: "m", pair: "femme" },
+    { theme: "Семья", w: "femme", g: "f", pl: "femmes", ru: "жена", rupl: "жёны", pair: "mari" },
+    { theme: "Семья", w: "enfant", g: "m", pl: "enfants", ru: "ребёнок", rupl: "дети", rg: "m" },
+    { theme: "Семья", w: "ami", g: "m", pl: "amis", ru: "друг", rupl: "друзья", rg: "m", pair: "amie" },
+    { theme: "Семья", w: "amie", g: "f", pl: "amies", ru: "подруга", rupl: "подруги", pair: "ami" },
+
+    { theme: "Профессии", w: "dentiste", g: "m", both: true, pl: "dentistes", ru: "стоматолог", rupl: "стоматологи", ins: "стоматологом" },
+    { theme: "Профессии", w: "secrétaire", g: "m", both: true, pl: "secrétaires", ru: "секретарь", rupl: "секретари", ins: "секретарём" },
+    { theme: "Профессии", w: "médecin", g: "m", pl: "médecins", ru: "врач", rupl: "врачи", ins: "врачом" },
+    { theme: "Профессии", w: "professeur", g: "m", pl: "professeurs", ru: "преподаватель", rupl: "преподаватели", ins: "преподавателем" },
+    { theme: "Профессии", w: "acteur", g: "m", pl: "acteurs", ru: "актёр", rupl: "актёры", ins: "актёром", pair: "actrice" },
+    { theme: "Профессии", w: "actrice", g: "f", pl: "actrices", ru: "актриса", rupl: "актрисы", ins: "актрисой", pair: "acteur" },
+    { theme: "Профессии", w: "étudiant", g: "m", pl: "étudiants", ru: "студент", rupl: "студенты", pair: "étudiante" },
+    { theme: "Профессии", w: "étudiante", g: "f", pl: "étudiantes", ru: "студентка", rupl: "студентки", pair: "étudiant" },
+    { theme: "Профессии", w: "serveur", g: "m", pl: "serveurs", ru: "официант", rupl: "официанты", ins: "официантом", pair: "serveuse" },
+    { theme: "Профессии", w: "serveuse", g: "f", pl: "serveuses", ru: "официантка", rupl: "официантки", ins: "официанткой", pair: "serveur" },
+    { theme: "Профессии", w: "vendeur", g: "m", pl: "vendeurs", ru: "продавец", rupl: "продавцы", ins: "продавцом", pair: "vendeuse" },
+    { theme: "Профессии", w: "vendeuse", g: "f", pl: "vendeuses", ru: "продавщица", rupl: "продавщицы", ins: "продавщицей", pair: "vendeur" },
+
+    { theme: "Дом и вещи", w: "maison", g: "f", pl: "maisons", ru: "дом", rupl: "дома" },
+    { theme: "Дом и вещи", w: "appartement", g: "m", pl: "appartements", ru: "квартира", rupl: "квартиры", rg: "f" },
+    { theme: "Дом и вещи", w: "chambre", g: "f", pl: "chambres", ru: "комната", rupl: "комнаты" },
+    { theme: "Дом и вещи", w: "voiture", g: "f", pl: "voitures", ru: "машина", rupl: "машины" },
+    { theme: "Дом и вещи", w: "livre", g: "m", pl: "livres", ru: "книга", rupl: "книги", rg: "f" },
+    { theme: "Дом и вещи", w: "téléphone", g: "m", pl: "téléphones", ru: "телефон", rupl: "телефоны", rg: "m" },
+    { theme: "Дом и вещи", w: "ordinateur", g: "m", pl: "ordinateurs", ru: "компьютер", rupl: "компьютеры", rg: "m" },
+    { theme: "Дом и вещи", w: "sac", g: "m", pl: "sacs", ru: "сумка", rupl: "сумки", rg: "f" },
+    { theme: "Дом и вещи", w: "table", g: "f", pl: "tables", ru: "стол", rupl: "столы" },
+    { theme: "Дом и вещи", w: "chaise", g: "f", pl: "chaises", ru: "стул", rupl: "стулья" },
+
+    { theme: "Город", w: "ville", g: "f", pl: "villes", ru: "город", rupl: "города" },
+    { theme: "Город", w: "rue", g: "f", pl: "rues", ru: "улица", rupl: "улицы" },
+    { theme: "Город", w: "gare", g: "f", pl: "gares", ru: "вокзал", rupl: "вокзалы" },
+    { theme: "Город", w: "école", g: "f", pl: "écoles", ru: "школа", rupl: "школы" },
+    { theme: "Город", w: "banque", g: "f", pl: "banques", ru: "банк", rupl: "банки" },
+    { theme: "Город", w: "café", g: "m", pl: "cafés", ru: "кафе", rupl: "кафе", rg: "n" },
+    { theme: "Город", w: "restaurant", g: "m", pl: "restaurants", ru: "ресторан", rupl: "рестораны", rg: "m" },
+    { theme: "Город", w: "musée", g: "m", pl: "musées", ru: "музей", rupl: "музеи", rg: "m" },
+    { theme: "Город", w: "magasin", g: "m", pl: "magasins", ru: "магазин", rupl: "магазины", rg: "m" },
+    { theme: "Город", w: "hôtel", g: "m", pl: "hôtels", ru: "гостиница", rupl: "гостиницы", rg: "f" },
+
+    { theme: "Еда", w: "pain", g: "m", noPl: true, ru: "хлеб", rg: "m" },
+    { theme: "Еда", w: "fromage", g: "m", noPl: true, ru: "сыр", rg: "m" },
+    { theme: "Еда", w: "lait", g: "m", noPl: true, ru: "молоко", rg: "n" },
+    { theme: "Еда", w: "viande", g: "f", noPl: true, ru: "мясо" },
+    { theme: "Еда", w: "vin", g: "m", noPl: true, ru: "вино", rg: "n" },
+    { theme: "Еда", w: "pomme", g: "f", pl: "pommes", ru: "яблоко", rupl: "яблоки" },
+    { theme: "Еда", w: "gâteau", g: "m", pl: "gâteaux", ru: "торт", rupl: "торты", rg: "m" },
+    { theme: "Еда", w: "poisson", g: "m", pl: "poissons", ru: "рыба", rupl: "рыбы", rg: "f" },
+    { theme: "Еда", w: "salade", g: "f", pl: "salades", ru: "салат", rupl: "салаты" },
+
+    { theme: "Время", w: "jour", g: "m", pl: "jours", ru: "день", rupl: "дни", rg: "m" },
+    { theme: "Время", w: "nuit", g: "f", pl: "nuits", ru: "ночь", rupl: "ночи" },
+    { theme: "Время", w: "semaine", g: "f", pl: "semaines", ru: "неделя", rupl: "недели" },
+    { theme: "Время", w: "mois", g: "m", pl: "mois", ru: "месяц", rupl: "месяцы", rg: "m" },
+    { theme: "Время", w: "matin", g: "m", pl: "matins", ru: "утро", rupl: "утра", rg: "n" },
+    { theme: "Время", w: "soir", g: "m", pl: "soirs", ru: "вечер", rupl: "вечера", rg: "m" },
+
+    { theme: "Досуг", w: "film", g: "m", pl: "films", ru: "фильм", rupl: "фильмы", rg: "m" },
+    { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка" },
+    { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", rg: "m" }
   ],
 
-  places: {
-    rule: [
-      { t: "text", ru: "<b>Город → à</b>" },
-      { t: "ex", fr: "Il va à Paris.", ru: "Он едет в Париж." },
-      { t: "text", ru: "<b>Страна ж.р.</b> (обычно на -e) <b>→ en</b>" },
-      { t: "ex", fr: "Je vais en France.", ru: "Я еду во Францию." },
-      { t: "text", ru: "<b>Страна м.р. → au</b>" },
-      { t: "ex", fr: "Je vais au Canada.", ru: "Я еду в Канаду." },
-      { t: "text", ru: "<b>Страна мн.ч. → aux</b>" },
-      { t: "ex", fr: "Je vais aux États-Unis.", ru: "Я еду в США." }
-    ],
-    list: [
-      { name: "France", kind: "f", ru: "во Францию" },
-      { name: "Italie", kind: "f", ru: "в Италию" },
-      { name: "Espagne", kind: "f", ru: "в Испанию" },
-      { name: "Russie", kind: "f", ru: "в Россию" },
-      { name: "Allemagne", kind: "f", ru: "в Германию" },
-      { name: "Canada", kind: "m", ru: "в Канаду" },
-      { name: "Japon", kind: "m", ru: "в Японию" },
-      { name: "Brésil", kind: "m", ru: "в Бразилию" },
-      { name: "Portugal", kind: "m", ru: "в Португалию" },
-      { name: "États-Unis", kind: "pl", ru: "в США" },
-      { name: "Pays-Bas", kind: "pl", ru: "в Нидерланды" },
-      { name: "Paris", kind: "city", ru: "в Париж" },
-      { name: "Moscou", kind: "city", ru: "в Москву" },
-      { name: "Londres", kind: "city", ru: "в Лондон" },
-      { name: "Rome", kind: "city", ru: "в Рим" }
-    ]
-  },
+  places: [
+    { name: "France", kind: "f", ru: "во Францию" },
+    { name: "Italie", kind: "f", ru: "в Италию" },
+    { name: "Espagne", kind: "f", ru: "в Испанию" },
+    { name: "Russie", kind: "f", ru: "в Россию" },
+    { name: "Allemagne", kind: "f", ru: "в Германию" },
+    { name: "Canada", kind: "m", ru: "в Канаду" },
+    { name: "Japon", kind: "m", ru: "в Японию" },
+    { name: "Brésil", kind: "m", ru: "в Бразилию" },
+    { name: "Portugal", kind: "m", ru: "в Португалию" },
+    { name: "États-Unis", kind: "pl", ru: "в США" },
+    { name: "Pays-Bas", kind: "pl", ru: "в Нидерланды" },
+    { name: "Paris", kind: "city", ru: "в Париж" },
+    { name: "Moscou", kind: "city", ru: "в Москву" },
+    { name: "Londres", kind: "city", ru: "в Лондон" },
+    { name: "Rome", kind: "city", ru: "в Рим" }
+  ],
 
   vocab: [
-    { fr: "beaucoup", ru: "много", tag: "Слова" },
-    { fr: "mal", ru: "плохо", tag: "Слова" },
-    { fr: "bien", ru: "хорошо", tag: "Слова" },
-    { fr: "très bien", ru: "очень хорошо", tag: "Слова" },
-    { fr: "comme", ru: "как (в роли)", tag: "Слова" },
-    { fr: "en tant que", ru: "в качестве", tag: "Слова" },
-    { fr: "préféré", ru: "любимый", tag: "Слова" },
-    { fr: "de", ru: "из (les acteurs de mon film)", tag: "Слова" },
-    { fr: "mon", ru: "мой", tag: "Притяжательные (м.р. ед.ч.)" },
-    { fr: "ton", ru: "твой", tag: "Притяжательные (м.р. ед.ч.)" },
-    { fr: "son", ru: "его / её", tag: "Притяжательные (м.р. ед.ч.)" },
-    { fr: "notre", ru: "наш", tag: "Притяжательные (м.р. ед.ч.)" },
-    { fr: "votre", ru: "ваш", tag: "Притяжательные (м.р. ед.ч.)" },
-    { fr: "leur", ru: "их", tag: "Притяжательные (м.р. ед.ч.)" },
-    { fr: "Ça va ?", ru: "Как дела? (безлично)", tag: "Фразы" },
-    { fr: "Comme ci, comme ça.", ru: "Так себе.", tag: "Фразы" },
-    { fr: "Ça va aller.", ru: "Всё наладится.", tag: "Фразы" },
-    { fr: "J'ai des amis.", ru: "У меня есть друзья.", tag: "Фразы" }
+    { fr: "bonjour", ru: "здравствуйте", theme: "Приветствия" },
+    { fr: "salut", ru: "привет", theme: "Приветствия" },
+    { fr: "au revoir", ru: "до свидания", theme: "Приветствия" },
+    { fr: "merci", ru: "спасибо", theme: "Приветствия" },
+    { fr: "s'il vous plaît", ru: "пожалуйста (просьба)", theme: "Приветствия" },
+    { fr: "oui", ru: "да", theme: "Приветствия" },
+    { fr: "non", ru: "нет", theme: "Приветствия" },
+    { fr: "pardon", ru: "извините", theme: "Приветствия" },
+    { fr: "beaucoup", ru: "много", theme: "Полезные слова" },
+    { fr: "bien", ru: "хорошо", theme: "Полезные слова" },
+    { fr: "très bien", ru: "очень хорошо", theme: "Полезные слова" },
+    { fr: "mal", ru: "плохо", theme: "Полезные слова" },
+    { fr: "comme", ru: "как (в роли)", theme: "Полезные слова" },
+    { fr: "en tant que", ru: "в качестве", theme: "Полезные слова" },
+    { fr: "préféré", ru: "любимый", theme: "Полезные слова" },
+    { fr: "de", ru: "из (les acteurs de mon film)", theme: "Полезные слова" },
+    { fr: "mon", ru: "мой", theme: "Притяжательные" },
+    { fr: "ton", ru: "твой", theme: "Притяжательные" },
+    { fr: "son", ru: "его / её", theme: "Притяжательные" },
+    { fr: "notre", ru: "наш", theme: "Притяжательные" },
+    { fr: "votre", ru: "ваш", theme: "Притяжательные" },
+    { fr: "leur", ru: "их", theme: "Притяжательные" },
+    { fr: "Ça va ?", ru: "Как дела? (безлично)", theme: "Фразы" },
+    { fr: "Comment vas-tu ?", ru: "Как ты?", theme: "Фразы" },
+    { fr: "Comment allez-vous ?", ru: "Как вы?", theme: "Фразы" },
+    { fr: "Comme ci, comme ça.", ru: "Так себе.", theme: "Фразы" },
+    { fr: "Ça va aller.", ru: "Всё наладится.", theme: "Фразы" },
+    { fr: "J'ai des amis.", ru: "У меня есть друзья.", theme: "Фразы" }
   ],
 
   lessons: {
@@ -181,8 +219,7 @@ window.COURSE = {
             prompt: "Как спросить «как дела?» безлично?", options: ["Comment ça va ?", "Comment vas-tu ?", "Comment allez-vous ?"], answer: "Comment ça va ?", say: "Comment ça va ?",
             explain: "Безлично: <b>comment ça va ?</b> или <b>ça va ?</b>" },
           { id: "a3-4", type: "order", kind: "Собери фразу",
-            prompt: "У меня всё очень хорошо.", tokens: ["Je", "vais", "très", "bien."], say: "Je vais très bien.",
-            explain: "" },
+            prompt: "У меня всё очень хорошо.", tokens: ["Je", "vais", "très", "bien."], say: "Je vais très bien.", explain: "" },
           { id: "a3-5", type: "choice", kind: "Закончи диалог",
             prompt: "— Ça va ?\n— ___", ru: "— Как дела? — Так себе.", options: ["Comme ci, comme ça.", "Comment vas-tu ?", "Il va à Paris."], answer: "Comme ci, comme ça.", say: "Comme ci, comme ça.",
             explain: "На «Ça va ?» отвечают: ça va ___ / comme ci, comme ça / ça va aller." },
@@ -217,18 +254,20 @@ window.COURSE = {
   --violet: #7b5cf7;
   --pink: #ff92dc;
   --peach: #ffe0bd;
+  --cream: #fff6ea;
   color-scheme: light;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif; padding-inline: 16px; }
 button { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
-.app { max-width: 520px; margin: 0 auto; padding-block: 18px 130px; }
+button:focus-visible, input:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
+.app { max-width: 520px; margin: 0 auto; padding-block: 18px 150px; }
 h1, h2, h3 { margin: 0; font-weight: 900; letter-spacing: -0.02em; text-wrap: balance; }
 .fr { font-family: "Fredoka", "Nunito", sans-serif; font-weight: 600; }
 .muted { color: var(--muted); }
 svg.art { position: absolute; inset: 0; width: 100%; height: 100%; }
+.end { background: var(--coral); color: #fff; border-radius: 6px; padding: 0 3px; margin-left: 1px; }
 
 /* ---------- home ---------- */
 .top { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
@@ -238,14 +277,12 @@ svg.art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .stats { margin-left: auto; display: flex; gap: 6px; }
 .pill { display: inline-flex; align-items: center; gap: 5px; padding: 6px 11px; border-radius: 99px; background: var(--card); border: 1.5px solid var(--line); font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums; }
 .pill svg { width: 16px; height: 16px; }
-
 .daily { display: flex; align-items: center; gap: 18px; padding: 18px; border: 1.5px solid var(--ink); border-radius: 22px; background: var(--card); }
 .ring { position: relative; width: 78px; height: 78px; flex: none; }
 .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
 .ring b { position: absolute; inset: 0; display: grid; place-items: center; font-weight: 900; font-size: 17px; font-variant-numeric: tabular-nums; }
 .daily h3 { font-size: 17px; }
 .daily p { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
-
 .row-h { display: flex; align-items: baseline; justify-content: space-between; margin: 26px 0 12px; }
 .row-h h2 { font-size: 26px; }
 .bento { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 118px; gap: 12px; }
@@ -259,7 +296,7 @@ svg.art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .tile:active { transform: scale(.98); }
 
 /* ---------- section ---------- */
-.hero { position: relative; overflow: hidden; border-radius: 26px 26px 0 0; background: var(--a); height: 190px; }
+.hero { position: relative; overflow: hidden; border-radius: 26px 26px 0 0; background: var(--a); height: 170px; }
 .hero .bar-top { position: relative; display: flex; align-items: center; padding: 14px; z-index: 1; }
 .hero .bar-top h1 { position: absolute; left: 0; right: 0; text-align: center; font-size: 18px; pointer-events: none; }
 .round { width: 42px; height: 42px; border-radius: 50%; border: 0; background: var(--card); display: grid; place-items: center; flex: none; }
@@ -269,34 +306,70 @@ svg.art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .sheet .sub { color: var(--muted); font-size: 14px; margin-top: 2px; }
 .meter { height: 8px; background: #f0ebe4; border-radius: 99px; overflow: hidden; margin-top: 12px; }
 .meter i { display: block; height: 100%; background: var(--ink); border-radius: inherit; }
-.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-.chips button { border: 1.5px solid var(--line); background: var(--card); border-radius: 99px; padding: 6px 14px; font-weight: 800; font-size: 14px; }
+.h-sm { font-size: 20px; margin: 22px 0 4px; }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.chips button { border: 1.5px solid var(--line); background: var(--card); border-radius: 99px; padding: 6px 13px; font-weight: 800; font-size: 14px; }
 .chips button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
-.list { display: grid; gap: 4px; margin-top: 14px; }
-.item { display: flex; gap: 14px; align-items: center; width: 100%; text-align: left; border: 0; background: none; padding: 10px 0; border-radius: 16px; }
+.list { display: grid; gap: 2px; margin-top: 6px; }
+.item { display: flex; gap: 14px; align-items: center; width: 100%; text-align: left; border: 0; background: none; padding: 9px 0; border-radius: 16px; }
 .item:hover .thumb { transform: rotate(-3deg); }
-.item:disabled { cursor: default; }
-.thumb { position: relative; width: 72px; height: 72px; flex: none; border-radius: 16px; overflow: hidden; background: var(--a); transition: transform .2s; }
-.thumb .ic { position: absolute; left: 50%; top: 50%; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; }
-.thumb .ic svg { width: 18px; height: 18px; }
+.item:disabled { cursor: default; opacity: .45; }
+.thumb { position: relative; width: 66px; height: 66px; flex: none; border-radius: 16px; overflow: hidden; background: var(--a); transition: transform .2s; }
+.thumb .ic { position: absolute; left: 50%; top: 50%; width: 34px; height: 34px; margin: -17px 0 0 -17px; border-radius: 50%; background: rgba(255,255,255,.92); display: grid; place-items: center; }
+.thumb .ic svg { width: 17px; height: 17px; }
 .item .tt { font-weight: 900; font-size: 17px; line-height: 1.2; }
 .item .dd { font-size: 13.5px; color: var(--muted); line-height: 1.35; margin-top: 2px; }
-.lvl { display: inline-block; margin-top: 4px; font-size: 11px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
+.lvl { display: inline-block; margin-top: 3px; font-size: 11px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; }
 .lvl.l1 { color: var(--green); } .lvl.l2 { color: #c77d00; } .lvl.l3 { color: #e0452e; }
 .lvl .best { color: var(--muted); font-weight: 700; letter-spacing: 0; text-transform: none; margin-left: 6px; }
+
+/* ---------- rule card (schematic) ---------- */
+.rule { margin-top: 16px; background: var(--cream); border: 1.5px solid var(--line); border-radius: 20px; padding: 14px 14px 12px; display: grid; gap: 10px; }
+.rule-h { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 15px; }
+.rule-h .badge { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; background: var(--ink); color: #fff; border-radius: 99px; padding: 2px 9px; }
+.scheme { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 15px; }
+.w { display: inline-flex; align-items: center; background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; padding: 3px 10px; font: 600 17px "Fredoka", sans-serif; }
+.w.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+.arr { font-weight: 900; color: var(--muted); }
+.egrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.egrid .w { justify-content: space-between; gap: 6px; font-size: 16px; }
+.egrid .w small { font: 700 12px "Nunito", sans-serif; color: var(--muted); }
+.note { font-size: 13.5px; color: var(--muted); }
+.note b { color: var(--ink); }
+.tbl { width: 100%; border-collapse: separate; border-spacing: 5px; margin: -5px; }
+.tbl th { font-size: 12px; font-weight: 800; color: var(--muted); text-align: left; padding: 0 4px; }
+.tbl td { background: var(--card); border: 1.5px solid var(--line); border-radius: 10px; text-align: center; font: 600 18px "Fredoka", sans-serif; padding: 4px; }
+.tbl td.hl { background: var(--pink); }
+.tbl td.hl2 { background: var(--lime); }
+.rule-sep { height: 1.5px; background: var(--line); }
+.prep-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.prep-row div { background: var(--card); border: 1.5px solid var(--line); border-radius: 12px; padding: 6px 4px; text-align: center; font-size: 12px; font-weight: 700; color: var(--muted); line-height: 1.2; }
+.prep-row b { display: block; font: 600 22px "Fredoka", sans-serif; color: var(--ink); }
+
+/* ---------- verb dropdowns ---------- */
+details.verb { border: 1.5px solid var(--line); border-radius: 18px; background: var(--card); }
+details.verb + details.verb { margin-top: 8px; }
+details.verb summary { list-style: none; display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; }
+details.verb summary::-webkit-details-marker { display: none; }
+details.verb summary .fr { font-size: 19px; }
+details.verb summary .ru { color: var(--muted); font-size: 14px; }
+details.verb summary .chev { margin-left: auto; transition: transform .2s; width: 20px; height: 20px; flex: none; }
+details.verb[open] summary .chev { transform: rotate(180deg); }
+details.verb .body { padding: 0 14px 14px; }
+.gtag { font-size: 11px; font-weight: 900; padding: 2px 8px; border-radius: 99px; background: var(--lime); }
+.gtag.g3 { background: var(--pink); }
+.sublbl { font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 12px 0 2px; }
 
 /* ---------- cheat sheet ---------- */
 .cards { display: grid; gap: 12px; margin-top: 16px; }
 .card { background: var(--card); border-radius: 20px; padding: 16px; border: 1.5px solid var(--line); }
-.card h3 { font-size: 18px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.card .blk { margin: 6px 0; }
+.card h3 { font-size: 18px; margin-bottom: 8px; }
 .ex { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
-.ex .fr { font-size: 18px; line-height: 1.2; }
+.ex .fr { font-size: 17px; line-height: 1.2; }
 .ex .ru { font-size: 13px; color: var(--muted); }
 .say { width: 34px; height: 34px; flex: none; border-radius: 50%; border: 0; background: var(--lime); display: grid; place-items: center; }
 .say svg { width: 17px; height: 17px; }
-.tag { font-size: 12px; font-weight: 800; padding: 3px 10px; border-radius: 99px; background: var(--peach); }
-.conj { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.conj { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
 .conj .ex { margin: 5px 0; }
 .conj .fr { font-size: 16px; }
 .numsay { display: flex; align-items: center; gap: 12px; min-height: 48px; margin-bottom: 10px; }
@@ -355,7 +428,7 @@ textarea.field { min-height: 110px; resize: vertical; }
 .dock.fb { background: var(--card); border-radius: 26px 26px 0 0; box-shadow: 0 -6px 30px rgba(23,23,28,.12); padding-top: 18px; }
 .dock.fb.ok { background: var(--lime); }
 .dock.fb.bad { background: #ffb4a6; }
-.dock-in { max-width: 520px; margin: 0 auto; display: grid; gap: 12px; }
+.dock-in { max-width: 520px; margin: 0 auto; display: grid; gap: 10px; }
 .fb-h { font-weight: 900; font-size: 22px; }
 .fb-ans { display: flex; align-items: center; gap: 10px; }
 .fb-ans .fr { font-size: 21px; line-height: 1.2; }
@@ -379,7 +452,7 @@ textarea.field { min-height: 110px; resize: vertical; }
 .res-p { text-align: center; color: var(--muted); margin: 0; }
 .linkbtn { display: block; margin: 22px auto 0; background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 13px; padding: 8px; }
 
-@media (max-width: 370px) { .q { font-size: 24px; } .bento { grid-auto-rows: 104px; } }
+@media (max-width: 370px) { .q { font-size: 24px; } .bento { grid-auto-rows: 104px; } .egrid { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 
@@ -400,13 +473,16 @@ textarea.field { min-height: 110px; resize: vertical; }
     speak: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    chev: '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
     cards: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="4" y="6" width="12" height="14" rx="2"/><path d="M8 4h10a2 2 0 0 1 2 2v12"/></svg>',
     pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg>',
     ear: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/></svg>',
     puzzle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="4" width="8" height="6" rx="2"/><rect x="13" y="4" width="8" height="6" rx="2"/><rect x="7" y="14" width="10" height="6" rx="2"/></svg>',
     bug: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M16 16l4 4"/></svg>',
     calc: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 4v6M4 7h6M14 7h6M5 15l4 4M9 15l-4 4M14 16h6M14 19h6"/></svg>',
-    book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>'
+    book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>',
+    globe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><path d="M4 12h16M12 4c3 3 3 13 0 16M12 4c-3 3-3 13 0 16"/></svg>',
+    mix: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h3l10 10h3M4 17h3l10-10h3"/></svg>'
   };
 
   // ---------- декоративные формы ----------
@@ -477,6 +553,8 @@ textarea.field { min-height: 110px; resize: vertical; }
   const norm = s => String(s).toLowerCase().replace(/[’`]/g, "'").replace(/[.,!?«»;:—]/g, " ").replace(/\s*-\s*/g, "-").replace(/\s*'\s*/g, "'").replace(/\s+/g, " ").trim();
   const bare = s => norm(s).normalize("NFD").replace(/[̀-ͯ]/g, "");
   const tokenize = s => s.split(" ").reduce((a, t) => { if (/^[?!.]+$/.test(t) && a.length) a[a.length - 1] += " " + t; else a.push(t); return a; }, []);
+  const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const blankify = (fr, w) => fr.replace(new RegExp("(^|[\\s'])" + reEsc(w) + "(?=[\\s.,?!-]|$)"), "$1___");
 
   // ---------- speech ----------
   let frVoice = null;
@@ -492,9 +570,10 @@ textarea.field { min-height: 110px; resize: vertical; }
     speechSynthesis.speak(u);
   }
   const sayBtn = t => `<button class="say" data-say="${esc(t)}" aria-label="Послушать">${ICON.speak}</button>`;
-  document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) { e.stopPropagation(); speak(b.dataset.say, b.dataset.slow === "1"); } }, true);
+  document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) { e.stopPropagation(); e.preventDefault(); speak(b.dataset.say, b.dataset.slow === "1"); } }, true);
 
-  // ---------- клавиатура: Enter = проверить, ещё Enter = дальше; 1–4 = вариант ----------
+  // ---------- клавиатура ----------
+  // Enter — проверить, ещё Enter — дальше; стрелки и 1–4 — выбрать вариант
   let enterLock = 0;
   document.addEventListener("keydown", e => {
     if (e.target.tagName === "TEXTAREA") return;
@@ -507,14 +586,20 @@ textarea.field { min-height: 110px; resize: vertical; }
       else if (!chk.disabled) chk.click();
       return;
     }
-    if (/^[1-4]$/.test(e.key) && e.target.tagName !== "INPUT") {
-      const o = document.querySelectorAll(".opts .opt:not(:disabled)")[+e.key - 1];
-      if (o) o.click();
-    }
+    if (e.target.tagName === "INPUT") return;
+    const list = [...document.querySelectorAll(".opts .opt:not(:disabled), .words .opt:not(:disabled)")];
+    if (!list.length) return;
+    if (/^[1-9]$/.test(e.key)) { const o = list[+e.key - 1]; if (o) { o.click(); o.focus(); } return; }
+    const dir = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[e.key];
+    if (!dir) return;
+    e.preventDefault();
+    let i = list.findIndex(b => b.classList.contains("sel"));
+    i = i < 0 ? (dir > 0 ? 0 : list.length - 1) : (i + dir + list.length) % list.length;
+    list[i].click(); list[i].focus();
   });
 
   // ================================================================
-  //  ДАННЫЕ → ЗАДАНИЯ
+  //  ДАННЫЕ
   // ================================================================
   const PRON = ["je", "tu", "il", "elle", "nous", "vous", "ils", "elles"];
   const GROUP = { 1: "I группа", 2: "II группа", 3: "III группа" };
@@ -527,6 +612,13 @@ textarea.field { min-height: 110px; resize: vertical; }
   const prons = v => PRON.filter(p => formOf(v, p));
   const whoHas = (v, f) => prons(v).filter(p => formOf(v, p) === f).map(p => pdisp(p, f)).join(", ");
   const headOf = (v, ex) => cap(pf(ex.p, formOf(v, ex.p)));
+  const stemOf = v => (v.group === 1 || v.group === 2) ? v.inf.slice(0, -2) : null;
+  // форма с выделенным окончанием (для I и II группы)
+  function markForm(v, f) {
+    const st = stemOf(v);
+    return st && f.startsWith(st) && f.length > st.length ? esc(st) + `<span class="end">${esc(f.slice(st.length))}</span>` : esc(f);
+  }
+  const markPf = (v, p) => { const f = formOf(v, p); return (elides(p, f) ? "j'" : p + " ") + markForm(v, f); };
 
   const UNITS = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"];
   const TENS = { 2: "vingt", 3: "trente", 4: "quarante", 5: "cinquante", 6: "soixante" };
@@ -537,7 +629,7 @@ textarea.field { min-height: 110px; resize: vertical; }
     if (n < 20) return `${n} = dix + ${UNITS[n - 10]}.`;
     if (n % 10 === 0) return `Это десяток.`;
     if (n % 10 === 1) return `На конце 1 → «et un».`;
-    return `Десятки и единицы через дефис.`;
+    return `Десяток + единицы через дефис: ${TENS[Math.floor(n / 10)]}-${UNITS[n % 10]}.`;
   }
   const ruYears = n => n % 10 === 1 && n % 100 !== 11 ? "год" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "года" : "лет";
   const NMAX = C.numbers.max;
@@ -548,13 +640,75 @@ textarea.field { min-height: 110px; resize: vertical; }
   const defOf = n => vowel(n.w) ? "l'" : n.g === "f" ? "la" : "le";
   const withDef = (d, w) => d === "l'" ? "l'" + w : d + " " + w;
   const G_RU = { m: "м.р.", f: "ж.р." };
+  const pairOf = n => n.pair && NOUN[n.pair];
+  const pairNote = n => { const p = pairOf(n); return p ? ` Пара: <b>${indefOf(p)} ${esc(p.w)}</b> — ${esc(p.ru)} (${G_RU[p.g]}).` : n.both ? " Одинаково для м.р. и ж.р.: un / une " + esc(n.w) + "." : ""; };
+  const artNouns = () => C.nouns.filter(n => !n.both);
 
   const PREP = { f: "en", m: "au", pl: "aux", city: "à" };
   const KIND_RU = { f: "страна ж.р.", m: "страна м.р.", pl: "страна мн.ч.", city: "город" };
+  const RU_NOM = { je: "Я", tu: "Ты", il: "Он", elle: "Она", nous: "Мы", vous: "Вы", ils: "Они", elles: "Они" };
+  const RU_GEN = { je: "меня", tu: "тебя", il: "него", elle: "неё", nous: "нас", vous: "вас", ils: "них", elles: "них" };
+  const RU_DAT = { je: "Мне", tu: "Тебе", il: "Ему", elle: "Ей", nous: "Нам", vous: "Вам", ils: "Им", elles: "Им" };
   const RU_GO = { je: "Я еду", tu: "Ты едешь", il: "Он едет", elle: "Она едет", nous: "Мы едем", vous: "Вы едете", ils: "Они едут", elles: "Они едут" };
-  const PLACE = Object.fromEntries(C.places.list.map(p => [p.name, p]));
-  const WORD = Object.fromEntries(C.vocab.map(w => [w.fr, w]));
+  const POSS_FR = { je: "mon", tu: "ton", il: "son", elle: "son", nous: "notre", vous: "votre", ils: "leur", elles: "leur" };
+  const POSS_RU = { je: { m: "мой", f: "моя", n: "моё" }, tu: { m: "твой", f: "твоя", n: "твоё" }, il: "его / её", elle: "его / её",
+    nous: { m: "наш", f: "наша", n: "наше" }, vous: { m: "ваш", f: "ваша", n: "ваше" }, ils: "их", elles: "их" };
+  const ruPoss = (p, rg) => typeof POSS_RU[p] === "string" ? POSS_RU[p] : POSS_RU[p][rg];
+  const PLACE = Object.fromEntries(C.places.map(p => [p.name, p]));
 
+  // словарик: слова + существительные (с артиклем un/une — сразу виден род)
+  const nounLabel = n => `${indefOf(n)} ${n.w}`;
+  const VOCAB = C.vocab.concat(C.nouns.map(n => ({ fr: nounLabel(n), ru: n.ru, theme: n.theme, noun: n })));
+  const WORD = Object.fromEntries(VOCAB.map(w => [w.fr, w]));
+
+  // ================================================================
+  //  ФРАЗЫ ИЗ ВСЕХ СЛОВ (шаблоны)
+  // ================================================================
+  const HAVE_TH = ["Семья", "Дом и вещи"];
+  const P4 = ["je", "tu", "il", "elle"];
+  const profsM = () => C.nouns.filter(n => n.theme === "Профессии" && n.g === "m");
+  function profFor(p, n) { const pr = pairOf(n); if (p === "elle" && pr) return pr; if ((p === "je" || p === "tu") && pr && Math.random() < .5) return pr; return n; }
+  const TPL = {
+    cest: { verb: "être", make: () => ["cest", pick(C.nouns).w],
+      build: ([, w]) => { const n = NOUN[w]; if (!n) return null; const a = indefOf(n);
+        return { fr: `C'est ${a} ${n.w}.`, ru: `Это ${n.ru}.`, slots: [{ w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
+    cesont: { verb: "être", make: () => ["cesont", pick(C.nouns.filter(n => !n.noPl)).w],
+      build: ([, w]) => { const n = NOUN[w]; if (!n || n.noPl) return null;
+        return { fr: `Ce sont des ${n.pl}.`, ru: `Это ${n.rupl}.`, slots: [{ w: "des", k: "art" }, { w: n.pl, k: "noun" }] }; } },
+    avoir: { verb: "avoir", make: () => ["avoir", pick(PRON), pick(C.nouns.filter(n => HAVE_TH.includes(n.theme))).w],
+      build: ([, p, w]) => { const n = NOUN[w], v = VERB.avoir; if (!n || !v) return null; const f = formOf(v, p), a = indefOf(n);
+        return { fr: `${cap(pf(p, f))} ${a} ${n.w}.`, ru: `У ${RU_GEN[p]} есть ${n.ru}.`, slots: [{ w: f, k: "verb" }, { w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
+    age: { verb: "avoir", make: () => ["age", pick(PRON), String(rnd(2, NMAX))],
+      build: ([, p, num]) => { const v = VERB.avoir, n = +num; if (!v || !(n >= 2 && n <= NMAX)) return null; const f = formOf(v, p);
+        return { fr: `${cap(pf(p, f))} ${nword(n)} ans.`, ru: `${RU_DAT[p]} ${n} ${ruYears(n)}.`, slots: [{ w: f, k: "verb" }] }; } },
+    aller: { verb: "aller", make: () => ["aller", pick(PRON), pick(C.places).name],
+      build: ([, p, name]) => { const pl = PLACE[name], v = VERB.aller; if (!pl || !v) return null; const f = formOf(v, p), pr = PREP[pl.kind];
+        return { fr: `${cap(pf(p, f))} ${pr} ${name}.`, ru: `${RU_GO[p]} ${pl.ru}.`, slots: [{ w: f, k: "verb" }, { w: pr, k: "prep" }] }; } },
+    poss: { verb: "être", make: () => ["poss", pick(PRON), pick(C.nouns.filter(n => n.g === "m" && n.rg && ["Семья", "Дом и вещи", "Досуг"].includes(n.theme))).w],
+      build: ([, p, w]) => { const n = NOUN[w]; if (!n || !n.rg) return null; const ps = POSS_FR[p];
+        return { fr: `C'est ${ps} ${n.w}.`, ru: `Это ${ruPoss(p, n.rg)} ${n.ru}.`, slots: [{ w: ps, k: "poss" }, { w: n.w, k: "noun" }] }; } },
+    etre: { verb: "être", make: () => { const p = pick(P4); return ["etre", p, profFor(p, pick(profsM())).w]; },
+      build: ([, p, w]) => { const n = NOUN[w], v = VERB["être"]; if (!n || !v) return null; const f = formOf(v, p);
+        return { fr: `${cap(pf(p, f))} ${n.w}.`, ru: `${RU_NOM[p]} ${n.ru}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] }; } },
+    travail: { verb: "travailler", make: () => { const p = pick(P4); return ["travail", p, profFor(p, pick(profsM().filter(n => n.ins))).w]; },
+      build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.ins || !v) return null; const f = formOf(v, p);
+        return { fr: `${cap(pf(p, f))} comme ${n.w}.`, ru: `${cap(ruOf(v, p))} ${n.ins}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] }; } }
+  };
+  const tplFor = infs => Object.keys(TPL).filter(t => VERB[TPL[t].verb] && (!infs || infs.includes(TPL[t].verb)));
+  function phraseKeys(tpls, n = 40) {
+    const out = [];
+    for (let i = 0; i < n * 2 && out.length < n; i++) { const t = pick(tpls); if (!t) break; const sp = TPL[t].make(); if (TPL[t].build(sp)) out.push("t|" + sp.join("~")); }
+    return uniq(out);
+  }
+  function sampleSentences(inf, n) {
+    const t = tplFor([inf]); const out = [];
+    for (let i = 0; i < 20 && out.length < n && t.length; i++) { const T = TPL[pick(t)], s = T.build(T.make()); if (s && !out.some(o => o.fr === s.fr)) out.push(s); }
+    return out;
+  }
+
+  // ================================================================
+  //  ГЕНЕРАТОРЫ ЗАДАНИЙ
+  // ================================================================
   const pickMode = (avail, modes) => { const m = modes ? avail.filter(x => modes.includes(x)) : avail; return m.length ? pick(m) : null; };
 
   const GEN = {
@@ -562,10 +716,20 @@ textarea.field { min-height: 110px; resize: vertical; }
     vf(inf, p, modes) {
       const v = VERB[inf]; if (!v) return null;
       const f = formOf(v, p); if (!f) return null;
-      const m = pickMode(["conj", "conjc", "pron", "dict"], modes); if (!m) return null;
+      const st = stemOf(v);
+      const avail = ["conj", "conjc", "pron", "dict"];
+      if (st && f.startsWith(st)) avail.push("end");
+      const m = pickMode(avail, modes); if (!m) return null;
       const full = pf(p, f), ru = ruOf(v, p);
-      const base = { say: full, sayRu: ru, explain: `${inf} — ${esc(v.ru)}, ${GROUP[v.group]}.` };
+      const base = { say: full, sayRu: ru, sayHtml: markPf(v, p), explain: `${inf} — ${esc(v.ru)}, ${GROUP[v.group]}.` };
       const blankP = elides(p, f) ? "j'___" : p + " ___";
+      if (m === "end") {
+        const ends = uniq(prons(v).map(q => formOf(v, q).slice(st.length)));
+        const mine = f.slice(st.length);
+        return { ...base, type: "choice", kind: "Окончание", ask: `${inf}: основа ${st} + окончание`, prompt: `${pdisp(p, f)}${elides(p, f) ? "" : " "}${st}___`, ru,
+          options: [mine, ...shuffle(ends.filter(x => x !== mine)).slice(0, 2)].map(x => "-" + x), answer: "-" + mine,
+          explain: `I группа: ${esc(p)} → <b>-${esc(mine)}</b>.` };
+      }
       if (m === "conj") return { ...base, type: "input", kind: "Спряжение", ask: `Глагол ${inf}`, prompt: blankP, ru, answers: [f] };
       if (m === "conjc") {
         const others = shuffle(uniq(prons(v).map(q => formOf(v, q))).filter(x => x !== f)).slice(0, 2);
@@ -579,7 +743,6 @@ textarea.field { min-height: 110px; resize: vertical; }
       }
       return { ...base, type: "input", kind: "Правописание", ask: `Послушай и запиши · ${inf}`, audio: full, prompt: "", answers: [full] };
     },
-    // перевод глагола: vt|inf
     vt(inf, _, modes) {
       const v = VERB[inf]; if (!v || !v.ru) return null;
       const m = pickMode(["fr2ru", "ru2fr"], modes); if (!m) return null;
@@ -588,14 +751,13 @@ textarea.field { min-height: 110px; resize: vertical; }
       if (m === "fr2ru") return { ...base, type: "choice", kind: "Переведи", prompt: inf, options: [v.ru, ...others("ru")], answer: v.ru };
       return { ...base, type: "choice", kind: "Переведи", prompt: v.ru, options: [inf, ...others("inf")], answer: inf };
     },
-    // пары: vm|inf
     vm(inf, _, modes) {
       const v = VERB[inf]; if (!v || pickMode(["match"], modes) === null) return null;
       const seen = new Set(), pairs = [];
       ["je", "tu", "il", "nous", "vous", "ils"].forEach(p => { const f = formOf(v, p); if (f && !seen.has(f)) { seen.add(f); pairs.push([pdisp(p, f), f]); } });
-      return { type: "match", kind: "Соедини пары", prompt: `${inf} — ${v.ru}`, pairs, explain: pairs.map(p => (p[0].endsWith("'") ? p[0] : p[0] + " ") + p[1]).join(", ") + "." };
+      return { type: "match", kind: "Соедини пары", prompt: `${inf} — ${v.ru}`, pairs, explain: "" };
     },
-    // предложение: vs|inf|index
+    // фраза из конспекта: vs|inf|index
     vs(inf, i, modes) {
       const v = VERB[inf]; const ex = v && v.examples[+i]; if (!ex) return null;
       const form = ex.v || (ex.p && formOf(v, ex.p));
@@ -608,21 +770,37 @@ textarea.field { min-height: 110px; resize: vertical; }
       if (m === "order") return { ...base, type: "order", kind: "Собери фразу", prompt: ex.ru || "Собери фразу", tokens: tokenize(fr) };
       if (m === "dict") return { ...base, type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: fr, prompt: "", answers: [fr] };
       if (m === "translate") return { ...base, type: "input", kind: "Переведи фразу", ask: "Напиши по-французски", prompt: ex.ru, answers: [fr] };
-      if (m === "fill") {
-        const re = new RegExp("(^|[\\s'])" + form + "(?=[\\s.,?!-]|$)");
-        return { ...base, type: "input", kind: "Вставь глагол", ask: `Глагол ${inf}`, prompt: fr.replace(re, "$1___"), ru: ex.ru, answers: [form] };
-      }
+      if (m === "fill") return { ...base, type: "input", kind: "Вставь глагол", ask: `Глагол ${inf}`, prompt: blankify(fr, form), ru: ex.ru, answers: [form] };
       const old = headOf(v, ex), rest = fr.slice(old.length);
       const q = pick(prons(v).filter(x => x !== ex.p && x !== "je" && formOf(v, x) !== formOf(v, ex.p))); if (!q) return null;
       const right = cap(pf(q, formOf(v, q))) + rest;
       const qBase = { say: right, sayRu: ruOf(v, q) ? `${pf(q, formOf(v, q))} — ${ruOf(v, q)}` : "" };
-      if (m === "transform") return { ...qBase, type: "input", kind: "Переделай", ask: `Начни с «${cap(q)}»`, prompt: fr, ru: ex.ru, answers: [right],
-        explain: `${q} → <b>${esc(formOf(v, q))}</b>.` };
+      if (m === "transform") return { ...qBase, type: "input", kind: "Переделай", ask: `Начни с «${cap(q)}»`, prompt: fr, ru: ex.ru, answers: [right], explain: `${q} → <b>${esc(formOf(v, q))}</b>.` };
       const wf = pick(uniq(prons(v).map(r => formOf(v, r))).filter(f => f !== formOf(v, q)));
       const bad = cap(q) + " " + wf + rest;
       const why = `${q} → <b>${esc(formOf(v, q))}</b>, а ${esc(wf)} — для: ${esc(whoHas(v, wf))}.`;
       if (m === "find") return { ...qBase, type: "find", kind: "Найди ошибку", prompt: "Нажми на неправильное слово", words: tokenize(bad), wrong: 1, explain: why };
       return { ...qBase, type: "input", kind: "Исправь ошибку", ask: "Напиши правильно", prompt: bad, answers: [right], explain: why };
+    },
+    // фраза из шаблона: t|tpl~a~b
+    t(spec, _, modes) {
+      const parts = spec.split("~"), T = TPL[parts[0]]; if (!T) return null;
+      const s = T.build(parts); if (!s) return null;
+      const hasArt = s.slots.some(z => z.k === "art");
+      const m = pickMode(["fr2ru", "ru2fr1", "order", "dict"].concat(hasArt ? ["art1"] : []), modes); if (!m) return null;
+      const base = { say: s.fr, sayRu: s.ru, explain: "" };
+      if (m === "fr2ru") {
+        const ds = [];
+        for (let i = 0; i < 30 && ds.length < 2; i++) { const o = T.build(T.make()); if (o && o.ru !== s.ru && !ds.includes(o.ru)) ds.push(o.ru); }
+        return { ...base, type: "choice", kind: "Переведи на русский", prompt: s.fr, options: [s.ru, ...ds], answer: s.ru, noRu: true };
+      }
+      if (m === "ru2fr1" || m === "art1") {
+        const slot = m === "art1" ? s.slots.find(z => z.k === "art") : pick(s.slots);
+        if (m === "art1") return { ...base, type: "choice", kind: "Какой артикль?", prompt: blankify(s.fr, slot.w), ru: s.ru, options: ["un", "une", "des"], answer: slot.w };
+        return { ...base, type: "input", kind: "Вставь одно слово", ask: "Переведи: впиши пропущенное слово", prompt: blankify(s.fr, slot.w), ru: s.ru, answers: [slot.w] };
+      }
+      if (m === "order") return { ...base, type: "order", kind: "Собери фразу", prompt: s.ru, tokens: tokenize(s.fr) };
+      return { ...base, type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: s.fr, prompt: "", answers: [s.fr] };
     },
     // число: n|N
     n(nStr, _, modes) {
@@ -640,9 +818,9 @@ textarea.field { min-height: 110px; resize: vertical; }
       if (m === "calc") {
         let a, b, op;
         if (n >= 2 && (n === NMAX || Math.random() < .5)) { op = "+"; a = rnd(1, n - 1); b = n - a; } else { op = "−"; b = rnd(1, NMAX - n); a = n + b; }
-        const ex = { ...base, explain: `${nword(a)} ${op} ${nword(b)} = <b>${w}</b>` };
-        if (Math.random() < .5) return { ...ex, type: "input", digits: true, kind: "Реши пример", ask: "Ответ цифрами", prompt: `${nword(a)} ${op} ${nword(b)}`, answers: [String(n)] };
-        return { ...ex, type: "input", kind: "Реши пример", ask: "Ответ буквами", prompt: `${a} ${op} ${b}`, answers: nAnswers(n) };
+        const prompt = Math.random() < .5 ? `${a} ${op} ${b} = ?` : `${nword(a)} ${op} ${nword(b)} = ?`;
+        return { ...base, type: "input", kind: "Реши пример", ask: "Ответ напиши буквами", prompt, answers: nAnswers(n), sayRu: `${a} ${op} ${b} = ${n}`,
+          explain: `${nword(a)} ${op} ${nword(b)} = <b>${w}</b>` };
       }
       const sent = n === 1 ? "Il a 1 an." : `J'ai ${n} ans.`;
       const sentW = n === 1 ? "Il a un an." : `J'ai ${w} ans.`;
@@ -653,33 +831,33 @@ textarea.field { min-height: 110px; resize: vertical; }
     },
     // существительное: a|mot
     a(w, _, modes) {
-      const n = NOUN[w]; if (!n) return null;
-      const m = pickMode(["indef", "def", "gender", "plural"], modes); if (!m) return null;
-      const pl = Math.random() < .35, word = pl ? n.pl : n.w, ru = pl ? n.rupl : n.ru;
+      const n = NOUN[w]; if (!n || n.both) return null;
+      const avail = ["indef", "def", "gender"].concat(n.noPl ? [] : ["plural"]);
+      const m = pickMode(avail, modes); if (!m) return null;
+      const pl = !n.noPl && Math.random() < .3, word = pl ? n.pl : n.w, ru = pl ? n.rupl : n.ru;
+      const pn = pairNote(n);
       if (m === "indef") {
         const ans = pl ? "des" : indefOf(n);
         return { type: "choice", kind: "un · une · des", prompt: `___ ${word}`, ru, options: ["un", "une", "des"], answer: ans, say: `${ans} ${word}`, sayRu: ru,
-          explain: pl ? `Мн.ч. → <b>des</b>.` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${ans}</b>.` };
+          explain: (pl ? `Мн.ч. → <b>des</b>.` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${ans}</b>.`) + pn };
       }
       if (m === "def") {
         const ans = pl ? "les" : defOf(n), shown = withDef(ans, word);
         return { type: "choice", kind: "le · la · l' · les", prompt: `___ ${word}`, ru, options: ["le", "la", "l'", "les"], answer: ans, say: shown, sayRu: ru,
-          explain: pl ? `Мн.ч. → <b>les</b>.` : ans === "l'" ? `Ед.ч. перед гласной → <b>l'</b>.` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${ans}</b>.` };
+          explain: (pl ? `Мн.ч. → <b>les</b>.` : ans === "l'" ? `${esc(n.w)} начинается с гласной → <b>l'</b> (${G_RU[n.g]}).` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${ans}</b>.`) + pn };
       }
       if (m === "gender") return { type: "choice", kind: "Какой род?", prompt: n.w, ru: n.ru, options: ["м.р.", "ж.р."], answer: G_RU[n.g], say: `${indefOf(n)} ${n.w}`, sayRu: n.ru,
-        explain: `${indefOf(n)} ${esc(n.w)} → ${G_RU[n.g]}.` };
+        explain: `<b>${indefOf(n)} ${esc(n.w)}</b> → ${G_RU[n.g]}.` + pn };
       return { type: "input", kind: "Мн. число", ask: "Поставь во множественное число", prompt: `${indefOf(n)} ${n.w} → des ___`, ru: `${n.ru} → ${n.rupl}`, answers: [n.pl], say: `des ${n.pl}`, sayRu: n.rupl,
-        explain: `Мн.ч. → + <b>s</b>.` };
+        explain: n.pl === n.w ? `Не меняется: ${esc(n.w)} → ${esc(n.pl)}.` : n.pl.endsWith("x") ? `-eau → + <b>x</b>.` : `Мн.ч. → + <b>s</b> (не читается).` };
     },
     // страна/город: p|Nom
     p(name, _, modes) {
       const pl = PLACE[name]; if (!pl || pickMode(["prep"], modes) === null) return null;
       const v = VERB.aller, q = pick(prons(v)), head = cap(pf(q, formOf(v, q))), prep = PREP[pl.kind];
       return { type: "choice", kind: "Страны и города", prompt: `${head} ___ ${name}.`, ru: `${RU_GO[q]} ${pl.ru}.`, options: ["à", "en", "au", "aux"], answer: prep,
-        say: `${head} ${prep} ${name}.`, sayRu: `${RU_GO[q]} ${pl.ru}.`,
-        explain: `${esc(name)} — ${KIND_RU[pl.kind]} → <b>${prep}</b>.` };
+        say: `${head} ${prep} ${name}.`, sayRu: `${RU_GO[q]} ${pl.ru}.`, explain: `${esc(name)} — ${KIND_RU[pl.kind]} → <b>${prep}</b>.` };
     },
-    // фразы про артикли: as|index
     as(i, _, modes) {
       const s = C.articles.sentences[+i]; if (!s) return null;
       const m = pickMode(["order", "dict"], modes); if (!m) return null;
@@ -687,22 +865,26 @@ textarea.field { min-height: 110px; resize: vertical; }
       if (m === "order") return { ...base, type: "order", kind: "Собери фразу", prompt: s.ru, tokens: tokenize(s.fr) };
       return { ...base, type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: s.fr, prompt: "", answers: [s.fr] };
     },
-    // слово: w|mot
+    // слово: w|fr
     w(fr, _, modes) {
       const w = WORD[fr]; if (!w) return null;
       const m = pickMode(["fr2ru", "ru2fr", "write", "hear", "dict"], modes); if (!m) return null;
-      const base = { say: w.fr, sayRu: w.ru, explain: "" };
-      const others = k => shuffle(uniq(C.vocab.filter(x => x !== w).map(x => x[k])).filter(x => x !== w[k])).slice(0, 2);
+      const n = w.noun;
+      const base = { say: w.fr, sayRu: w.ru, explain: n ? `${G_RU[n.g]}.` + pairNote(n) : "" };
+      const pool = VOCAB.filter(x => x !== w && x.theme === w.theme).concat(VOCAB.filter(x => x !== w && x.theme !== w.theme));
+      const others = k => { const o = []; for (const x of shuffle(pool.slice(0, 12)).concat(pool)) { if (o.length >= 2) break; if (x[k] !== w[k] && !o.includes(x[k])) o.push(x[k]); } return o; };
+      const answers = n ? [w.fr, n.w] : [w.fr];
       if (m === "fr2ru") return { ...base, type: "choice", kind: "Переведи", prompt: w.fr, options: [w.ru, ...others("ru")], answer: w.ru };
       if (m === "ru2fr") return { ...base, type: "choice", kind: "Переведи", prompt: w.ru, options: [w.fr, ...others("fr")], answer: w.fr };
-      if (m === "write") return { ...base, type: "input", kind: "Правописание", ask: "Напиши по-французски", prompt: w.ru, answers: [w.fr] };
+      if (m === "write") return { ...base, type: "input", kind: "Правописание", ask: n ? "Напиши по-французски (можно с un / une)" : "Напиши по-французски", prompt: w.ru, answers };
       if (m === "hear") return { ...base, type: "choice", kind: "Что ты услышала?", audio: w.fr, prompt: "", options: [w.fr, ...others("fr")], answer: w.fr };
-      return { ...base, type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: w.fr, prompt: "", answers: [w.fr] };
+      return { ...base, type: "input", kind: "Диктант", ask: "Послушай и запиши", audio: w.fr, prompt: "", answers };
     },
-    // пары слов (не попадают в повторение)
-    wm(tag, _, modes) {
+    wm(theme, _, modes) {
       if (pickMode(["match"], modes) === null) return null;
-      const pairs = shuffle(C.vocab.filter(w => !tag || w.tag === tag)).slice(0, 5).map(w => [w.fr, w.ru]);
+      const pool = VOCAB.filter(w => !theme || w.theme === theme);
+      const pairs = []; const ru = new Set();
+      for (const w of shuffle(pool)) { if (pairs.length >= 5) break; if (!ru.has(w.ru)) { ru.add(w.ru); pairs.push([w.fr, w.ru]); } }
       if (pairs.length < 3) return null;
       return { type: "match", kind: "Соедини пары", prompt: "Слово и перевод", pairs, noKey: true, explain: "" };
     },
@@ -713,9 +895,9 @@ textarea.field { min-height: 110px; resize: vertical; }
   Object.values(C.lessons).forEach(ls => ls.forEach(l => l.exercises.forEach(ex => { LESSON_EX[ex.id] = { ex, lesson: l }; })));
 
   function exFor(key, modes) {
-    const [t, a, b] = key.split("|");
+    const i = key.indexOf("|"), t = key.slice(0, i), rest = key.slice(i + 1).split("|");
     const g = GEN[t]; if (!g) return null;
-    const ex = g(a, b, modes);
+    const ex = g(rest[0], rest[1], modes);
     if (ex) ex.key = ex.noKey ? null : key;
     return ex;
   }
@@ -725,23 +907,26 @@ textarea.field { min-height: 110px; resize: vertical; }
   // ================================================================
   const vGroup = () => S.prefs.vg || 0;
   const vList = () => C.verbs.filter(v => !vGroup() || v.group === vGroup());
+  const vInfs = () => vList().map(v => v.inf);
   const verbKeys = () => vList().flatMap(v => prons(v).map(p => `vf|${v.inf}|${p}`));
   const sentKeys = () => vList().flatMap(v => v.examples.map((_, i) => `vs|${v.inf}|${i}`));
   const numRange = () => ({ "1-20": [1, 20], "21-69": [21, NMAX], all: [1, NMAX] })[S.prefs.nr || "all"];
   const numKeys = () => { const [a, b] = numRange(); const k = []; for (let n = a; n <= b; n++) k.push("n|" + n); return k; };
-  const nounKeys = () => C.nouns.map(n => "a|" + n.w);
-  const vocKeys = () => C.vocab.map(w => "w|" + w.fr);
+  const nounKeys = () => artNouns().map(n => "a|" + n.w);
+  const vTheme = () => S.prefs.vt || "";
+  const vocKeys = () => VOCAB.filter(w => !vTheme() || w.theme === vTheme()).map(w => "w|" + w.fr);
 
   const SECTIONS = [
     { id: "verbs", title: "Глаголы", fr: "les verbes", a: "var(--violet)", b: "var(--lime)", seed: 11,
       mastery: () => C.verbs.flatMap(v => prons(v).map(p => `vf|${v.inf}|${p}`).concat(v.examples.map((_, i) => `vs|${v.inf}|${i}`))),
       drills: [
-        { id: "v1", t: "Формы глагола", d: "Выбрать форму, найти местоимение, соединить пары", lvl: 1, icon: "cards",
-          keys: () => [...verbKeys(), ...vList().flatMap(v => [`vm|${v.inf}`, `vm|${v.inf}`, `vt|${v.inf}`])], modes: ["conjc", "pron", "match", "fr2ru", "ru2fr"] },
-        { id: "v2", t: "Собери фразу", d: "Слова по порядку, с переводом", lvl: 1, icon: "puzzle", keys: sentKeys, modes: ["order"] },
-        { id: "v3", t: "Спряжение", d: "Написать форму самой", lvl: 2, icon: "pen", keys: () => [...verbKeys(), ...sentKeys()], modes: ["conj", "fill"] },
-        { id: "v4", t: "Найди ошибку", d: "Нажать на неправильное слово", lvl: 2, icon: "bug", keys: sentKeys, modes: ["find"] },
-        { id: "v5", t: "Диктант и перевод", d: "На слух, переделать, исправить", lvl: 3, icon: "ear", keys: () => [...verbKeys(), ...sentKeys()], modes: ["dict", "transform", "fix", "translate"] }
+        { id: "v1", t: "Формы глагола", d: "Выбрать форму или окончание, найти местоимение", lvl: 1, icon: "cards",
+          keys: () => [...verbKeys(), ...vList().flatMap(v => [`vm|${v.inf}`, `vt|${v.inf}`])], modes: ["conjc", "pron", "end", "match", "fr2ru", "ru2fr"] },
+        { id: "v2", t: "Собери фразу", d: "Слова по порядку по переводу", lvl: 1, icon: "puzzle", keys: () => [...sentKeys(), ...phraseKeys(tplFor(vInfs()), 30)], modes: ["order"] },
+        { id: "v3", t: "Переведи фразу", d: "С французского на русский", lvl: 1, icon: "globe", keys: () => phraseKeys(tplFor(vInfs()), 40), modes: ["fr2ru"] },
+        { id: "v4", t: "Спряжение", d: "Написать форму самой", lvl: 2, icon: "pen", keys: () => [...verbKeys(), ...sentKeys()], modes: ["conj", "fill"] },
+        { id: "v5", t: "Найди ошибку", d: "Нажать на неправильное слово", lvl: 2, icon: "bug", keys: sentKeys, modes: ["find"] },
+        { id: "v6", t: "Диктант и переделка", d: "На слух, другое местоимение, исправить", lvl: 3, icon: "ear", keys: () => [...verbKeys(), ...sentKeys()], modes: ["dict", "transform", "fix", "translate"] }
       ] },
     { id: "numbers", title: "Числа", fr: "les nombres", a: "var(--yellow)", b: "var(--violet)", seed: 23,
       mastery: () => { const k = []; for (let n = 1; n <= NMAX; n++) k.push("n|" + n); return k; },
@@ -751,30 +936,124 @@ textarea.field { min-height: 110px; resize: vertical; }
         { id: "n3", t: "Цифры → буквы", d: "42 → quarante-deux", lvl: 2, icon: "pen", keys: numKeys, modes: ["d2w"] },
         { id: "n4", t: "Возраст", d: "J'ai 29 ans · Il a 1 an", lvl: 2, icon: "puzzle", keys: numKeys, modes: ["age", "ageh"] },
         { id: "n5", t: "На слух", d: "Услышать и записать цифрами", lvl: 2, icon: "ear", keys: numKeys, modes: ["hear"] },
-        { id: "n6", t: "Примеры", d: "Реши: ответ цифрами или буквами", lvl: 3, icon: "calc", keys: numKeys, modes: ["calc"] }
+        { id: "n6", t: "Примеры", d: "Реши и напиши ответ буквами", lvl: 3, icon: "calc", keys: numKeys, modes: ["calc"] }
       ] },
     { id: "articles", title: "Артикли и страны", short: "Артикли", fr: "les articles", a: "var(--coral)", b: "var(--pink)", seed: 37,
-      mastery: () => [...nounKeys(), ...C.places.list.map(p => "p|" + p.name), ...C.articles.sentences.map((_, i) => "as|" + i)],
+      mastery: () => [...nounKeys(), ...C.places.map(p => "p|" + p.name), ...C.articles.sentences.map((_, i) => "as|" + i)],
       drills: [
-        { id: "a1", t: "Какой род?", d: "м.р. или ж.р.", lvl: 1, icon: "cards", keys: nounKeys, modes: ["gender"] },
+        { id: "a1", t: "Какой род?", d: "м.р. или ж.р. — и пара другого рода", lvl: 1, icon: "cards", keys: nounKeys, modes: ["gender"] },
         { id: "a2", t: "un · une · des", d: "Неопределённые артикли", lvl: 1, icon: "cards", keys: nounKeys, modes: ["indef"] },
         { id: "a3", t: "le · la · l' · les", d: "Определённые артикли", lvl: 2, icon: "cards", keys: nounKeys, modes: ["def"] },
-        { id: "a4", t: "Страны и города", d: "à · en · au · aux", lvl: 2, icon: "puzzle", keys: () => C.places.list.map(p => "p|" + p.name), modes: ["prep"] },
-        { id: "a5", t: "Фразы", d: "C'est un… · Ce sont des…", lvl: 2, icon: "puzzle", keys: () => C.articles.sentences.map((_, i) => "as|" + i), modes: ["order", "dict"] },
+        { id: "a4", t: "Страны и города", d: "à · en · au · aux", lvl: 2, icon: "globe", keys: () => C.places.map(p => "p|" + p.name), modes: ["prep"] },
+        { id: "a5", t: "Артикль во фразе", d: "C'est un… · J'ai une… · Ce sont des…", lvl: 2, icon: "puzzle",
+          keys: () => [...C.articles.sentences.map((_, i) => "as|" + i), ...phraseKeys(["cest", "cesont", "avoir"], 30)], modes: ["order", "art1"] },
         { id: "a6", t: "Мн. число", d: "une voiture → des voitures", lvl: 3, icon: "pen", keys: nounKeys, modes: ["plural"] }
       ] },
     { id: "vocab", title: "Словарик", fr: "le vocabulaire", a: "var(--mint)", b: "var(--pink)", seed: 51,
-      mastery: () => [...vocKeys(), ...(C.lessons.vocab || []).flatMap(l => l.exercises.map(e => "L|" + e.id))],
+      mastery: () => [...VOCAB.map(w => "w|" + w.fr), ...(C.lessons.vocab || []).flatMap(l => l.exercises.map(e => "L|" + e.id))],
       drills: [
-        { id: "w1", t: "Карточки", d: "Перевод туда и обратно, пары", lvl: 1, icon: "cards", keys: () => [...vocKeys(), "wm|", "wm|"], modes: ["fr2ru", "ru2fr", "match"] },
+        { id: "w1", t: "Карточки", d: "Перевод туда и обратно, пары", lvl: 1, icon: "cards", keys: () => [...vocKeys(), `wm|${vTheme()}`, `wm|${vTheme()}`, `wm|${vTheme()}`], modes: ["fr2ru", "ru2fr", "match"] },
         { id: "w2", t: "Что ты услышала?", d: "Узнать слово на слух", lvl: 2, icon: "ear", keys: vocKeys, modes: ["hear"] },
         { id: "w3", t: "Правописание", d: "Написать по-французски", lvl: 3, icon: "pen", keys: vocKeys, modes: ["write", "dict"] }
+      ] },
+    { id: "phrases", title: "Перевод", fr: "les phrases", a: "var(--pink)", b: "var(--yellow)", seed: 64,
+      masteryCount: true,
+      drills: [
+        { id: "p1", t: "С французского", d: "Выбери правильный перевод", lvl: 1, icon: "globe", keys: () => phraseKeys(tplFor(), 60), modes: ["fr2ru"] },
+        { id: "p2", t: "Собери фразу", d: "Сложи французскую фразу по переводу", lvl: 2, icon: "puzzle", keys: () => phraseKeys(tplFor(), 60), modes: ["order"] },
+        { id: "p3", t: "Вставь одно слово", d: "С русского: впиши пропущенное слово", lvl: 2, icon: "pen", keys: () => phraseKeys(tplFor(), 60), modes: ["ru2fr1"] },
+        { id: "p4", t: "Диктант фраз", d: "Послушай и запиши целиком", lvl: 3, icon: "ear", keys: () => phraseKeys(tplFor(), 60), modes: ["dict"] }
       ] }
   ];
   const SEC = Object.fromEntries(SECTIONS.map(s => [s.id, s]));
   const LVL = { 1: "Легко", 2: "Средне", 3: "Сложно" };
-  const mastery = s => { const k = uniq(s.mastery()); const ok = k.filter(x => S.items[x] && S.items[x].ok > 0 && !S.srs[x]).length; return { ok, total: k.length, pc: k.length ? Math.round(ok / k.length * 100) : 0 }; };
+  const PHRASE_GOAL = 50;
+  function mastery(s) {
+    if (s.masteryCount) {
+      const ok = Object.keys(S.items).filter(k => k.startsWith("t|") && S.items[k].ok > 0 && !S.srs[k]).length;
+      return { ok: Math.min(ok, PHRASE_GOAL), total: PHRASE_GOAL, pc: Math.min(100, Math.round(ok / PHRASE_GOAL * 100)), unit: "фраз" };
+    }
+    const k = uniq(s.mastery()); const ok = k.filter(x => S.items[x] && S.items[x].ok > 0 && !S.srs[x]).length;
+    return { ok, total: k.length, pc: k.length ? Math.round(ok / k.length * 100) : 0 };
+  }
   const dueKeys = () => Object.keys(S.srs).filter(k => S.srs[k].due <= dayStr() && exFor(k));
+
+  // ================================================================
+  //  СХЕМЫ ПРАВИЛ (в начале каждого раздела)
+  // ================================================================
+  function ruleCard(id) {
+    if (id === "verbs") {
+      const v1 = C.verbs.find(v => v.group === 1);
+      let h = `<div class="rule">`;
+      if (!vGroup() || vGroup() === 1) {
+        h += `<div class="rule-h"><span class="badge">I группа</span>глаголы на -er</div>`;
+        if (v1) {
+          const st = stemOf(v1);
+          h += `<div class="scheme"><span class="w">${esc(st)}<span class="end">er</span></span><span class="arr">→</span><span class="w dark">${esc(st)}</span><span class="arr">+</span><span class="w"><span class="end">окончание</span></span></div>
+            <div class="egrid">${["je", "nous", "tu", "vous", "il", "ils"].map(p => `<span class="w">${markPf(v1, p)}</span>`).join("")}</div>`;
+        }
+        h += `<div class="note">Убираем <b>-er</b>, добавляем окончание. <b>-e, -es, -ent</b> не читаются: je travaille и ils travaillent звучат одинаково. Исключение: <b>aller</b> — III группа.</div>`;
+      }
+      if (!vGroup() || vGroup() === 2) {
+        if (!vGroup()) h += `<div class="rule-sep"></div>`;
+        h += `<div class="rule-h"><span class="badge">II группа</span>глаголы на -ir</div>
+          <div class="scheme"><span class="w">fin<span class="end">ir</span></span><span class="arr">→</span><span class="w">fin<span class="end">is</span> · fin<span class="end">issons</span></span></div>
+          <div class="note">Окончания: -is, -is, -it, -issons, -issez, -issent. Пришли глаголы II группы — появятся тренировки.</div>`;
+      }
+      if (!vGroup() || vGroup() === 3) {
+        if (!vGroup()) h += `<div class="rule-sep"></div>`;
+        h += `<div class="rule-h"><span class="badge">III группа</span>неправильные</div>
+          <div class="scheme">${C.verbs.filter(v => v.group === 3).map(v => `<span class="w">${esc(v.inf)}</span>`).join("")}</div>
+          <div class="note">Общего правила нет — формы учим наизусть. Открой глагол ниже, чтобы увидеть все формы.</div>`;
+      }
+      return h + `</div>`;
+    }
+    if (id === "numbers") {
+      return `<div class="rule">
+        <div class="rule-h"><span class="badge">11–16</span>отдельные слова</div>
+        <div class="scheme">${[11, 12, 13, 14, 15, 16].map(n => `<span class="w">${nword(n)}</span>`).join("")}</div>
+        <div class="rule-h"><span class="badge">17–19</span>dix + число</div>
+        <div class="scheme"><span class="w">10 dix</span><span class="arr">+</span><span class="w">7 sept</span><span class="arr">→</span><span class="w dark">dix-sept</span></div>
+        <div class="rule-h"><span class="badge">20–69</span>десяток + единицы</div>
+        <div class="scheme">${[20, 30, 40, 50, 60].map(n => `<span class="w">${n} ${nword(n)}</span>`).join("")}</div>
+        <div class="scheme"><span class="w">vingt</span><span class="arr">+</span><span class="w">deux</span><span class="arr">→</span><span class="w dark">vingt-deux</span></div>
+        <div class="scheme"><span class="w">vingt</span><span class="arr">+</span><span class="w">un</span><span class="arr">→</span><span class="w dark">vingt et un</span></div>
+        <div class="note">На конце 1 — <b>et un</b> (21, 31, 41…), в остальных — <b>дефис</b>.</div></div>`;
+    }
+    if (id === "articles") {
+      return `<div class="rule">
+        <table class="tbl"><tr><th></th><th>м.р.</th><th>ж.р.</th><th>мн.ч.</th></tr>
+          <tr><th>какой-то</th><td>un</td><td>une</td><td>des</td></tr>
+          <tr><th>тот самый</th><td>le</td><td>la</td><td>les</td></tr>
+          <tr><th>+ гласная</th><td class="hl" colspan="2">l'ami · l'école</td><td>les</td></tr></table>
+        <div class="note"><b>un / une</b> — впервые, «какой-то». <b>le / la</b> — конкретный, известный: <i>le secrétaire de Pierre</i>.</div>
+        <div class="rule-sep"></div>
+        <div class="rule-h"><span class="badge">куда?</span>страны и города</div>
+        <div class="prep-row"><div><b>à</b>город</div><div><b>en</b>страна ж.р.</div><div><b>au</b>страна м.р.</div><div><b>aux</b>страна мн.ч.</div></div>
+        <div class="note">à Paris · en France · au Canada · aux États-Unis. Страна на <b>-e</b> почти всегда ж.р.</div></div>`;
+    }
+    if (id === "vocab") {
+      return `<div class="rule">
+        <div class="rule-h"><span class="badge">совет</span>учим слово сразу с артиклем</div>
+        <div class="scheme"><span class="w">un ami</span><span class="arr">↔</span><span class="w">une amie</span><span class="arr">·</span><span class="w">un acteur</span><span class="arr">↔</span><span class="w">une actrice</span></div>
+        <div class="note"><b>un</b> = мужской род, <b>une</b> = женский. Выбери тему ниже — тренировки будут только по ней.</div></div>`;
+    }
+    return `<div class="rule">
+      <div class="rule-h"><span class="badge">схемы</span>как строится фраза</div>
+      <div class="scheme"><span class="w">C'est un…</span><span class="arr">=</span><span>Это…</span></div>
+      <div class="scheme"><span class="w">J'ai une…</span><span class="arr">=</span><span>У меня есть…</span></div>
+      <div class="scheme"><span class="w">J'ai 30 ans</span><span class="arr">=</span><span>Мне 30 лет</span></div>
+      <div class="scheme"><span class="w">Je vais en…</span><span class="arr">=</span><span>Я еду в…</span></div>
+      <div class="scheme"><span class="w">Je travaille comme…</span><span class="arr">=</span><span>Я работаю (кем?)</span></div>
+      <div class="note">Фразы собираются случайно из всех слов, которые есть в приложении.</div></div>`;
+  }
+
+  function verbDrop(v, open) {
+    const ex = v.examples.map(e => exLine(e.fr, e.ru)).join("") + sampleSentences(v.inf, 2).map(s => exLine(s.fr, s.ru)).join("");
+    return `<details class="verb"${open ? " open" : ""}><summary><span class="fr">${esc(v.inf)}</span><span class="ru">${esc(v.ru)}</span><span class="gtag ${v.group === 3 ? "g3" : ""}">${["", "I", "II", "III"][v.group]}</span>${ICON.chev}</summary>
+      <div class="body"><div class="conj">${["je", "nous", "tu", "vous", "il", "ils", "elle", "elles"].map(p => exLineHtml(pf(p, formOf(v, p)), markPf(v, p), ruOf(v, p))).join("")}</div>
+      <div class="sublbl">Примеры</div>${ex}</div></details>`;
+  }
 
   // ================================================================
   //  ЭКРАНЫ
@@ -788,18 +1067,21 @@ textarea.field { min-height: 110px; resize: vertical; }
         ${pc ? `<circle cx="39" cy="39" r="34" fill="none" stroke="#17171c" stroke-width="6" stroke-linecap="round" stroke-dasharray="${(L * pc / 100).toFixed(1)} ${L.toFixed(1)}"/>` : ""}</svg><b>${pc}%</b></div>
         <div><h3>Цель дня: ${GOAL} ответов</h3><p>${n >= GOAL ? "Цель выполнена. Bravo !" : `Сегодня ${n}. Ещё ${GOAL - n} до цели.`}</p></div></div>
       <div class="row-h"><h2>Разделы</h2></div><div class="bento">`;
-    const shape = ["tall", "", "", "wide"];
+    const shape = ["tall", "", "", "", ""];
     SECTIONS.forEach((s, i) => {
       const m = mastery(s);
-      h += `<button class="tile ${shape[i]}" data-sec="${s.id}" style="--a:${s.a}">${art(s.b, s.seed, i % 3, shape[i] === "wide" ? 400 : 200, shape[i] === "tall" ? 250 : 120)}
+      h += `<button class="tile ${shape[i]}" data-sec="${s.id}" style="--a:${s.a}">${art(s.b, s.seed, i % 3, 200, shape[i] === "tall" ? 250 : 120)}
         <span class="fr-t">${s.fr}</span><span class="lbl"><b>${s.short || s.title}</b><span>${m.pc}%</span></span></button>`;
     });
+    h += `<button class="tile wide" id="bigtest" style="--a:var(--ink)">${art("var(--lime)", 77, 1, 400, 120)}<span class="fr-t">le test</span><span class="lbl"><b style="color:#fff">Общий тест</b><span>${SIZE}</span></span></button>`;
     h += `</div><button class="linkbtn" id="reset">Сбросить прогресс</button>`;
     $app.innerHTML = h;
     $app.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => section(b.dataset.sec));
+    $("#bigtest").onclick = runBigTest;
     $("#reset").onclick = confirmReset;
-    showDock("", `<button class="btn" id="rev">${due ? `Повторить ошибки · ${due}` : "Смешанное повторение"}</button>`);
+    showDock("", `<div class="two"><button class="btn ghost" id="rev">${due ? `Ошибки · ${due}` : "Повторение"}</button><button class="btn" id="bt">Общий тест</button></div>`);
     $("#rev").onclick = startRevision;
+    $("#bt").onclick = runBigTest;
     window.scrollTo(0, 0);
   }
 
@@ -812,28 +1094,32 @@ textarea.field { min-height: 110px; resize: vertical; }
 
   function section(id) {
     const s = SEC[id], m = mastery(s);
-    let h = `<div class="hero" style="--a:${s.a}">${art(s.b, s.seed + 7, 2, 400, 190)}
+    let h = `<div class="hero" style="--a:${s.a}">${art(s.b, s.seed + 7, 2, 400, 170)}
         <div class="bar-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h1 class="fr">${s.fr}</h1></div></div>
-      <div class="sheet"><h2>${s.title}</h2><div class="sub">Освоено ${m.ok} из ${m.total}</div><div class="meter"><i style="width:${m.pc}%"></i></div>`;
+      <div class="sheet"><h2>${s.title}</h2><div class="sub">Освоено ${m.ok} из ${m.total}${m.unit ? " " + m.unit : ""}</div><div class="meter"><i style="width:${m.pc}%"></i></div>`;
     if (id === "verbs") h += chips("vg", [[0, "Все"], [1, "I группа"], [2, "II"], [3, "III"]]);
     if (id === "numbers") h += chips("nr", [["all", `1–${NMAX}`], ["1-20", "1–20"], ["21-69", `21–${NMAX}`]]);
-    h += `<div class="list">`;
-    h += row({ t: "Шпаргалка", d: "Правила и таблицы со звуком", icon: "book" }, s, "cheat", 9);
+    if (id === "vocab") h += chips("vt", [["", "Все темы"], ...C.themes.map(t => [t, t])]);
+    h += ruleCard(id);
+    h += `<h3 class="h-sm">Тренировки</h3><div class="list">`;
+    s.drills.forEach((d, i) => { const empty = !d.keys().length;
+      h += row({ ...d, best: S.best[d.id], d: empty ? "Пока пусто для этого фильтра" : d.d }, s, d.id, i, false, empty); });
     (C.lessons[id] || []).forEach((l, i) => { const r = S.lessons[l.id];
       h += row({ t: l.title, d: `Урок «${l.ru || ""}» · ${l.exercises.length} заданий`, icon: "puzzle", best: r && r.best }, s, "L:" + l.id, 7 + i, true); });
-    s.drills.forEach((d, i) => { const empty = !d.keys().length;
-      h += row({ ...d, best: S.best[d.id], d: empty ? "Пока пусто для этой группы" : d.d }, s, d.id, i, false, empty); });
-    h += `</div></div>`;
+    h += row({ t: "Шпаргалка", d: "Все правила и таблицы со звуком", icon: "book" }, s, "cheat", 9);
+    h += `</div>`;
+    if (id === "verbs") h += `<h3 class="h-sm">Мои глаголы</h3><p class="muted" style="margin:0 0 10px;font-size:14px">Нажми на глагол — откроются все формы.</p>` + vList().map(v => verbDrop(v)).join("");
+    h += `</div>`;
     $app.innerHTML = h;
     $("#bk").onclick = home;
-    $app.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { S.prefs[b.dataset.f] = isNaN(+b.dataset.v) ? b.dataset.v : +b.dataset.v; save(); section(id); });
+    $app.querySelectorAll("[data-f]").forEach(b => b.onclick = () => { const v = b.dataset.v; S.prefs[b.dataset.f] = v !== "" && !isNaN(+v) ? +v : v; save(); section(id); });
     $app.querySelectorAll("[data-go]").forEach(b => b.onclick = () => {
       const g = b.dataset.go;
       if (g === "cheat") return cheat(id);
       if (g.startsWith("L:")) return openLesson(id, C.lessons[id].find(l => l.id === g.slice(2)));
       runDrill(id, g);
     });
-    showDock("", `<button class="btn" id="mix">Смешанная тренировка</button>`);
+    showDock("", `<button class="btn" id="mix">Смешанный тест по разделу · ${SIZE}</button>`);
     $("#mix").onclick = () => runMix(id);
     window.scrollTo(0, 0);
   }
@@ -843,45 +1129,40 @@ textarea.field { min-height: 110px; resize: vertical; }
     const a = colors[i % colors.length], b = colors[(i + 2) % colors.length];
     const best = d.best != null ? `<span class="best">лучший результат ${Math.round(d.best * 100)}%</span>` : "";
     const lvl = d.lvl ? `<span class="lvl l${d.lvl}">${LVL[d.lvl]}${best}</span>` : isLesson && d.best != null ? `<span class="lvl l1">Пройден${best}</span>` : "";
-    return `<button class="item" data-go="${go}" ${disabled ? "disabled style='opacity:.45'" : ""}><span class="thumb" style="--a:${a}">${art(b, s.seed + i * 5, i % 3, 80, 80)}<span class="ic">${ICON[d.icon]}</span></span>
+    return `<button class="item" data-go="${go}" ${disabled ? "disabled" : ""}><span class="thumb" style="--a:${a}">${art(b, s.seed + i * 5, i % 3, 80, 80)}<span class="ic">${ICON[d.icon]}</span></span>
       <span><span class="tt">${esc(d.t)}</span><div class="dd">${esc(d.d)}</div>${lvl}</span></button>`;
   }
 
   function chips(key, opts) {
     const cur = S.prefs[key] ?? opts[0][0];
-    return `<div class="chips">` + opts.map(([v, t]) => `<button data-f="${key}" data-v="${v}" class="${cur == v ? "on" : ""}">${t}</button>`).join("") + `</div>`;
+    return `<div class="chips">` + opts.map(([v, t]) => `<button data-f="${key}" data-v="${esc(v)}" class="${cur == v ? "on" : ""}">${esc(t)}</button>`).join("") + `</div>`;
   }
 
   // ---------- шпаргалка ----------
   const exLine = (fr, ru) => `<div class="ex">${sayBtn(fr)}<div><div class="fr">${esc(fr)}</div>${ru ? `<div class="ru">${esc(ru)}</div>` : ""}</div></div>`;
+  const exLineHtml = (fr, html, ru) => `<div class="ex">${sayBtn(fr)}<div><div class="fr">${html}</div>${ru ? `<div class="ru">${esc(ru)}</div>` : ""}</div></div>`;
   const blocks = bl => bl.map(b => b.t === "ex" ? exLine(b.fr, b.ru) : `<div class="blk">${b.ru}</div>`).join("");
 
   function cheat(id) {
     const s = SEC[id];
-    let h = `<div class="ex-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h2 style="font-size:24px">Шпаргалка · ${s.title}</h2></div><div class="cards">`;
+    let h = `<div class="ex-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h2 style="font-size:24px">Шпаргалка · ${s.title}</h2></div>` + ruleCard(id) + `<div class="cards">`;
     if (id === "verbs") {
-      [1, 2, 3].forEach(g => {
-        h += `<div class="card" style="background:var(--lime);border-color:transparent"><h3>${GROUP[g]}</h3>${blocks(C.groups[g] || [])}</div>`;
-        C.verbs.filter(v => v.group === g).forEach(v => {
-          h += `<div class="card"><h3><span class="fr">${v.inf}</span><span class="tag">${esc(v.ru)}</span></h3>
-            <div class="conj">${["je", "nous", "tu", "vous", "il", "ils", "elle", "elles"].map(p => exLine(pf(p, formOf(v, p)), ruOf(v, p))).join("")}</div>
-            ${v.examples.map(e => exLine(e.fr, e.ru)).join("")}</div>`;
-        });
-      });
+      h += `<div>${C.verbs.map(v => verbDrop(v)).join("")}</div>`;
     } else if (id === "numbers") {
       let g = ""; for (let n = 1; n <= NMAX; n++) g += `<button data-num="${n}">${n}</button>`;
-      h += `<div class="card"><div class="numsay" id="numsay"><span class="muted">Нажми на число — услышишь, как оно звучит</span></div><div class="numgrid">${g}</div></div>
-        <div class="card"><h3>Как строятся</h3>${blocks(C.numbers.rule)}</div>`;
+      h += `<div class="card"><div class="numsay" id="numsay"><span class="muted">Нажми на число — услышишь, как оно звучит</span></div><div class="numgrid">${g}</div></div>`;
     } else if (id === "articles") {
-      h += `<div class="card"><h3>Артикли</h3>${blocks(C.articles.rule)}</div>
-        <div class="card"><h3>Слова</h3>${C.nouns.map(n => `<div class="vrow">${sayBtn(`${indefOf(n)} ${n.w}`)}<span class="fr">${indefOf(n)} ${esc(n.w)} · ${esc(withDef(defOf(n), n.w))}</span><span class="ru">${esc(n.ru)} · ${G_RU[n.g]}</span></div>`).join("")}</div>
-        <div class="card"><h3>Страны и города</h3>${blocks(C.places.rule)}</div>
-        <div class="card"><h3>Список</h3>${["city", "f", "m", "pl"].map(k => C.places.list.filter(p => p.kind === k).map(p => `<div class="vrow">${sayBtn(`${PREP[k]} ${p.name}`)}<span class="fr">${PREP[k]} ${esc(p.name)}</span><span class="ru">${esc(p.ru)}</span></div>`).join("")).join("")}</div>`;
-    } else {
-      uniq(C.vocab.map(w => w.tag)).forEach(t => {
-        h += `<div class="card"><h3>${esc(t)}</h3>${C.vocab.filter(w => w.tag === t).map(w => `<div class="vrow">${sayBtn(w.fr)}<span class="fr">${esc(w.fr)}</span><span class="ru">${esc(w.ru)}</span></div>`).join("")}</div>`;
+      h += `<div class="card"><h3>Из конспекта</h3>${C.articles.sentences.map(x => exLine(x.fr, x.ru)).join("")}</div>
+        <div class="card"><h3>Страны и города</h3>${["city", "f", "m", "pl"].map(k => C.places.filter(p => p.kind === k).map(p => `<div class="vrow">${sayBtn(`${PREP[k]} ${p.name}`)}<span class="fr">${PREP[k]} ${esc(p.name)}</span><span class="ru">${esc(p.ru)}</span></div>`).join("")).join("")}</div>
+        <div class="card"><h3>Слова с артиклями</h3>${artNouns().map(n => `<div class="vrow">${sayBtn(withDef(defOf(n), n.w))}<span class="fr">${indefOf(n)} ${esc(n.w)} · ${esc(withDef(defOf(n), n.w))}</span><span class="ru">${esc(n.ru)}</span></div>`).join("")}</div>`;
+    } else if (id === "vocab") {
+      C.themes.forEach(t => {
+        const ws = VOCAB.filter(w => w.theme === t); if (!ws.length) return;
+        h += `<div class="card"><h3>${esc(t)}</h3>${ws.map(w => `<div class="vrow">${sayBtn(w.fr)}<span class="fr">${esc(w.fr)}</span><span class="ru">${esc(w.ru)}</span></div>`).join("")}</div>`;
       });
       (C.lessons.vocab || []).forEach(l => { h += `<div class="card"><h3 class="fr">${esc(l.title)}</h3>${blocks(l.rule)}</div>`; });
+    } else {
+      h += `<div class="card"><h3>Примеры</h3>${Object.keys(TPL).map(t => { const T = TPL[t], x = T.build(T.make()); return x ? exLine(x.fr, x.ru) : ""; }).join("")}</div>`;
     }
     h += `</div>`;
     $app.innerHTML = h;
@@ -896,15 +1177,15 @@ textarea.field { min-height: 110px; resize: vertical; }
   }
 
   // ---------- сессии ----------
-  const SIZE = 8;
+  const SIZE = 12;
   function buildSet(keys, modes, n = SIZE) {
     const out = [], seen = new Set();
     const weighted = keys.flatMap(k => S.srs[k] ? [k, k, k] : [k]);
     if (!weighted.length) return out;
-    for (let tries = 0; out.length < n && tries < 200; tries++) {
+    for (let tries = 0; out.length < n && tries < 300; tries++) {
       const ex = exFor(pick(weighted), modes);
       if (!ex) continue;
-      const sig = JSON.stringify([ex.type, ex.prompt, ex.audio, ex.pairs, ex.words, ex.answer]);
+      const sig = JSON.stringify([ex.type, ex.prompt, ex.audio, ex.pairs && ex.pairs.map(p => p[0]).sort(), ex.words, ex.answer]);
       if (seen.has(sig)) continue;
       seen.add(sig); out.push(ex);
     }
@@ -915,11 +1196,18 @@ textarea.field { min-height: 110px; resize: vertical; }
     const set = buildSet(d.keys(), d.modes); if (!set.length) return;
     startSession(set, { title: d.t, sec: s, drill: d.id, back: () => section(secId), again: () => runDrill(secId, did) });
   }
+  function mixFrom(drills, n) {
+    const per = Math.max(2, Math.ceil(n / drills.length) + 1);
+    return shuffle(drills.filter(d => d.keys().length).flatMap(d => buildSet(d.keys(), d.modes, per))).slice(0, n);
+  }
   function runMix(secId) {
     const s = SEC[secId];
-    const set = shuffle(s.drills.filter(d => d.lvl < 3).flatMap(d => buildSet(d.keys(), d.modes, 2))).slice(0, SIZE);
-    if (!set.length) return;
-    startSession(set, { title: "Смешанная тренировка", sec: s, back: () => section(secId), again: () => runMix(secId) });
+    const set = mixFrom(s.drills, SIZE); if (!set.length) return;
+    startSession(set, { title: "Смешанный тест", sec: s, back: () => section(secId), again: () => runMix(secId) });
+  }
+  function runBigTest() {
+    const set = shuffle(SECTIONS.flatMap(s => mixFrom(s.drills.filter(d => d.lvl < 3), 3))).slice(0, SIZE);
+    startSession(set, { title: "Общий тест", back: home, again: runBigTest });
   }
   function openLesson(secId, l) {
     const s = SEC[secId];
@@ -931,11 +1219,10 @@ textarea.field { min-height: 110px; resize: vertical; }
     window.scrollTo(0, 0);
   }
   function startRevision() {
-    let set = dueKeys().sort((a, b) => S.srs[a].box - S.srs[b].box).slice(0, 10).map(k => exFor(k)).filter(Boolean), revision = true;
+    let set = dueKeys().sort((a, b) => S.srs[a].box - S.srs[b].box).slice(0, SIZE).map(k => exFor(k)).filter(Boolean), revision = true;
     if (!set.length) {
       const seen = Object.keys(S.items).filter(k => exFor(k));
-      const pool = seen.length ? seen : SECTIONS.flatMap(s => s.drills.filter(d => d.lvl === 1).flatMap(d => d.keys()));
-      set = buildSet(pool, ["conjc", "pron", "order", "fr2ru", "ru2fr", "hearc", "w2d", "gender", "indef", "def", "prep", "hear", "fill"]);
+      set = seen.length >= 6 ? buildSet(seen, ["conjc", "pron", "end", "order", "fr2ru", "ru2fr", "hearc", "w2d", "gender", "indef", "def", "prep", "art1", "hear", "fill"]) : mixFrom(SECTIONS.flatMap(s => s.drills.filter(d => d.lvl === 1)), SIZE);
       revision = false;
     }
     startSession(set, { title: "Повторение", revision, back: home, again: startRevision });
@@ -958,7 +1245,7 @@ textarea.field { min-height: 110px; resize: vertical; }
     if (ex.ask) h += `<div class="ask">${esc(ex.ask)}</div>`;
     if (ex.audio) h += `<div class="listen"><button class="play" data-say="${esc(ex.audio)}">${ICON.speak}Слушать</button>
       <button class="play slow" data-say="${esc(ex.audio)}" data-slow="1" aria-label="Медленно">0.6×</button></div>`;
-    if (ex.prompt) h += `<div class="qwrap"><div class="q ${ruQ ? "ru" : ""}">${esc(ex.prompt)}</div>${ex.ru && !ruQ ? `<div class="q-ru">${esc(ex.ru)}</div>` : ""}</div>`;
+    if (ex.prompt) h += `<div class="qwrap"><div class="q ${ruQ ? "ru" : ""}">${esc(ex.prompt)}</div>${ex.ru && !ruQ && !ex.noRu ? `<div class="q-ru">${esc(ex.ru)}</div>` : ""}</div>`;
     h += `<div id="work"></div>`;
     if (ex.audio && !hasTTS) h += `<p class="muted">Этот браузер не умеет озвучивать текст.</p>`;
     $app.innerHTML = h;
@@ -992,7 +1279,7 @@ textarea.field { min-height: 110px; resize: vertical; }
     const title = ok ? (note ? "Почти!" : hinted ? "Верно, с подсказкой" : pick(["Верно!", "Bravo !", "Super !", "Très bien !"])) : "Не совсем";
     let body = "";
     if (!ok && correct && !ex.say) body += `<div class="fb-ans"><div class="fr">${correct}</div></div>`;
-    if (sayText) body += `<div class="fb-ans">${sayBtn(sayText)}<div><div class="fr">${esc(sayText)}</div>${ex.sayRu ? `<div class="ru">${esc(ex.sayRu)}</div>` : ""}</div></div>`;
+    if (sayText) body += `<div class="fb-ans">${sayBtn(sayText)}<div><div class="fr">${ex.sayHtml || esc(sayText)}</div>${ex.sayRu ? `<div class="ru">${esc(ex.sayRu)}</div>` : ""}</div></div>`;
     if (note) body += `<div class="fb-why">${note}</div>`;
     if (ex.explain) body += `<div class="fb-why">${ex.explain}</div>`;
     showDock("fb " + (ok ? "ok" : "bad"), `<div class="fb-h">${title}</div>${body}<button class="btn" id="nx">Дальше<span class="kbd">Enter</span></button>`);
@@ -1005,11 +1292,11 @@ textarea.field { min-height: 110px; resize: vertical; }
     if (R.lesson) { const p = S.lessons[R.lesson.id]; S.lessons[R.lesson.id] = { best: Math.max(pct, p ? p.best : 0) }; }
     if (R.drill) S.best[R.drill] = Math.max(pct, S.best[R.drill] || 0);
     S.xp += 20; R.xp += 20; save();
-    const s = R.sec || SECTIONS[0];
+    const s = R.sec || { a: "var(--ink)", b: "var(--lime)", seed: 5 };
     $app.innerHTML = `<div class="result" style="--a:${s.a}">${art(s.b, s.seed + 99, 1, 400, 240)}<div class="big"><b>${Math.round(pct * 100)}%</b><span>с первой попытки</span></div></div>
       <h2 class="res-h fr">${pct === 1 ? "Parfait !" : pct >= 0.7 ? "Très bien !" : "Bien !"}</h2>
       <p class="res-p">+${R.xp} баллов${R.missed.size ? ` · ошибки (${R.missed.size}) попадут в повторение` : ""}</p>`;
-    showDock("", `<div class="two"><button class="btn ghost" id="bk">Назад</button><button class="btn" id="ag">Ещё раз</button></div>`);
+    showDock("", `<div class="two"><button class="btn ghost" id="bk">Назад</button><button class="btn" id="ag">Новый тест</button></div>`);
     $("#bk").onclick = R.back; $("#ag").onclick = R.again;
     enterLock = Date.now() + 400;
   }
@@ -1033,7 +1320,7 @@ textarea.field { min-height: 110px; resize: vertical; }
     input(ex, w) {
       let hinted = false;
       w.innerHTML = `<input class="field" id="inp" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" ${ex.digits ? 'inputmode="numeric" placeholder="Цифрами"' : 'placeholder="По-французски"'}>
-        <div class="tools">${ex.digits ? "" : ["é", "è", "ê", "à", "ç", "'", "-"].map(c => `<button data-c="${c}" type="button">${c}</button>`).join("")}<button class="hint" type="button" id="hint">Подсказка</button></div>`;
+        <div class="tools">${ex.digits ? "" : ["é", "è", "ê", "à", "ç", "œ", "'", "-"].map(c => `<button data-c="${c}" type="button">${c}</button>`).join("")}<button class="hint" type="button" id="hint">Подсказка</button></div>`;
       const inp = w.querySelector("#inp");
       const chk = checkDock(() => {
         if (!inp.value.trim() || inp.disabled) return;
@@ -1084,7 +1371,7 @@ textarea.field { min-height: 110px; resize: vertical; }
       w.innerHTML = `<div class="words">` + ex.words.map((t, i) => `<button class="opt" data-i="${i}">${esc(t)}</button>`).join("") + `</div>`;
       const btns = [...w.querySelectorAll(".opt")];
       const chk = checkDock(() => {
-        btns.forEach(b => { b.disabled = true; if (+b.dataset.i === ex.wrong) b.classList.add("bad"); });
+        btns.forEach(b => { b.disabled = true; b.classList.remove("sel"); if (+b.dataset.i === ex.wrong) b.classList.add("bad"); });
         grade(sel === ex.wrong);
       });
       btns.forEach(b => b.onclick = () => { sel = +b.dataset.i; btns.forEach(x => x.classList.toggle("sel", x === b)); chk.disabled = false; });
