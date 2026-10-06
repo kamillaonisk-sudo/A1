@@ -18,6 +18,8 @@
     --avatar-bg: #dbdbdb;
     --avatar-fg: #ffffff;
     --placeholder: #efefef;
+    --dialog-bg: #ffffff;
+    --danger: #ed4956;
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -33,6 +35,8 @@
       --avatar-bg: #262626;
       --avatar-fg: #737373;
       --placeholder: #121212;
+      --dialog-bg: #262626;
+      --danger: #ed4956;
     }
   }
 
@@ -120,8 +124,8 @@
   .btn:hover { background: var(--btn-bg-hover); }
   .btn-primary { background: var(--blue); color: #fff; }
   .btn-primary:hover { background: var(--blue-hover); }
-  .btn-icon { width: 32px; padding: 0; background: none; }
-  .btn-icon:hover { background: none; opacity: .5; }
+  .btn:disabled { opacity: .3; cursor: default; }
+  .btn:disabled:hover { background: var(--btn-bg); }
 
   .stats {
     display: flex;
@@ -239,6 +243,53 @@
 
   #file-input { display: none; }
 
+  /* ---------- Type de publication (icône en haut à droite) ---------- */
+  .post-type {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    color: #fff;
+    filter: drop-shadow(0 0 1px rgba(0, 0, 0, .4));
+    pointer-events: none;
+  }
+  .post-type:empty { display: none; }
+  .post-type svg { width: 100%; height: 100%; display: block; }
+  .post:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  /* ---------- Boîtes de dialogue (style « action sheet » Instagram) ---------- */
+  dialog {
+    margin: auto;
+    width: 400px;
+    max-width: calc(100% - 40px);
+    border: 0;
+    border-radius: 12px;
+    background: var(--dialog-bg);
+    color: var(--text);
+    overflow: hidden;
+    text-align: center;
+  }
+  dialog::backdrop { background: rgba(0, 0, 0, .65); }
+  .dialog-head { padding: 32px 32px 16px; }
+  .dialog-head h3 { font-size: 20px; line-height: 25px; font-weight: 400; }
+  .dialog-head p { margin-top: 4px; color: var(--text-secondary); }
+  .dialog-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 48px;
+    padding: 4px 8px;
+    border-top: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .dialog-option:active { background: var(--btn-bg); }
+  .dialog-option svg { width: 18px; height: 18px; }
+  .dialog-option.selected { font-weight: 700; color: var(--blue); }
+  .dialog-option.danger { font-weight: 700; color: var(--danger); }
+
   /* ---------- Mobile ---------- */
   @media (max-width: 735px) {
     main { padding: 0; }
@@ -258,7 +309,6 @@
     .profile-info { display: contents; }
     .row-username { grid-area: info; margin: 0; align-content: center; }
     .username { width: 100%; margin: 0 0 4px; }
-    .row-username .btn-icon { display: none; }
     .bio { grid-area: bio; padding: 16px 0 20px; }
     .stats {
       grid-area: stats;
@@ -282,6 +332,7 @@
     .tab.active { color: var(--blue); border-top-color: transparent; }
     .grid { gap: 2px; }
     .post-overlay { display: none; }
+    .post-type { width: 16px; height: 16px; top: 6px; right: 6px; }
   }
 </style>
 </head>
@@ -302,13 +353,8 @@
         <h1 class="username">mon_profil</h1>
         <button class="btn" type="button">Modifier le profil</button>
         <button class="btn btn-primary" type="button" id="add-btn">＋ Ajouter</button>
-        <button class="btn btn-icon" type="button" aria-label="Options">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="8.635"/>
-            <path d="M14.232 3.656a1.269 1.269 0 0 1-.796-.66L12.93 2h-1.86l-.505.996a1.269 1.269 0 0 1-.796.66m-.001 16.688a1.269 1.269 0 0 1 .796.66l.505.996h1.862l.505-.996a1.269 1.269 0 0 1 .796-.66M3.656 9.768a1.269 1.269 0 0 1-.66.796L2 11.07v1.862l.996.505a1.269 1.269 0 0 1 .66.796m16.688-.001a1.269 1.269 0 0 1 .66-.796L22 12.93v-1.86l-.996-.505a1.269 1.269 0 0 1-.66-.796M7.678 4.522a1.269 1.269 0 0 1-1.03.096l-1.06-.348L4.27 5.587l.348 1.062a1.269 1.269 0 0 1-.096 1.03m11.8 11.799a1.269 1.269 0 0 1 1.03-.096l1.06.348 1.318-1.317-.348-1.062a1.269 1.269 0 0 1 .096-1.03m-14.956.001a1.269 1.269 0 0 1 .096 1.03l-.348 1.06 1.317 1.318 1.062-.348a1.269 1.269 0 0 1 1.03.096m11.799-11.8a1.269 1.269 0 0 1-.096-1.03l.348-1.06-1.317-1.318-1.062.348a1.269 1.269 0 0 1-1.03-.096"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        </button>
+        <button class="btn" type="button" id="export-btn" disabled>Exporter</button>
+        <button class="btn" type="button" id="clear-btn" disabled>Vider</button>
         <input type="file" id="file-input" accept="image/*" multiple>
       </div>
 
@@ -359,6 +405,23 @@
   </div>
 </main>
 
+<dialog id="type-dialog">
+  <div class="dialog-head">
+    <h3>Type de publication</h3>
+  </div>
+  <div id="type-options"></div>
+  <button class="dialog-option" type="button" data-close>Annuler</button>
+</dialog>
+
+<dialog id="clear-dialog">
+  <div class="dialog-head">
+    <h3>Vider le feed ?</h3>
+    <p>Toutes les publications seront retirées de la grille.</p>
+  </div>
+  <button class="dialog-option danger" type="button" id="clear-confirm">Vider</button>
+  <button class="dialog-option" type="button" data-close>Annuler</button>
+</dialog>
+
 <script>
 (function () {
   const grid = document.getElementById('grid');
@@ -366,21 +429,46 @@
   const empty = document.getElementById('empty');
   const countEl = document.getElementById('post-count');
   const labelEl = document.getElementById('post-label');
+  const exportBtn = document.getElementById('export-btn');
+  const clearBtn = document.getElementById('clear-btn');
+  const typeDialog = document.getElementById('type-dialog');
+  const typeOptions = document.getElementById('type-options');
+  const clearDialog = document.getElementById('clear-dialog');
 
   const HEART = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.792 3.904A4.989 4.989 0 0 1 21.5 9.122c0 3.072-2.652 4.959-5.197 7.222-2.512 2.243-3.865 3.469-4.303 3.752-.477-.309-2.143-1.823-4.303-3.752C5.141 14.072 2.5 12.167 2.5 9.122a4.989 4.989 0 0 1 4.708-5.218 4.21 4.21 0 0 1 3.675 1.941c.84 1.175.98 1.763 1.12 1.763s.278-.588 1.11-1.766a4.17 4.17 0 0 1 3.679-1.938Z"/></svg>';
   const BUBBLE = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.656 17.008a9.993 9.993 0 1 0-3.59 3.615L22 22Z"/></svg>';
+
+  const CAROUSEL = '<svg viewBox="0 0 48 48" fill="currentColor"><path d="M34.8 29.7V11c0-2.9-2.3-5.2-5.2-5.2H11c-2.9 0-5.2 2.3-5.2 5.2v18.7c0 2.9 2.3 5.2 5.2 5.2h18.7c2.8-.1 5.1-2.4 5.1-5.2zM39.2 15v16.1c0 4.5-3.7 8.2-8.2 8.2H14.9c-.6 0-.9.7-.5 1.1 1 1.1 2.4 1.8 4.1 1.8h13.4c5.7 0 10.3-4.6 10.3-10.3V18.5c0-1.6-.7-3.1-1.8-4.1-.5-.4-1.2 0-1.2.6z"/></svg>';
+  const REEL = '<svg viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.05 7h19.9c.03.48.05 1 .05 1.55v6.9c0 2.85-.7 4-1.6 4.95-.94.9-2.1 1.6-4.95 1.6h-6.9c-2.85 0-4-.7-4.95-1.6C2.7 19.45 2 18.3 2 15.45v-6.9C2 8 2.02 7.48 2.05 7Zm7.71 10.66c.28.16.63.16.91 0l4.55-2.62a.91.91 0 0 0 0-1.58l-4.55-2.62a.91.91 0 0 0-1.36.79v5.24c0 .33.17.63.45.79ZM8.55 2h1.32l2.8 4H8.1L5.6 2.4C6.38 2.15 7.32 2 8.55 2Zm3.83 0h3.07c2.85 0 4 .7 4.95 1.6.6.62 1.08 1.35 1.36 2.4h-6.58l-2.8-4ZM3.6 3.6c.2-.19.4-.37.62-.53L6.12 6H2.28c.28-1.05.7-1.78 1.32-2.4Z"/></svg>';
+  const SINGLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/></svg>';
+
+  const TYPES = {
+    single:   { label: 'Visuel unique', badge: '',       icon: SINGLE },
+    carousel: { label: 'Carrousel',     badge: CAROUSEL, icon: CAROUSEL },
+    reel:     { label: 'Reel',          badge: REEL,     icon: REEL }
+  };
+
+  function setType(post, type) {
+    post.dataset.type = type;
+    post.querySelector('.post-type').innerHTML = TYPES[type].badge;
+    post.setAttribute('aria-label', TYPES[type].label + ' — cliquer pour changer le type');
+  }
 
   function updateCount() {
     const n = grid.children.length;
     countEl.textContent = n.toLocaleString('fr-FR');
     labelEl.textContent = n > 1 ? 'publications' : 'publication';
     empty.hidden = n > 0;
+    exportBtn.disabled = n === 0;
+    clearBtn.disabled = n === 0;
   }
 
   function createPost(file) {
     const post = document.createElement('div');
     post.className = 'post';
     post.draggable = true;
+    post.tabIndex = 0;
+    post.setAttribute('role', 'button');
 
     const img = document.createElement('img');
     img.src = URL.createObjectURL(file);
@@ -391,7 +479,11 @@
     overlay.className = 'post-overlay';
     overlay.innerHTML = '<span>' + HEART + '0</span><span>' + BUBBLE + '0</span>';
 
-    post.append(img, overlay);
+    const badge = document.createElement('div');
+    badge.className = 'post-type';
+
+    post.append(img, overlay, badge);
+    setType(post, 'single');
     return post;
   }
 
@@ -442,6 +534,127 @@
     grid.classList.remove('is-dragging');
     dragged = null;
   });
+
+  /* ---------- Choix du type de publication ---------- */
+  let editing = null;
+
+  function openTypeDialog(post) {
+    editing = post;
+    typeOptions.replaceChildren();
+    for (const key in TYPES) {
+      const opt = document.createElement('button');
+      opt.type = 'button';
+      opt.className = 'dialog-option' + (post.dataset.type === key ? ' selected' : '');
+      opt.innerHTML = TYPES[key].icon + '<span>' + TYPES[key].label + '</span>';
+      opt.addEventListener('click', function () {
+        setType(editing, key);
+        typeDialog.close();
+      });
+      typeOptions.append(opt);
+    }
+    typeDialog.showModal();
+  }
+
+  grid.addEventListener('click', function (e) {
+    const post = e.target.closest('.post');
+    if (post) openTypeDialog(post);
+  });
+  grid.addEventListener('keydown', function (e) {
+    const post = e.target.closest('.post');
+    if (post && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      openTypeDialog(post);
+    }
+  });
+
+  for (const dialog of [typeDialog, clearDialog]) {
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog || e.target.closest('[data-close]')) dialog.close();
+    });
+  }
+  typeDialog.addEventListener('close', function () {
+    if (editing) editing.focus({ preventScroll: true });
+    editing = null;
+  });
+
+  /* ---------- Vider le feed ---------- */
+  clearBtn.addEventListener('click', function () { clearDialog.showModal(); });
+  document.getElementById('clear-confirm').addEventListener('click', function () {
+    grid.querySelectorAll('.post img').forEach(function (img) { URL.revokeObjectURL(img.src); });
+    grid.replaceChildren();
+    updateCount();
+    clearDialog.close();
+  });
+
+  /* ---------- Export HTML statique ---------- */
+  // Recadre au centre en 4:5 (max 1080×1350, format Instagram) et encode en JPEG,
+  // pour que le fichier exporté soit autonome et reste léger.
+  async function toDataURL(img) {
+    try { await img.decode(); } catch (err) { /* déjà chargée */ }
+    const w = img.naturalWidth, h = img.naturalHeight;
+    let sw = w, sh = h;
+    if (w / h > 4 / 5) sw = h * 4 / 5; else sh = w * 5 / 4;
+    const outW = Math.round(Math.min(1080, sw));
+    const outH = Math.round(outW * 5 / 4);
+    const canvas = document.createElement('canvas');
+    canvas.width = outW;
+    canvas.height = outH;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, outW, outH);
+    ctx.drawImage(img, (w - sw) / 2, (h - sh) / 2, sw, sh, 0, 0, outW, outH);
+    return canvas.toDataURL('image/jpeg', 0.85);
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  async function exportFeed() {
+    exportBtn.disabled = true;
+    exportBtn.textContent = 'Export…';
+    try {
+      const clone = document.querySelector('main').cloneNode(true);
+      const srcImgs = grid.querySelectorAll('.post img');
+      const outImgs = clone.querySelectorAll('.post img');
+      for (let i = 0; i < srcImgs.length; i++) {
+        outImgs[i].src = await toDataURL(srcImgs[i]);
+      }
+
+      // Retire tout ce qui est interactif
+      clone.querySelectorAll('button, input, .empty, .post-overlay').forEach(function (el) { el.remove(); });
+      clone.querySelectorAll('[onclick]').forEach(function (el) { el.removeAttribute('onclick'); });
+      clone.querySelectorAll('a[href]').forEach(function (el) { el.removeAttribute('href'); });
+      clone.querySelectorAll('[id]').forEach(function (el) { el.removeAttribute('id'); });
+      clone.querySelectorAll('.post, .post img').forEach(function (el) {
+        ['draggable', 'tabindex', 'role', 'aria-label'].forEach(function (a) { el.removeAttribute(a); });
+      });
+
+      const name = document.querySelector('.username').textContent.trim();
+      const css = document.querySelector('style').textContent +
+        '  .post, .post:active { cursor: default; }\n';
+      const html = '<!DOCTYPE html>\n<html lang="fr">\n<head>\n<meta charset="UTF-8">\n' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+        '<title>Aperçu – ' + escapeHtml(name) + '</title>\n' +
+        '<style>' + css + '</style>\n</head>\n<body>\n' + clone.outerHTML + '\n</body>\n</html>\n';
+
+      const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'apercu_' + name.replace(/[^\w.-]+/g, '_') + '.html';
+      document.body.append(a);
+      a.click();
+      a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    } finally {
+      exportBtn.textContent = 'Exporter';
+      updateCount();
+    }
+  }
+
+  exportBtn.addEventListener('click', exportFeed);
 
   updateCount();
 })();
