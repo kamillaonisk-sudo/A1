@@ -338,6 +338,9 @@
     .profile-info { display: contents; }
     .row-username { grid-area: info; margin: 0; align-content: center; }
     .username { width: 100%; margin: 0 0 4px; }
+    .row-username { column-gap: 6px; }
+    .row-username .username { flex: 0 0 100%; }
+    .row-username .btn { flex: 1 1 0; min-width: 0; padding: 0 6px; }
     .bio { grid-area: bio; padding: 16px 0 20px; }
     .stats {
       grid-area: stats;
@@ -363,6 +366,9 @@
     .post-overlay { display: none; }
     .post-type { width: 16px; height: 16px; top: 6px; right: 6px; }
   }
+  @media (max-width: 359px) {
+    .row-username .btn { font-size: 12px; padding: 0 4px; }
+  }
 </style>
 </head>
 <body>
@@ -381,7 +387,6 @@
     <section class="profile-info">
       <div class="row-username">
         <h1 class="username editable" data-field="username" data-placeholder="nom_utilisateur">mon_profil</h1>
-        <button class="btn" type="button">Modifier le profil</button>
         <button class="btn btn-primary" type="button" id="add-btn">＋ Ajouter</button>
         <button class="btn" type="button" id="export-btn" disabled>Exporter</button>
         <button class="btn" type="button" id="clear-btn" disabled>Vider</button>
