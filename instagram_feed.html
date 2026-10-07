@@ -20,6 +20,7 @@
     --placeholder: #efefef;
     --dialog-bg: #ffffff;
     --danger: #ed4956;
+    --edit-hover: rgba(0, 0, 0, .05);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -37,6 +38,7 @@
       --placeholder: #121212;
       --dialog-bg: #262626;
       --danger: #ed4956;
+      --edit-hover: rgba(255, 255, 255, .08);
     }
   }
 
@@ -83,7 +85,20 @@
     background: var(--avatar-bg);
     flex-shrink: 0;
   }
-  .avatar svg { width: 100%; height: 100%; display: block; }
+  .avatar svg, .avatar img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .avatar[role="button"] { cursor: pointer; }
+  .avatar[role="button"]:hover { opacity: .85; }
+  .avatar:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+  /* ---------- Champs modifiables au clic ---------- */
+  .editable {
+    border-radius: 4px;
+    outline: none;
+    cursor: text;
+  }
+  .editable:hover, .editable:focus { background: var(--edit-hover); }
+  .editable:focus { box-shadow: 0 0 0 2px var(--blue); }
+  .editable:empty::before { content: attr(data-placeholder); color: var(--text-secondary); }
 
   .profile-info {
     flex: 2 0 0;
@@ -143,7 +158,6 @@
   .bio-category { color: var(--text-secondary); }
   .bio-text { white-space: pre-line; }
   .bio-link { color: var(--link); font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-  .bio-link:hover { text-decoration: underline; }
 
   /* ---------- Tabs ---------- */
   .tabs {
@@ -179,7 +193,7 @@
 
   .post {
     position: relative;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
     background: var(--placeholder);
     cursor: grab;
@@ -340,17 +354,18 @@
 <main>
   <header class="profile">
     <div class="profile-avatar">
-      <div class="avatar" aria-hidden="true">
+      <div class="avatar" role="button" tabindex="0" title="Changer la photo de profil" aria-label="Changer la photo de profil">
         <svg viewBox="0 0 150 150">
           <circle cx="75" cy="58" r="28" fill="var(--avatar-fg)"/>
           <path d="M18 150c3-35 27-58 57-58s54 23 57 58Z" fill="var(--avatar-fg)"/>
         </svg>
       </div>
+      <input type="file" id="avatar-input" accept="image/*" hidden>
     </div>
 
     <section class="profile-info">
       <div class="row-username">
-        <h1 class="username">mon_profil</h1>
+        <h1 class="username editable" data-placeholder="nom_utilisateur">mon_profil</h1>
         <button class="btn" type="button">Modifier le profil</button>
         <button class="btn btn-primary" type="button" id="add-btn">＋ Ajouter</button>
         <button class="btn" type="button" id="export-btn" disabled>Exporter</button>
@@ -360,20 +375,20 @@
 
       <ul class="stats">
         <li><b id="post-count">0</b> <span class="label" id="post-label">publication</span></li>
-        <li><b>248</b> <span class="label">followers</span></li>
-        <li><b>312</b> <span class="label">suivi(e)s</span></li>
+        <li><b class="editable" data-numeric data-placeholder="0">248</b> <span class="label">followers</span></li>
+        <li><b class="editable" data-numeric data-placeholder="0">312</b> <span class="label">suivi(e)s</span></li>
       </ul>
 
       <div class="bio">
-        <div class="bio-name">Mon Profil</div>
-        <div class="bio-category">Créateur de contenu</div>
-        <div class="bio-text">📍 Paris, France
+        <div class="bio-name editable" data-placeholder="Nom">Mon Profil</div>
+        <div class="bio-category editable" data-placeholder="Catégorie">Créateur de contenu</div>
+        <div class="bio-text editable" data-multiline data-placeholder="Bio">📍 Paris, France
 📸 Photographie &amp; voyages
 ✨ Nouvelles photos chaque semaine</div>
-        <a class="bio-link" href="#" onclick="return false">
+        <div class="bio-link">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
-          monprofil.fr
-        </a>
+          <span class="editable" data-placeholder="Lien">monprofil.fr</span>
+        </div>
       </div>
     </section>
   </header>
@@ -587,15 +602,15 @@
   });
 
   /* ---------- Export HTML statique ---------- */
-  // Recadre au centre en 4:5 (max 1080×1350, format Instagram) et encode en JPEG,
-  // pour que le fichier exporté soit autonome et reste léger.
-  async function toDataURL(img) {
+  // Recadre au centre au ratio voulu (posts : 3:4, max 1080×1440, format des miniatures
+  // Instagram) et encode en JPEG, pour que le fichier exporté soit autonome et reste léger.
+  async function toDataURL(img, ratio, maxW) {
     try { await img.decode(); } catch (err) { /* déjà chargée */ }
     const w = img.naturalWidth, h = img.naturalHeight;
     let sw = w, sh = h;
-    if (w / h > 4 / 5) sw = h * 4 / 5; else sh = w * 5 / 4;
-    const outW = Math.round(Math.min(1080, sw));
-    const outH = Math.round(outW * 5 / 4);
+    if (w / h > ratio) sw = h * ratio; else sh = w / ratio;
+    const outW = Math.round(Math.min(maxW, sw));
+    const outH = Math.round(outW / ratio);
     const canvas = document.createElement('canvas');
     canvas.width = outW;
     canvas.height = outH;
@@ -620,14 +635,21 @@
       const srcImgs = grid.querySelectorAll('.post img');
       const outImgs = clone.querySelectorAll('.post img');
       for (let i = 0; i < srcImgs.length; i++) {
-        outImgs[i].src = await toDataURL(srcImgs[i]);
+        outImgs[i].src = await toDataURL(srcImgs[i], 3 / 4, 1080);
       }
+      const avatarImg = document.querySelector('.avatar img');
+      if (avatarImg) clone.querySelector('.avatar img').src = await toDataURL(avatarImg, 1, 320);
 
       // Retire tout ce qui est interactif
       clone.querySelectorAll('button, input, .empty, .post-overlay').forEach(function (el) { el.remove(); });
       clone.querySelectorAll('[onclick]').forEach(function (el) { el.removeAttribute('onclick'); });
       clone.querySelectorAll('a[href]').forEach(function (el) { el.removeAttribute('href'); });
       clone.querySelectorAll('[id]').forEach(function (el) { el.removeAttribute('id'); });
+      clone.querySelectorAll('.editable').forEach(function (el) {
+        ['contenteditable', 'spellcheck', 'data-placeholder', 'data-numeric', 'data-multiline'].forEach(function (a) { el.removeAttribute(a); });
+        el.classList.remove('editable');
+      });
+      ['role', 'tabindex', 'title', 'aria-label'].forEach(function (a) { clone.querySelector('.avatar').removeAttribute(a); });
       clone.querySelectorAll('.post, .post img').forEach(function (el) {
         ['draggable', 'tabindex', 'role', 'aria-label'].forEach(function (a) { el.removeAttribute(a); });
       });
@@ -655,6 +677,54 @@
   }
 
   exportBtn.addEventListener('click', exportFeed);
+
+  /* ---------- Profil modifiable au clic ---------- */
+  const avatar = document.querySelector('.avatar');
+  const avatarInput = document.getElementById('avatar-input');
+
+  avatar.addEventListener('click', function () { avatarInput.click(); });
+  avatar.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); avatarInput.click(); }
+  });
+  avatarInput.addEventListener('change', function () {
+    const file = avatarInput.files[0];
+    avatarInput.value = '';
+    if (!file || !file.type.startsWith('image/')) return;
+    const old = avatar.querySelector('img');
+    if (old) URL.revokeObjectURL(old.src);
+    const img = document.createElement('img');
+    img.src = URL.createObjectURL(file);
+    img.alt = 'Photo de profil';
+    avatar.replaceChildren(img);
+  });
+
+  document.querySelectorAll('.editable').forEach(function (el) {
+    el.spellcheck = false;
+    el.setAttribute('contenteditable', 'plaintext-only');
+    // Navigateurs sans « plaintext-only » : édition classique, le collage reste en texte brut
+    if (el.contentEditable !== 'plaintext-only') el.setAttribute('contenteditable', 'true');
+
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !el.hasAttribute('data-multiline')) {
+        e.preventDefault();
+        el.blur();
+      } else if (e.key === 'Escape') {
+        el.blur();
+      }
+    });
+    el.addEventListener('paste', function (e) {
+      e.preventDefault();
+      let text = e.clipboardData.getData('text/plain');
+      if (!el.hasAttribute('data-multiline')) text = text.replace(/\s*\n\s*/g, ' ');
+      document.execCommand('insertText', false, text);
+    });
+    el.addEventListener('blur', function () {
+      const text = el.innerText.trim();
+      if (el.hasAttribute('data-numeric') && text === '') el.textContent = '0';
+      else if (text === '') el.textContent = '';  // vide → le placeholder réapparaît
+      window.getSelection().removeAllRanges();
+    });
+  });
 
   updateCount();
 })();
