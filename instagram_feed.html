@@ -85,7 +85,10 @@
     background: var(--avatar-bg);
     flex-shrink: 0;
   }
-  .avatar svg, .avatar img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .avatar svg { width: 100%; height: 100%; display: block; }
+  /* Logo entier visible (contain), mis à l'échelle par le curseur « Taille » ; fond blanc autour */
+  .avatar.has-image { background: #fff; }
+  .avatar img { width: 100%; height: 100%; display: block; object-fit: contain; transform-origin: center; }
   .avatar[role="button"] { cursor: pointer; }
   .avatar[role="button"]:hover { opacity: .85; }
   .avatar:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
@@ -318,6 +321,15 @@
   .dialog-option svg { width: 18px; height: 18px; }
   .dialog-option.selected { font-weight: 700; color: var(--blue); }
   .dialog-option.danger { font-weight: 700; color: var(--danger); }
+  .dialog-option:disabled { opacity: .3; cursor: default; }
+
+  .avatar-editor { padding: 8px 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+  .avatar.avatar-preview { width: 150px; height: 150px; }
+  .avatar.avatar-preview.has-image { box-shadow: 0 0 0 1px var(--border); }  /* repère du rond pendant le réglage */
+  .size-row { display: flex; align-items: center; gap: 12px; width: 100%; }
+  .size-row input { flex: 1; accent-color: var(--blue); }
+  .size-row output { min-width: 48px; text-align: right; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
+  .size-row.disabled { opacity: .3; }
 
   /* ---------- Mobile ---------- */
   @media (max-width: 735px) {
@@ -375,7 +387,7 @@
 <main>
   <header class="profile">
     <div class="profile-avatar">
-      <div class="avatar" role="button" tabindex="0" title="Changer la photo de profil" aria-label="Changer la photo de profil">
+      <div class="avatar" id="avatar" role="button" tabindex="0" title="Modifier la photo de profil" aria-label="Modifier la photo de profil">
         <svg viewBox="0 0 150 150">
           <circle cx="75" cy="58" r="28" fill="var(--avatar-fg)"/>
           <path d="M18 150c3-35 27-58 57-58s54 23 57 58Z" fill="var(--avatar-fg)"/>
@@ -448,6 +460,23 @@
   </div>
   <div id="type-options"></div>
   <button class="dialog-option" type="button" data-close>Annuler</button>
+</dialog>
+
+<dialog id="avatar-dialog">
+  <div class="dialog-head">
+    <h3>Photo de profil</h3>
+  </div>
+  <div class="avatar-editor">
+    <div class="avatar avatar-preview" id="avatar-preview"></div>
+    <label class="size-row" id="size-row">
+      <span>Taille</span>
+      <input type="range" id="avatar-size" min="10" max="300" step="1" value="100">
+      <output id="avatar-size-value">100 %</output>
+    </label>
+  </div>
+  <button class="dialog-option" type="button" id="avatar-change">Changer la photo</button>
+  <button class="dialog-option" type="button" id="avatar-reset">Taille d'origine</button>
+  <button class="dialog-option selected" type="button" data-close>Terminé</button>
 </dialog>
 
 <dialog id="clear-dialog">
@@ -674,7 +703,7 @@
     }
   });
 
-  for (const dialog of [typeDialog, clearDialog]) {
+  for (const dialog of [typeDialog, clearDialog, document.getElementById('avatar-dialog')]) {
     dialog.addEventListener('click', function (e) {
       if (e.target === dialog || e.target.closest('[data-close]')) dialog.close();
     });
@@ -718,6 +747,22 @@
     return canvas.toDataURL('image/jpeg', 0.85);
   }
 
+  // Photo de profil telle qu'affichée : logo entier (contain) × taille choisie, fond blanc
+  async function avatarDataURL(img, scale) {
+    try { await img.decode(); } catch (err) { /* déjà chargée */ }
+    const size = 320;
+    const w = img.naturalWidth, h = img.naturalHeight;
+    const fit = Math.min(size / w, size / h) * scale;
+    const dw = w * fit, dh = h * fit;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, size, size);
+    ctx.drawImage(img, (size - dw) / 2, (size - dh) / 2, dw, dh);
+    return canvas.toDataURL('image/jpeg', 0.9);
+  }
+
   function escapeHtml(str) {
     return str.replace(/[&<>"]/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
@@ -734,8 +779,13 @@
       for (let i = 0; i < srcImgs.length; i++) {
         outImgs[i].src = await toDataURL(srcImgs[i], 3 / 4, 1080);
       }
-      const avatarImg = document.querySelector('.avatar img');
-      if (avatarImg) clone.querySelector('.avatar img').src = await toDataURL(avatarImg, 1, 320);
+      const avatarImg = avatar.querySelector('img');
+      if (avatarImg) {
+        const outAvatar = clone.querySelector('.avatar img');
+        outAvatar.src = await avatarDataURL(avatarImg, avatarScale / 100);
+        outAvatar.removeAttribute('style');
+        outAvatar.removeAttribute('draggable');
+      }
 
       // Retire tout ce qui est interactif
       clone.querySelectorAll('button, input, .empty, .post-overlay').forEach(function (el) { el.remove(); });
@@ -776,29 +826,84 @@
   exportBtn.addEventListener('click', exportFeed);
 
   /* ---------- Profil modifiable au clic ---------- */
-  const avatar = document.querySelector('.avatar');
+  const avatar = document.getElementById('avatar');
   const avatarInput = document.getElementById('avatar-input');
+  const avatarDialog = document.getElementById('avatar-dialog');
+  const avatarPreview = document.getElementById('avatar-preview');
+  const sizeInput = document.getElementById('avatar-size');
+  const sizeValue = document.getElementById('avatar-size-value');
+  const sizeRow = document.getElementById('size-row');
+  const avatarReset = document.getElementById('avatar-reset');
+  const PLACEHOLDER = avatar.innerHTML;
+  let avatarUrl = null;
+  let avatarScale = 100;  // en %, 100 = logo entier dans le rond
 
-  avatar.addEventListener('click', function () { avatarInput.click(); });
+  // Affiche la photo (ou la silhouette par défaut) dans le rond du profil et dans l'aperçu
+  function renderAvatar() {
+    [avatar, avatarPreview].forEach(function (box) {
+      if (!avatarUrl) {
+        box.classList.remove('has-image');
+        box.innerHTML = PLACEHOLDER;
+        return;
+      }
+      let img = box.querySelector('img');
+      if (!img) {
+        img = document.createElement('img');
+        img.alt = 'Photo de profil';
+        img.draggable = false;
+        box.replaceChildren(img);
+      }
+      if (img.getAttribute('src') !== avatarUrl) img.src = avatarUrl;
+      img.style.transform = 'scale(' + avatarScale / 100 + ')';
+      box.classList.add('has-image');
+    });
+    sizeInput.value = avatarScale;
+    sizeValue.textContent = avatarScale + ' %';
+    sizeInput.disabled = !avatarUrl;
+    sizeRow.classList.toggle('disabled', !avatarUrl);
+    avatarReset.disabled = !avatarUrl || avatarScale === 100;
+  }
+
+  function setAvatar(file, scale) {
+    if (avatarUrl) URL.revokeObjectURL(avatarUrl);
+    avatarUrl = URL.createObjectURL(file);
+    avatarScale = scale || 100;
+    renderAvatar();
+  }
+
+  function setAvatarScale(value) {
+    avatarScale = Math.round(value);
+    renderAvatar();
+  }
+  function saveAvatarScale() {
+    save(function (store) { store.put(avatarScale, 'avatarScale'); });
+  }
+
+  function openAvatarDialog() {
+    renderAvatar();
+    avatarDialog.showModal();
+  }
+  avatar.addEventListener('click', openAvatarDialog);
   avatar.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); avatarInput.click(); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openAvatarDialog(); }
   });
+  document.getElementById('avatar-change').addEventListener('click', function () { avatarInput.click(); });
   avatarInput.addEventListener('change', function () {
     const file = avatarInput.files[0];
     avatarInput.value = '';
     if (!file || !file.type.startsWith('image/')) return;
-    setAvatar(file);
-    save(function (store) { store.put(file, 'avatar'); });
+    setAvatar(file, 100);
+    save(function (store) {
+      store.put(file, 'avatar');
+      store.put(100, 'avatarScale');
+    });
   });
-
-  function setAvatar(file) {
-    const old = avatar.querySelector('img');
-    if (old) URL.revokeObjectURL(old.src);
-    const img = document.createElement('img');
-    img.src = URL.createObjectURL(file);
-    img.alt = 'Photo de profil';
-    avatar.replaceChildren(img);
-  }
+  sizeInput.addEventListener('input', function () { setAvatarScale(sizeInput.value); });
+  sizeInput.addEventListener('change', saveAvatarScale);
+  avatarReset.addEventListener('click', function () {
+    setAvatarScale(100);
+    saveAvatarScale();
+  });
 
   const fields = document.querySelectorAll('[data-field]');
   let profileTimer = null;
@@ -847,7 +952,10 @@
     restoring = true;
     try {
       const saved = await DB.run('readonly', function (store) {
-        return { layout: store.get('layout'), profile: store.get('profile'), avatar: store.get('avatar') };
+        return {
+          layout: store.get('layout'), profile: store.get('profile'),
+          avatar: store.get('avatar'), avatarScale: store.get('avatarScale')
+        };
       });
       if (saved.profile) {
         fields.forEach(function (el) {
@@ -855,7 +963,7 @@
           if (typeof v === 'string') el.textContent = v;
         });
       }
-      if (saved.avatar) setAvatar(saved.avatar);
+      if (saved.avatar) setAvatar(saved.avatar, saved.avatarScale);
       const items = saved.layout || [];
       if (items.length) {
         const files = await DB.run('readonly', function (store) {
@@ -876,6 +984,7 @@
   }
 
   updateCount();
+  renderAvatar();
   restore();
 })();
 </script>
