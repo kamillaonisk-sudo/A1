@@ -257,6 +257,21 @@
 
   #file-input { display: none; }
 
+  .save-warning {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    max-width: calc(100% - 32px);
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #262626;
+    color: #f5f5f5;
+    text-align: center;
+    z-index: 10;
+  }
+  .save-warning[hidden] { display: none; }
+
   /* ---------- Type de publication (icône en haut à droite) ---------- */
   .post-type {
     position: absolute;
@@ -365,7 +380,7 @@
 
     <section class="profile-info">
       <div class="row-username">
-        <h1 class="username editable" data-placeholder="nom_utilisateur">mon_profil</h1>
+        <h1 class="username editable" data-field="username" data-placeholder="nom_utilisateur">mon_profil</h1>
         <button class="btn" type="button">Modifier le profil</button>
         <button class="btn btn-primary" type="button" id="add-btn">＋ Ajouter</button>
         <button class="btn" type="button" id="export-btn" disabled>Exporter</button>
@@ -375,19 +390,19 @@
 
       <ul class="stats">
         <li><b id="post-count">0</b> <span class="label" id="post-label">publication</span></li>
-        <li><b class="editable" data-numeric data-placeholder="0">248</b> <span class="label">followers</span></li>
-        <li><b class="editable" data-numeric data-placeholder="0">312</b> <span class="label">suivi(e)s</span></li>
+        <li><b class="editable" data-field="followers" data-numeric data-placeholder="0">248</b> <span class="label">followers</span></li>
+        <li><b class="editable" data-field="following" data-numeric data-placeholder="0">312</b> <span class="label">suivi(e)s</span></li>
       </ul>
 
       <div class="bio">
-        <div class="bio-name editable" data-placeholder="Nom">Mon Profil</div>
-        <div class="bio-category editable" data-placeholder="Catégorie">Créateur de contenu</div>
-        <div class="bio-text editable" data-multiline data-placeholder="Bio">📍 Paris, France
+        <div class="bio-name editable" data-field="name" data-placeholder="Nom">Mon Profil</div>
+        <div class="bio-category editable" data-field="category" data-placeholder="Catégorie">Créateur de contenu</div>
+        <div class="bio-text editable" data-field="bio" data-multiline data-placeholder="Bio">📍 Paris, France
 📸 Photographie &amp; voyages
 ✨ Nouvelles photos chaque semaine</div>
         <div class="bio-link">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10 14a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1 1"/><path d="M14 10a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1-1"/></svg>
-          <span class="editable" data-placeholder="Lien">monprofil.fr</span>
+          <span class="editable" data-field="link" data-placeholder="Lien">monprofil.fr</span>
         </div>
       </div>
     </section>
@@ -419,6 +434,8 @@
     <button type="button" id="empty-add">Partagez votre première photo</button>
   </div>
 </main>
+
+<div class="save-warning" id="save-warning" hidden></div>
 
 <dialog id="type-dialog">
   <div class="dialog-head">
@@ -463,6 +480,66 @@
     reel:     { label: 'Reel',          badge: REEL,     icon: REEL }
   };
 
+  /* ---------- Sauvegarde automatique (IndexedDB) ----------
+     Clés : 'layout' → [{ id, type }] dans l'ordre de la grille, 'img:<id>' → fichier image,
+     'profile' → textes du profil, 'avatar' → fichier de la photo de profil. */
+  const DB = (function () {
+    let opening = null;
+    function open() {
+      if (!opening) {
+        opening = new Promise(function (resolve, reject) {
+          const req = indexedDB.open('instagram_feed', 1);
+          req.onupgradeneeded = function () { req.result.createObjectStore('kv'); };
+          req.onsuccess = function () { resolve(req.result); };
+          req.onerror = function () { reject(req.error); };
+        });
+      }
+      return opening;
+    }
+    // fn reçoit le store ; renvoie éventuellement un objet de requêtes dont on lit les résultats
+    async function run(mode, fn) {
+      const db = await open();
+      return new Promise(function (resolve, reject) {
+        const tx = db.transaction('kv', mode);
+        const reqs = fn(tx.objectStore('kv')) || {};
+        tx.oncomplete = function () {
+          const out = {};
+          for (const k in reqs) out[k] = reqs[k].result;
+          resolve(out);
+        };
+        tx.onerror = tx.onabort = function () { reject(tx.error); };
+      });
+    }
+    return { run: run };
+  })();
+
+  let restoring = false;
+
+  function saveFailed(err) {
+    console.warn('Sauvegarde impossible :', err);
+    const box = document.getElementById('save-warning');
+    box.textContent = err && err.name === 'QuotaExceededError'
+      ? 'Espace de stockage plein : les dernières modifications ne seront pas conservées.'
+      : 'Sauvegarde automatique indisponible dans ce navigateur : les modifications ne seront pas conservées.';
+    box.hidden = false;
+  }
+
+  function save(fn) {
+    if (restoring) return;
+    DB.run('readwrite', fn).catch(saveFailed);
+  }
+
+  function layout() {
+    return Array.from(grid.children).map(function (p) { return { id: p.dataset.id, type: p.dataset.type }; });
+  }
+  function saveLayout() {
+    save(function (store) { store.put(layout(), 'layout'); });
+  }
+
+  function newId() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  }
+
   function setType(post, type) {
     post.dataset.type = type;
     post.querySelector('.post-type').innerHTML = TYPES[type].badge;
@@ -478,9 +555,10 @@
     clearBtn.disabled = n === 0;
   }
 
-  function createPost(file) {
+  function createPost(file, id, type) {
     const post = document.createElement('div');
     post.className = 'post';
+    post.dataset.id = id;
     post.draggable = true;
     post.tabIndex = 0;
     post.setAttribute('role', 'button');
@@ -498,7 +576,7 @@
     badge.className = 'post-type';
 
     post.append(img, overlay, badge);
-    setType(post, 'single');
+    setType(post, TYPES[type] ? type : 'single');
     return post;
   }
 
@@ -507,12 +585,19 @@
   document.getElementById('empty-add').addEventListener('click', openPicker);
 
   input.addEventListener('change', function () {
+    const added = [];
     for (const file of input.files) {
       if (!file.type.startsWith('image/')) continue;
-      grid.prepend(createPost(file));
+      const post = createPost(file, newId(), 'single');
+      grid.prepend(post);
+      added.push([post.dataset.id, file]);
     }
     input.value = '';
     updateCount();
+    save(function (store) {
+      added.forEach(function (a) { store.put(a[1], 'img:' + a[0]); });
+      store.put(layout(), 'layout');
+    });
   });
 
   /* ---------- Drag & drop (API native HTML5) ---------- */
@@ -548,6 +633,7 @@
     if (dragged) dragged.classList.remove('dragging');
     grid.classList.remove('is-dragging');
     dragged = null;
+    saveLayout();
   });
 
   /* ---------- Choix du type de publication ---------- */
@@ -563,6 +649,7 @@
       opt.innerHTML = TYPES[key].icon + '<span>' + TYPES[key].label + '</span>';
       opt.addEventListener('click', function () {
         setType(editing, key);
+        saveLayout();
         typeDialog.close();
       });
       typeOptions.append(opt);
@@ -595,9 +682,14 @@
   /* ---------- Vider le feed ---------- */
   clearBtn.addEventListener('click', function () { clearDialog.showModal(); });
   document.getElementById('clear-confirm').addEventListener('click', function () {
+    const ids = layout().map(function (p) { return p.id; });
     grid.querySelectorAll('.post img').forEach(function (img) { URL.revokeObjectURL(img.src); });
     grid.replaceChildren();
     updateCount();
+    save(function (store) {
+      ids.forEach(function (id) { store.delete('img:' + id); });
+      store.put([], 'layout');
+    });
     clearDialog.close();
   });
 
@@ -646,7 +738,7 @@
       clone.querySelectorAll('a[href]').forEach(function (el) { el.removeAttribute('href'); });
       clone.querySelectorAll('[id]').forEach(function (el) { el.removeAttribute('id'); });
       clone.querySelectorAll('.editable').forEach(function (el) {
-        ['contenteditable', 'spellcheck', 'data-placeholder', 'data-numeric', 'data-multiline'].forEach(function (a) { el.removeAttribute(a); });
+        ['contenteditable', 'spellcheck', 'data-field', 'data-placeholder', 'data-numeric', 'data-multiline'].forEach(function (a) { el.removeAttribute(a); });
         el.classList.remove('editable');
       });
       ['role', 'tabindex', 'title', 'aria-label'].forEach(function (a) { clone.querySelector('.avatar').removeAttribute(a); });
@@ -690,13 +782,27 @@
     const file = avatarInput.files[0];
     avatarInput.value = '';
     if (!file || !file.type.startsWith('image/')) return;
+    setAvatar(file);
+    save(function (store) { store.put(file, 'avatar'); });
+  });
+
+  function setAvatar(file) {
     const old = avatar.querySelector('img');
     if (old) URL.revokeObjectURL(old.src);
     const img = document.createElement('img');
     img.src = URL.createObjectURL(file);
     img.alt = 'Photo de profil';
     avatar.replaceChildren(img);
-  });
+  }
+
+  const fields = document.querySelectorAll('[data-field]');
+  let profileTimer = null;
+  function saveProfile() {
+    clearTimeout(profileTimer);
+    const data = {};
+    fields.forEach(function (el) { data[el.dataset.field] = el.innerText; });
+    save(function (store) { store.put(data, 'profile'); });
+  }
 
   document.querySelectorAll('.editable').forEach(function (el) {
     el.spellcheck = false;
@@ -723,10 +829,49 @@
       if (el.hasAttribute('data-numeric') && text === '') el.textContent = '0';
       else if (text === '') el.textContent = '';  // vide → le placeholder réapparaît
       window.getSelection().removeAllRanges();
+      saveProfile();
+    });
+    el.addEventListener('input', function () {
+      clearTimeout(profileTimer);
+      profileTimer = setTimeout(saveProfile, 400);
     });
   });
 
+  /* ---------- Restauration à l'ouverture ---------- */
+  async function restore() {
+    restoring = true;
+    try {
+      const saved = await DB.run('readonly', function (store) {
+        return { layout: store.get('layout'), profile: store.get('profile'), avatar: store.get('avatar') };
+      });
+      if (saved.profile) {
+        fields.forEach(function (el) {
+          const v = saved.profile[el.dataset.field];
+          if (typeof v === 'string') el.textContent = v;
+        });
+      }
+      if (saved.avatar) setAvatar(saved.avatar);
+      const items = saved.layout || [];
+      if (items.length) {
+        const files = await DB.run('readonly', function (store) {
+          const reqs = {};
+          items.forEach(function (p) { reqs[p.id] = store.get('img:' + p.id); });
+          return reqs;
+        });
+        items.forEach(function (p) {
+          if (files[p.id]) grid.append(createPost(files[p.id], p.id, p.type));
+        });
+      }
+    } catch (err) {
+      saveFailed(err);
+    } finally {
+      restoring = false;
+      updateCount();
+    }
+  }
+
   updateCount();
+  restore();
 })();
 </script>
 </body>
