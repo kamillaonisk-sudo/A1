@@ -21,6 +21,7 @@
     --dialog-bg: #ffffff;
     --danger: #ed4956;
     --edit-hover: rgba(0, 0, 0, .05);
+    --avatar-border: rgba(0, 0, 0, .0975);
   }
   @media (prefers-color-scheme: dark) {
     :root {
@@ -39,6 +40,7 @@
       --dialog-bg: #262626;
       --danger: #ed4956;
       --edit-hover: rgba(255, 255, 255, .08);
+      --avatar-border: rgba(255, 255, 255, .0975);
     }
   }
 
@@ -84,6 +86,16 @@
     overflow: hidden;
     background: var(--avatar-bg);
     flex-shrink: 0;
+  }
+  .avatar { position: relative; }
+  /* Fin contour gris des avatars Instagram : calque 1px par-dessus l'image */
+  .avatar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--avatar-border);
+    border-radius: 50%;
+    pointer-events: none;
   }
   .avatar svg { width: 100%; height: 100%; display: block; }
   /* Logo entier visible (contain), mis à l'échelle par le curseur « Taille » ; fond blanc autour */
@@ -325,7 +337,6 @@
 
   .avatar-editor { padding: 8px 32px 24px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
   .avatar.avatar-preview { width: 150px; height: 150px; }
-  .avatar.avatar-preview.has-image { box-shadow: 0 0 0 1px var(--border); }  /* repère du rond pendant le réglage */
   .size-row { display: flex; align-items: center; gap: 12px; width: 100%; }
   .size-row input { flex: 1; accent-color: var(--blue); }
   .size-row output { min-width: 48px; text-align: right; color: var(--text-secondary); font-variant-numeric: tabular-nums; }
