@@ -30,6 +30,14 @@ window.COURSE = {
         { fr: "Je travaille comme dentiste.", ru: "Я работаю стоматологом.", p: "je", fixed: true },
         { fr: "Je travaille en tant que dentiste.", ru: "Я работаю в качестве стоматолога.", p: "je", fixed: true }
       ] },
+    { inf: "habiter", group: 1, ru: "жить",
+      forms: { je: "habite", tu: "habites", il: "habite", nous: "habitons", vous: "habitez", ils: "habitent" },
+      ruForms: { je: "я живу", tu: "ты живёшь", il: "он живёт", elle: "она живёт", nous: "мы живём", vous: "вы живёте", ils: "они живут", elles: "они живут" },
+      examples: [
+        { fr: "J'habite à Paris.", ru: "Я живу в Париже.", p: "je" },
+        { fr: "Il habite en France.", ru: "Он живёт во Франции.", p: "il" },
+        { fr: "Nous habitons au Canada.", ru: "Мы живём в Канаде.", p: "nous" }
+      ] },
     { inf: "aller", group: 3, ru: "идти / ехать",
       forms: { je: "vais", tu: "vas", il: "va", nous: "allons", vous: "allez", ils: "vont" },
       ruForms: { je: "я иду / еду", tu: "ты идёшь / едешь", il: "он идёт / едет", elle: "она идёт / едет", nous: "мы идём / едем", vous: "вы идёте / едете", ils: "они идут / едут", elles: "они идут / едут" },
@@ -143,21 +151,21 @@ window.COURSE = {
   ],
 
   places: [
-    { name: "France", kind: "f", ru: "во Францию" },
-    { name: "Italie", kind: "f", ru: "в Италию" },
-    { name: "Espagne", kind: "f", ru: "в Испанию" },
-    { name: "Russie", kind: "f", ru: "в Россию" },
-    { name: "Allemagne", kind: "f", ru: "в Германию" },
-    { name: "Canada", kind: "m", ru: "в Канаду" },
-    { name: "Japon", kind: "m", ru: "в Японию" },
-    { name: "Brésil", kind: "m", ru: "в Бразилию" },
-    { name: "Portugal", kind: "m", ru: "в Португалию" },
-    { name: "États-Unis", kind: "pl", ru: "в США" },
-    { name: "Pays-Bas", kind: "pl", ru: "в Нидерланды" },
-    { name: "Paris", kind: "city", ru: "в Париж" },
-    { name: "Moscou", kind: "city", ru: "в Москву" },
-    { name: "Londres", kind: "city", ru: "в Лондон" },
-    { name: "Rome", kind: "city", ru: "в Рим" }
+    { name: "France", kind: "f", ru: "во Францию" , ruIn: "во Франции" },
+    { name: "Italie", kind: "f", ru: "в Италию" , ruIn: "в Италии" },
+    { name: "Espagne", kind: "f", ru: "в Испанию" , ruIn: "в Испании" },
+    { name: "Russie", kind: "f", ru: "в Россию" , ruIn: "в России" },
+    { name: "Allemagne", kind: "f", ru: "в Германию" , ruIn: "в Германии" },
+    { name: "Canada", kind: "m", ru: "в Канаду" , ruIn: "в Канаде" },
+    { name: "Japon", kind: "m", ru: "в Японию" , ruIn: "в Японии" },
+    { name: "Brésil", kind: "m", ru: "в Бразилию" , ruIn: "в Бразилии" },
+    { name: "Portugal", kind: "m", ru: "в Португалию" , ruIn: "в Португалии" },
+    { name: "États-Unis", kind: "pl", ru: "в США" , ruIn: "в США" },
+    { name: "Pays-Bas", kind: "pl", ru: "в Нидерланды" , ruIn: "в Нидерландах" },
+    { name: "Paris", kind: "city", ru: "в Париж" , ruIn: "в Париже" },
+    { name: "Moscou", kind: "city", ru: "в Москву" , ruIn: "в Москве" },
+    { name: "Londres", kind: "city", ru: "в Лондон" , ruIn: "в Лондоне" },
+    { name: "Rome", kind: "city", ru: "в Рим" , ruIn: "в Риме" }
   ],
 
   vocab: [
@@ -690,6 +698,9 @@ textarea.field { min-height: 110px; resize: vertical; }
     etre: { verb: "être", make: () => { const p = pick(P4); return ["etre", p, profFor(p, pick(profsM())).w]; },
       build: ([, p, w]) => { const n = NOUN[w], v = VERB["être"]; if (!n || !v) return null; const f = formOf(v, p);
         return { fr: `${cap(pf(p, f))} ${n.w}.`, ru: `${RU_NOM[p]} ${n.ru}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] }; } },
+    habiter: { verb: "habiter", make: () => ["habiter", pick(PRON), pick(C.places).name],
+      build: ([, p, name]) => { const pl = PLACE[name], v = VERB.habiter; if (!pl || !pl.ruIn || !v) return null; const f = formOf(v, p), pr = PREP[pl.kind];
+        return { fr: `${cap(pf(p, f))} ${pr} ${name}.`, ru: `${cap(ruOf(v, p))} ${pl.ruIn}.`, slots: [{ w: f, k: "verb" }, { w: pr, k: "prep" }] }; } },
     travail: { verb: "travailler", make: () => { const p = pick(P4); return ["travail", p, profFor(p, pick(profsM().filter(n => n.ins))).w]; },
       build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.ins || !v) return null; const f = formOf(v, p);
         return { fr: `${cap(pf(p, f))} comme ${n.w}.`, ru: `${cap(ruOf(v, p))} ${n.ins}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] }; } }
@@ -1044,6 +1055,7 @@ textarea.field { min-height: 110px; resize: vertical; }
       <div class="scheme"><span class="w">J'ai une…</span><span class="arr">=</span><span>У меня есть…</span></div>
       <div class="scheme"><span class="w">J'ai 30 ans</span><span class="arr">=</span><span>Мне 30 лет</span></div>
       <div class="scheme"><span class="w">Je vais en…</span><span class="arr">=</span><span>Я еду в…</span></div>
+      <div class="scheme"><span class="w">J'habite à…</span><span class="arr">=</span><span>Я живу в…</span></div>
       <div class="scheme"><span class="w">Je travaille comme…</span><span class="arr">=</span><span>Я работаю (кем?)</span></div>
       <div class="note">Фразы собираются случайно из всех слов, которые есть в приложении.</div></div>`;
   }
