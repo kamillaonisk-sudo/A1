@@ -338,7 +338,7 @@ svg.art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .w.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
 .arr { font-weight: 900; color: var(--muted); }
 .egrid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.egrid .w { justify-content: space-between; gap: 6px; font-size: 16px; }
+.egrid .w { justify-content: flex-start; gap: 0; font-size: 16px; white-space: nowrap; }
 .egrid .w small { font: 700 12px "Nunito", sans-serif; color: var(--muted); }
 .note { font-size: 13.5px; color: var(--muted); }
 .note b { color: var(--ink); }
@@ -451,7 +451,7 @@ textarea.field { min-height: 110px; resize: vertical; }
 
 /* ---------- result ---------- */
 .result { position: relative; overflow: hidden; border-radius: 28px; background: var(--a, var(--lime)); height: 240px; margin-top: 10px; }
-.result .big { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; background: var(--card); border-radius: 26px; padding: 14px 26px; }
+.result .big { position: absolute; left: 50%; top: 50%; translate: -50% -50%; text-align: center; background: var(--card); border-radius: 26px; padding: 14px 26px; }
 .result .big b { display: block; font: 700 56px "Fredoka", sans-serif; line-height: 1; font-variant-numeric: tabular-nums; }
 .result .big span { font-weight: 800; font-size: 14px; }
 .res-h { text-align: center; margin: 22px 0 6px; font-size: 30px; }
@@ -459,6 +459,49 @@ textarea.field { min-height: 110px; resize: vertical; }
 .linkbtn { display: block; margin: 22px auto 0; background: none; border: 0; color: var(--muted); text-decoration: underline; font-size: 13px; padding: 8px; }
 
 @media (max-width: 370px) { .q { font-size: 24px; } .bento { grid-auto-rows: 104px; } .egrid { grid-template-columns: 1fr; } }
+
+/* ---------- движение ---------- */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+@keyframes pop { 0% { opacity: 0; transform: scale(.88); } 65% { transform: scale(1.04); } }
+@keyframes slideUp { from { transform: translateY(105%); } }
+@keyframes wobble { 50% { transform: rotate(8deg) scale(1.06); } }
+@keyframes bounce { 40% { transform: scale(1.05); } }
+@keyframes ringIn { from { stroke-dasharray: 0 999; } }
+.app.enter > * { animation: rise .45s cubic-bezier(.2,.8,.2,1) backwards; }
+.app.enter > *:nth-child(2) { animation-delay: .04s; } .app.enter > *:nth-child(3) { animation-delay: .08s; }
+.app.enter > *:nth-child(4) { animation-delay: .12s; } .app.enter > *:nth-child(5) { animation-delay: .16s; }
+.app.enter > *:nth-child(n+6) { animation-delay: .2s; }
+.app.enter .bento > *, .app.enter .list > *, .app.enter details.verb { animation: rise .5s cubic-bezier(.2,.8,.2,1) backwards; }
+.app.enter .bento > :nth-child(2), .app.enter .list > :nth-child(2) { animation-delay: .07s; }
+.app.enter .bento > :nth-child(3), .app.enter .list > :nth-child(3) { animation-delay: .12s; }
+.app.enter .bento > :nth-child(4), .app.enter .list > :nth-child(4) { animation-delay: .17s; }
+.app.enter .bento > :nth-child(5), .app.enter .list > :nth-child(5) { animation-delay: .22s; }
+.app.enter .bento > :nth-child(n+6), .app.enter .list > :nth-child(n+6) { animation-delay: .27s; }
+.opts .opt, .words .opt, .match .opt { animation: pop .38s cubic-bezier(.2,.8,.2,1) backwards; }
+.opts .opt:nth-child(2), .match .opt:nth-child(2) { animation-delay: .06s; }
+.opts .opt:nth-child(3), .match .opt:nth-child(3) { animation-delay: .12s; }
+.opts .opt:nth-child(4), .match .opt:nth-child(4) { animation-delay: .18s; }
+.match .opt:nth-child(n+5) { animation-delay: .22s; }
+svg.art path:first-of-type { transform-box: fill-box; transform-origin: center; animation: wobble 9s ease-in-out infinite; }
+.ring circle:nth-child(2) { animation: ringIn 1.1s cubic-bezier(.2,.8,.2,1) backwards .25s; }
+.btn, .opt, .item, .tile, .chips button, .say, .tok, .round, .play, .tools button, .numgrid button, details.verb summary {
+  transition: transform .18s cubic-bezier(.2,.8,.2,1), background-color .2s, border-color .2s, box-shadow .2s, color .2s; }
+.btn:active:not(:disabled), .opt:active:not(:disabled), .chips button:active, .say:active, .tok:active, .round:active, .play:active, .tools button:active, .numgrid button:active { transform: scale(.95); }
+.item:active, .tile:active { transform: scale(.97); }
+@media (hover: hover) {
+  .tile:hover { transform: translateY(-3px) rotate(-.6deg); }
+  .btn:hover:not(:disabled) { transform: translateY(-2px); }
+  .opt:hover:not(:disabled) { border-color: var(--violet); transform: translateX(3px); }
+  .say:hover, .round:hover { transform: scale(1.08); }
+  .chips button:hover { border-color: var(--ink); }
+}
+.opt.bad { animation: shake .35s; }
+.opt.ok { animation: bounce .45s cubic-bezier(.2,.8,.2,1); }
+.dock.fb { animation: slideUp .38s cubic-bezier(.2,.8,.2,1); }
+.fb-h { animation: pop .4s cubic-bezier(.2,.8,.2,1) backwards .08s; }
+.kind { animation: pop .35s cubic-bezier(.2,.8,.2,1) backwards; }
+details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
+.result .big { animation: pop .55s cubic-bezier(.2,.8,.2,1) backwards .15s; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 
@@ -468,11 +511,13 @@ textarea.field { min-height: 110px; resize: vertical; }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "6 · 25.10";
+  const VERSION = "7 · 25.10";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
   const $ = s => document.querySelector(s);
+  // новый экран — плавное появление
+  new MutationObserver(() => { $app.classList.remove("enter"); void $app.offsetWidth; $app.classList.add("enter"); }).observe($app, { childList: true });
 
   const ICON = {
     fire: '<svg viewBox="0 0 24 24" fill="#ff6d57"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3 0-3-1-6 1-9.5z"/></svg>',
@@ -720,7 +765,7 @@ textarea.field { min-height: 110px; resize: vertical; }
   //  ГЕНЕРАТОРЫ ЗАДАНИЙ
   // ================================================================
   // «Собери фразу» и перевод целой фразы отключены
-  const OFF = ["order", "translate"];
+  const OFF = ["order", "translate", "find"];
   const pickMode = (avail, modes) => { const m = avail.filter(x => !OFF.includes(x) && (!modes || modes.includes(x))); return m.length ? pick(m) : null; };
 
   const GEN = {
@@ -935,7 +980,6 @@ textarea.field { min-height: 110px; resize: vertical; }
         { id: "v1", t: "Формы глагола", d: "Выбрать форму или окончание, найти местоимение", lvl: 1, icon: "cards",
           keys: () => [...verbKeys(), ...vList().flatMap(v => [`vm|${v.inf}`, `vt|${v.inf}`])], modes: ["conjc", "pron", "end", "match", "fr2ru", "ru2fr"] },
         { id: "v4", t: "Спряжение", d: "Написать форму самой", lvl: 2, icon: "pen", keys: () => [...verbKeys(), ...sentKeys()], modes: ["conj", "fill"] },
-        { id: "v5", t: "Найди ошибку", d: "Нажать на неправильное слово", lvl: 2, icon: "bug", keys: sentKeys, modes: ["find"] },
         { id: "v6", t: "Диктант и переделка", d: "На слух, другое местоимение, исправить", lvl: 3, icon: "ear", keys: () => [...verbKeys(), ...sentKeys()], modes: ["dict", "transform", "fix", "translate"] }
       ] },
     { id: "numbers", title: "Числа", fr: "les nombres", a: "var(--yellow)", b: "var(--violet)", seed: 23,
@@ -1001,19 +1045,17 @@ textarea.field { min-height: 110px; resize: vertical; }
           h += `<div class="scheme"><span class="w">${esc(st)}<span class="end">er</span></span><span class="arr">→</span><span class="w dark">${esc(st)}</span><span class="arr">+</span><span class="w"><span class="end">окончание</span></span></div>
             <div class="egrid">${["je", "nous", "tu", "vous", "il", "ils"].map(p => `<span class="w">${markPf(v1, p)}</span>`).join("")}</div>`;
         }
-        h += `<div class="note">Убираем <b>-er</b>, добавляем окончание. <b>-e, -es, -ent</b> не читаются: je travaille и ils travaillent звучат одинаково. Исключение: <b>aller</b> — III группа.</div>`;
       }
       if (!vGroup() || vGroup() === 2) {
         if (!vGroup()) h += `<div class="rule-sep"></div>`;
         h += `<div class="rule-h"><span class="badge">II группа</span>глаголы на -ir</div>
           <div class="scheme"><span class="w">fin<span class="end">ir</span></span><span class="arr">→</span><span class="w">fin<span class="end">is</span> · fin<span class="end">issons</span></span></div>
-          <div class="note">Окончания: -is, -is, -it, -issons, -issez, -issent. Пришли глаголы II группы — появятся тренировки.</div>`;
+          <div class="scheme">${["is", "is", "it", "issons", "issez", "issent"].map(e => `<span class="w">-${e}</span>`).join("")}</div>`;
       }
       if (!vGroup() || vGroup() === 3) {
         if (!vGroup()) h += `<div class="rule-sep"></div>`;
         h += `<div class="rule-h"><span class="badge">III группа</span>неправильные</div>
-          <div class="scheme">${C.verbs.filter(v => v.group === 3).map(v => `<span class="w">${esc(v.inf)}</span>`).join("")}</div>
-          <div class="note">Общего правила нет — формы учим наизусть. Открой глагол ниже, чтобы увидеть все формы.</div>`;
+          <div class="scheme">${C.verbs.filter(v => v.group === 3).map(v => `<span class="w">${esc(v.inf)}</span>`).join("")}</div>`;
       }
       return h + `</div>`;
     }
@@ -1027,7 +1069,7 @@ textarea.field { min-height: 110px; resize: vertical; }
         <div class="scheme">${[20, 30, 40, 50, 60].map(n => `<span class="w">${n} ${nword(n)}</span>`).join("")}</div>
         <div class="scheme"><span class="w">vingt</span><span class="arr">+</span><span class="w">deux</span><span class="arr">→</span><span class="w dark">vingt-deux</span></div>
         <div class="scheme"><span class="w">vingt</span><span class="arr">+</span><span class="w">un</span><span class="arr">→</span><span class="w dark">vingt et un</span></div>
-        <div class="note">На конце 1 — <b>et un</b> (21, 31, 41…), в остальных — <b>дефис</b>.</div></div>`;
+</div>`;
     }
     if (id === "articles") {
       return `<div class="rule">
@@ -1035,11 +1077,10 @@ textarea.field { min-height: 110px; resize: vertical; }
           <tr><th>какой-то</th><td>un</td><td>une</td><td>des</td></tr>
           <tr><th>тот самый</th><td>le</td><td>la</td><td>les</td></tr>
           <tr><th>+ гласная</th><td class="hl" colspan="2">l'ami · l'école</td><td>les</td></tr></table>
-        <div class="note"><b>un / une</b> — впервые, «какой-то». <b>le / la</b> — конкретный, известный: <i>le secrétaire de Pierre</i>.</div>
         <div class="rule-sep"></div>
         <div class="rule-h"><span class="badge">куда?</span>страны и города</div>
         <div class="prep-row"><div><b>à</b>город</div><div><b>en</b>страна ж.р.</div><div><b>au</b>страна м.р.</div><div><b>aux</b>страна мн.ч.</div></div>
-        <div class="note">à Paris · en France · au Canada · aux États-Unis. Страна на <b>-e</b> почти всегда ж.р.</div></div>`;
+</div>`;
     }
     if (id === "vocab") {
       return `<div class="rule">
@@ -1055,7 +1096,7 @@ textarea.field { min-height: 110px; resize: vertical; }
       <div class="scheme"><span class="w">Je vais en…</span><span class="arr">=</span><span>Я еду в…</span></div>
       <div class="scheme"><span class="w">J'habite à…</span><span class="arr">=</span><span>Я живу в…</span></div>
       <div class="scheme"><span class="w">Je travaille comme…</span><span class="arr">=</span><span>Я работаю (кем?)</span></div>
-      <div class="note">Фразы собираются случайно из всех слов, которые есть в приложении.</div></div>`;
+</div>`;
   }
 
   function verbDrop(v, open) {
@@ -1111,6 +1152,7 @@ textarea.field { min-height: 110px; resize: vertical; }
     if (id === "numbers") h += chips("nr", [["all", `1–${NMAX}`], ["1-20", "1–20"], ["21-69", `21–${NMAX}`]]);
     if (id === "vocab") h += chips("vt", [["", "Все темы"], ...C.themes.map(t => [t, t])]);
     h += ruleCard(id);
+    if (id === "verbs") h += `<h3 class="h-sm">Мои глаголы</h3>` + (vList().map(v => verbDrop(v)).join("") || `<p class="muted">Пока пусто — пришли глаголы этой группы.</p>`);
     h += `<h3 class="h-sm">Тренировки</h3><div class="list">`;
     s.drills.forEach((d, i) => { const empty = !d.keys().length;
       h += row({ ...d, best: S.best[d.id], d: empty ? "Пока пусто для этого фильтра" : d.d }, s, d.id, i, false, empty); });
@@ -1118,7 +1160,6 @@ textarea.field { min-height: 110px; resize: vertical; }
       h += row({ t: l.title, d: `Урок «${l.ru || ""}» · ${l.exercises.length} заданий`, icon: "puzzle", best: r && r.best }, s, "L:" + l.id, 7 + i, true); });
     h += row({ t: "Шпаргалка", d: "Все правила и таблицы со звуком", icon: "book" }, s, "cheat", 9);
     h += `</div>`;
-    if (id === "verbs") h += `<h3 class="h-sm">Мои глаголы</h3><p class="muted" style="margin:0 0 10px;font-size:14px">Нажми на глагол — откроются все формы.</p>` + vList().map(v => verbDrop(v)).join("");
     h += `</div>`;
     $app.innerHTML = h;
     $("#bk").onclick = home;
@@ -1303,11 +1344,14 @@ textarea.field { min-height: 110px; resize: vertical; }
     if (R.drill) S.best[R.drill] = Math.max(pct, S.best[R.drill] || 0);
     S.xp += 20; R.xp += 20; save();
     const s = R.sec || { a: "var(--ink)", b: "var(--lime)", seed: 5 };
-    $app.innerHTML = `<div class="result" style="--a:${s.a}">${art(s.b, s.seed + 99, 1, 400, 240)}<div class="big"><b>${Math.round(pct * 100)}%</b><span>с первой попытки</span></div></div>
+    $app.innerHTML = `<div class="result" style="--a:${s.a}">${art(s.b, s.seed + 99, 1, 400, 240)}<div class="big"><b id="score">0%</b><span>с первой попытки</span></div></div>
       <h2 class="res-h fr">${pct === 1 ? "Parfait !" : pct >= 0.7 ? "Très bien !" : "Bien !"}</h2>
       <p class="res-p">+${R.xp} баллов${R.missed.size ? ` · ошибки (${R.missed.size}) попадут в повторение` : ""}</p>`;
     showDock("", `<div class="two"><button class="btn ghost" id="bk">Назад</button><button class="btn" id="ag">Новый тест</button></div>`);
     $("#bk").onclick = R.back; $("#ag").onclick = R.again;
+    const target = Math.round(pct * 100), t0 = performance.now(), el = $("#score");
+    const tick = now => { const k = Math.min(1, (now - t0) / 900); el.textContent = Math.round(target * (1 - Math.pow(1 - k, 3))) + "%"; if (k < 1) requestAnimationFrame(tick); };
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) el.textContent = target + "%"; else requestAnimationFrame(tick);
     enterLock = Date.now() + 400;
   }
 
