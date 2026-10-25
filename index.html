@@ -226,8 +226,6 @@ window.COURSE = {
           { id: "a3-3", type: "choice", kind: "Выбери по смыслу",
             prompt: "Как спросить «как дела?» безлично?", options: ["Comment ça va ?", "Comment vas-tu ?", "Comment allez-vous ?"], answer: "Comment ça va ?", say: "Comment ça va ?",
             explain: "Безлично: <b>comment ça va ?</b> или <b>ça va ?</b>" },
-          { id: "a3-4", type: "order", kind: "Собери фразу",
-            prompt: "У меня всё очень хорошо.", tokens: ["Je", "vais", "très", "bien."], say: "Je vais très bien.", explain: "" },
           { id: "a3-5", type: "choice", kind: "Закончи диалог",
             prompt: "— Ça va ?\n— ___", ru: "— Как дела? — Так себе.", options: ["Comme ci, comme ça.", "Comment vas-tu ?", "Il va à Paris."], answer: "Comme ci, comme ça.", say: "Comme ci, comme ça.",
             explain: "На «Ça va ?» отвечают: ça va ___ / comme ci, comme ça / ça va aller." },
@@ -470,6 +468,7 @@ textarea.field { min-height: 110px; resize: vertical; }
 <script>
 (() => {
   const C = window.COURSE;
+  const VERSION = "6 · 25.10";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -720,7 +719,9 @@ textarea.field { min-height: 110px; resize: vertical; }
   // ================================================================
   //  ГЕНЕРАТОРЫ ЗАДАНИЙ
   // ================================================================
-  const pickMode = (avail, modes) => { const m = modes ? avail.filter(x => modes.includes(x)) : avail; return m.length ? pick(m) : null; };
+  // «Собери фразу» и перевод целой фразы отключены
+  const OFF = ["order", "translate"];
+  const pickMode = (avail, modes) => { const m = avail.filter(x => !OFF.includes(x) && (!modes || modes.includes(x))); return m.length ? pick(m) : null; };
 
   const GEN = {
     // форма глагола: vf|inf|pronoun
@@ -933,8 +934,6 @@ textarea.field { min-height: 110px; resize: vertical; }
       drills: [
         { id: "v1", t: "Формы глагола", d: "Выбрать форму или окончание, найти местоимение", lvl: 1, icon: "cards",
           keys: () => [...verbKeys(), ...vList().flatMap(v => [`vm|${v.inf}`, `vt|${v.inf}`])], modes: ["conjc", "pron", "end", "match", "fr2ru", "ru2fr"] },
-        { id: "v2", t: "Собери фразу", d: "Слова по порядку по переводу", lvl: 1, icon: "puzzle", keys: () => [...sentKeys(), ...phraseKeys(tplFor(vInfs()), 30)], modes: ["order"] },
-        { id: "v3", t: "Переведи фразу", d: "С французского на русский", lvl: 1, icon: "globe", keys: () => phraseKeys(tplFor(vInfs()), 40), modes: ["fr2ru"] },
         { id: "v4", t: "Спряжение", d: "Написать форму самой", lvl: 2, icon: "pen", keys: () => [...verbKeys(), ...sentKeys()], modes: ["conj", "fill"] },
         { id: "v5", t: "Найди ошибку", d: "Нажать на неправильное слово", lvl: 2, icon: "bug", keys: sentKeys, modes: ["find"] },
         { id: "v6", t: "Диктант и переделка", d: "На слух, другое местоимение, исправить", lvl: 3, icon: "ear", keys: () => [...verbKeys(), ...sentKeys()], modes: ["dict", "transform", "fix", "translate"] }
@@ -957,7 +956,7 @@ textarea.field { min-height: 110px; resize: vertical; }
         { id: "a3", t: "le · la · l' · les", d: "Определённые артикли", lvl: 2, icon: "cards", keys: nounKeys, modes: ["def"] },
         { id: "a4", t: "Страны и города", d: "à · en · au · aux", lvl: 2, icon: "globe", keys: () => C.places.map(p => "p|" + p.name), modes: ["prep"] },
         { id: "a5", t: "Артикль во фразе", d: "C'est un… · J'ai une… · Ce sont des…", lvl: 2, icon: "puzzle",
-          keys: () => [...C.articles.sentences.map((_, i) => "as|" + i), ...phraseKeys(["cest", "cesont", "avoir"], 30)], modes: ["order", "art1"] },
+          keys: () => phraseKeys(["cest", "cesont", "avoir"], 40), modes: ["art1"] },
         { id: "a6", t: "Мн. число", d: "une voiture → des voitures", lvl: 3, icon: "pen", keys: nounKeys, modes: ["plural"] }
       ] },
     { id: "vocab", title: "Словарик", fr: "le vocabulaire", a: "var(--mint)", b: "var(--pink)", seed: 51,
@@ -971,7 +970,6 @@ textarea.field { min-height: 110px; resize: vertical; }
       masteryCount: true,
       drills: [
         { id: "p1", t: "С французского", d: "Выбери правильный перевод", lvl: 1, icon: "globe", keys: () => phraseKeys(tplFor(), 60), modes: ["fr2ru"] },
-        { id: "p2", t: "Собери фразу", d: "Сложи французскую фразу по переводу", lvl: 2, icon: "puzzle", keys: () => phraseKeys(tplFor(), 60), modes: ["order"] },
         { id: "p3", t: "Вставь одно слово", d: "С русского: впиши пропущенное слово", lvl: 2, icon: "pen", keys: () => phraseKeys(tplFor(), 60), modes: ["ru2fr1"] },
         { id: "p4", t: "Диктант фраз", d: "Послушай и запиши целиком", lvl: 3, icon: "ear", keys: () => phraseKeys(tplFor(), 60), modes: ["dict"] }
       ] }
@@ -1086,7 +1084,7 @@ textarea.field { min-height: 110px; resize: vertical; }
         <span class="fr-t">${s.fr}</span><span class="lbl"><b>${s.short || s.title}</b><span>${m.pc}%</span></span></button>`;
     });
     h += `<button class="tile wide" id="bigtest" style="--a:var(--ink)">${art("var(--lime)", 77, 1, 400, 120)}<span class="fr-t">le test</span><span class="lbl"><b style="color:#fff">Общий тест</b><span>${SIZE}</span></span></button>`;
-    h += `</div><button class="linkbtn" id="reset">Сбросить прогресс</button>`;
+    h += `</div><button class="linkbtn" id="reset">Сбросить прогресс</button><p class="muted" style="text-align:center;font-size:12px;margin:0">Версия ${VERSION}</p>`;
     $app.innerHTML = h;
     $app.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => section(b.dataset.sec));
     $("#bigtest").onclick = runBigTest;
@@ -1234,7 +1232,7 @@ textarea.field { min-height: 110px; resize: vertical; }
     let set = dueKeys().sort((a, b) => S.srs[a].box - S.srs[b].box).slice(0, SIZE).map(k => exFor(k)).filter(Boolean), revision = true;
     if (!set.length) {
       const seen = Object.keys(S.items).filter(k => exFor(k));
-      set = seen.length >= 6 ? buildSet(seen, ["conjc", "pron", "end", "order", "fr2ru", "ru2fr", "hearc", "w2d", "gender", "indef", "def", "prep", "art1", "hear", "fill"]) : mixFrom(SECTIONS.flatMap(s => s.drills.filter(d => d.lvl === 1)), SIZE);
+      set = seen.length >= 6 ? buildSet(seen, ["conjc", "pron", "end", "fr2ru", "ru2fr", "hearc", "w2d", "gender", "indef", "def", "prep", "art1", "hear", "fill"]) : mixFrom(SECTIONS.flatMap(s => s.drills.filter(d => d.lvl === 1)), SIZE);
       revision = false;
     }
     startSession(set, { title: "Повторение", revision, back: home, again: startRevision });
