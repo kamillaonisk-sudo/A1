@@ -78,76 +78,85 @@ window.COURSE = {
     ]
   },
 
-  themes: ["Приветствия", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Полезные слова", "Притяжательные", "Фразы"],
+  themes: ["Приветствия", "Вопросы", "Анкета", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Полезные слова", "Притяжательные", "Фразы"],
 
   nouns: [
     { theme: "Семья", w: "père", g: "m", pl: "pères", ru: "отец", rupl: "отцы", rg: "m", pair: "mère" },
-    { theme: "Семья", w: "mère", g: "f", pl: "mères", ru: "мать", rupl: "матери", pair: "père" },
+    { theme: "Семья", w: "mère", g: "f", pl: "mères", ru: "мать", rupl: "матери", pair: "père", rg: "f" },
     { theme: "Семья", w: "frère", g: "m", pl: "frères", ru: "брат", rupl: "братья", rg: "m", pair: "sœur" },
-    { theme: "Семья", w: "sœur", g: "f", pl: "sœurs", ru: "сестра", rupl: "сёстры", pair: "frère" },
+    { theme: "Семья", w: "sœur", g: "f", pl: "sœurs", ru: "сестра", rupl: "сёстры", pair: "frère", rg: "f" },
     { theme: "Семья", w: "fils", g: "m", pl: "fils", ru: "сын", rupl: "сыновья", rg: "m", pair: "fille" },
-    { theme: "Семья", w: "fille", g: "f", pl: "filles", ru: "дочь", rupl: "дочери", pair: "fils" },
+    { theme: "Семья", w: "fille", g: "f", pl: "filles", ru: "дочь", rupl: "дочери", pair: "fils", rg: "f" },
     { theme: "Семья", w: "mari", g: "m", pl: "maris", ru: "муж", rupl: "мужья", rg: "m", pair: "femme" },
-    { theme: "Семья", w: "femme", g: "f", pl: "femmes", ru: "жена", rupl: "жёны", pair: "mari" },
+    { theme: "Семья", w: "femme", g: "f", pl: "femmes", ru: "жена", rupl: "жёны", pair: "mari", rg: "f" },
     { theme: "Семья", w: "enfant", g: "m", pl: "enfants", ru: "ребёнок", rupl: "дети", rg: "m" },
     { theme: "Семья", w: "ami", g: "m", pl: "amis", ru: "друг", rupl: "друзья", rg: "m", pair: "amie" },
-    { theme: "Семья", w: "amie", g: "f", pl: "amies", ru: "подруга", rupl: "подруги", pair: "ami" },
+    { theme: "Семья", w: "amie", g: "f", pl: "amies", ru: "подруга", rupl: "подруги", pair: "ami", rg: "f" },
 
-    { theme: "Профессии", w: "dentiste", g: "m", both: true, pl: "dentistes", ru: "стоматолог", rupl: "стоматологи", ins: "стоматологом" },
-    { theme: "Профессии", w: "secrétaire", g: "m", both: true, pl: "secrétaires", ru: "секретарь", rupl: "секретари", ins: "секретарём" },
-    { theme: "Профессии", w: "médecin", g: "m", pl: "médecins", ru: "врач", rupl: "врачи", ins: "врачом" },
-    { theme: "Профессии", w: "professeur", g: "m", pl: "professeurs", ru: "преподаватель", rupl: "преподаватели", ins: "преподавателем" },
-    { theme: "Профессии", w: "acteur", g: "m", pl: "acteurs", ru: "актёр", rupl: "актёры", ins: "актёром", pair: "actrice" },
-    { theme: "Профессии", w: "actrice", g: "f", pl: "actrices", ru: "актриса", rupl: "актрисы", ins: "актрисой", pair: "acteur" },
-    { theme: "Профессии", w: "étudiant", g: "m", pl: "étudiants", ru: "студент", rupl: "студенты", pair: "étudiante" },
-    { theme: "Профессии", w: "étudiante", g: "f", pl: "étudiantes", ru: "студентка", rupl: "студентки", pair: "étudiant" },
-    { theme: "Профессии", w: "serveur", g: "m", pl: "serveurs", ru: "официант", rupl: "официанты", ins: "официантом", pair: "serveuse" },
-    { theme: "Профессии", w: "serveuse", g: "f", pl: "serveuses", ru: "официантка", rupl: "официантки", ins: "официанткой", pair: "serveur" },
-    { theme: "Профессии", w: "vendeur", g: "m", pl: "vendeurs", ru: "продавец", rupl: "продавцы", ins: "продавцом", pair: "vendeuse" },
-    { theme: "Профессии", w: "vendeuse", g: "f", pl: "vendeuses", ru: "продавщица", rupl: "продавщицы", ins: "продавщицей", pair: "vendeur" },
+    { theme: "Профессии", w: "dentiste", g: "m", both: true, pl: "dentistes", ru: "стоматолог", rupl: "стоматологи", ins: "стоматологом", rg: "m" },
+    { theme: "Профессии", w: "secrétaire", g: "m", both: true, pl: "secrétaires", ru: "секретарь", rupl: "секретари", ins: "секретарём", rg: "m" },
+    { theme: "Профессии", w: "médecin", g: "m", pl: "médecins", ru: "врач", rupl: "врачи", ins: "врачом", rg: "m" },
+    { theme: "Профессии", w: "professeur", g: "m", pl: "professeurs", ru: "преподаватель", rupl: "преподаватели", ins: "преподавателем", rg: "m" },
+    { theme: "Профессии", w: "acteur", g: "m", pl: "acteurs", ru: "актёр", rupl: "актёры", ins: "актёром", pair: "actrice", rg: "m" },
+    { theme: "Профессии", w: "actrice", g: "f", pl: "actrices", ru: "актриса", rupl: "актрисы", ins: "актрисой", pair: "acteur", rg: "f" },
+    { theme: "Профессии", w: "étudiant", g: "m", pl: "étudiants", ru: "студент", rupl: "студенты", pair: "étudiante", rg: "m" },
+    { theme: "Профессии", w: "étudiante", g: "f", pl: "étudiantes", ru: "студентка", rupl: "студентки", pair: "étudiant", rg: "f" },
+    { theme: "Профессии", w: "serveur", g: "m", pl: "serveurs", ru: "официант", rupl: "официанты", ins: "официантом", pair: "serveuse", rg: "m" },
+    { theme: "Профессии", w: "serveuse", g: "f", pl: "serveuses", ru: "официантка", rupl: "официантки", ins: "официанткой", pair: "serveur", rg: "f" },
+    { theme: "Профессии", w: "vendeur", g: "m", pl: "vendeurs", ru: "продавец", rupl: "продавцы", ins: "продавцом", pair: "vendeuse", rg: "m" },
+    { theme: "Профессии", w: "vendeuse", g: "f", pl: "vendeuses", ru: "продавщица", rupl: "продавщицы", ins: "продавщицей", pair: "vendeur", rg: "f" },
 
-    { theme: "Дом и вещи", w: "maison", g: "f", pl: "maisons", ru: "дом", rupl: "дома" },
+    { theme: "Дом и вещи", w: "maison", g: "f", pl: "maisons", ru: "дом", rupl: "дома", rg: "m" },
     { theme: "Дом и вещи", w: "appartement", g: "m", pl: "appartements", ru: "квартира", rupl: "квартиры", rg: "f" },
-    { theme: "Дом и вещи", w: "chambre", g: "f", pl: "chambres", ru: "комната", rupl: "комнаты" },
-    { theme: "Дом и вещи", w: "voiture", g: "f", pl: "voitures", ru: "машина", rupl: "машины" },
+    { theme: "Дом и вещи", w: "chambre", g: "f", pl: "chambres", ru: "комната", rupl: "комнаты", rg: "f" },
+    { theme: "Дом и вещи", w: "voiture", g: "f", pl: "voitures", ru: "машина", rupl: "машины", rg: "f" },
     { theme: "Дом и вещи", w: "livre", g: "m", pl: "livres", ru: "книга", rupl: "книги", rg: "f" },
     { theme: "Дом и вещи", w: "téléphone", g: "m", pl: "téléphones", ru: "телефон", rupl: "телефоны", rg: "m" },
     { theme: "Дом и вещи", w: "ordinateur", g: "m", pl: "ordinateurs", ru: "компьютер", rupl: "компьютеры", rg: "m" },
     { theme: "Дом и вещи", w: "sac", g: "m", pl: "sacs", ru: "сумка", rupl: "сумки", rg: "f" },
-    { theme: "Дом и вещи", w: "table", g: "f", pl: "tables", ru: "стол", rupl: "столы" },
-    { theme: "Дом и вещи", w: "chaise", g: "f", pl: "chaises", ru: "стул", rupl: "стулья" },
+    { theme: "Дом и вещи", w: "table", g: "f", pl: "tables", ru: "стол", rupl: "столы", rg: "m" },
+    { theme: "Дом и вещи", w: "chaise", g: "f", pl: "chaises", ru: "стул", rupl: "стулья", rg: "m" },
 
-    { theme: "Город", w: "ville", g: "f", pl: "villes", ru: "город", rupl: "города" },
-    { theme: "Город", w: "rue", g: "f", pl: "rues", ru: "улица", rupl: "улицы" },
-    { theme: "Город", w: "gare", g: "f", pl: "gares", ru: "вокзал", rupl: "вокзалы" },
-    { theme: "Город", w: "école", g: "f", pl: "écoles", ru: "школа", rupl: "школы" },
-    { theme: "Город", w: "banque", g: "f", pl: "banques", ru: "банк", rupl: "банки" },
-    { theme: "Город", w: "café", g: "m", pl: "cafés", ru: "кафе", rupl: "кафе", rg: "n" },
-    { theme: "Город", w: "restaurant", g: "m", pl: "restaurants", ru: "ресторан", rupl: "рестораны", rg: "m" },
-    { theme: "Город", w: "musée", g: "m", pl: "musées", ru: "музей", rupl: "музеи", rg: "m" },
-    { theme: "Город", w: "magasin", g: "m", pl: "magasins", ru: "магазин", rupl: "магазины", rg: "m" },
-    { theme: "Город", w: "hôtel", g: "m", pl: "hôtels", ru: "гостиница", rupl: "гостиницы", rg: "f" },
+    { theme: "Город", w: "ville", g: "f", pl: "villes", ru: "город", rupl: "города", rg: "m" },
+    { theme: "Город", w: "rue", g: "f", pl: "rues", ru: "улица", rupl: "улицы", rg: "f" },
+    { theme: "Город", w: "gare", g: "f", pl: "gares", ru: "вокзал", rupl: "вокзалы", rg: "m", rin: "на вокзале" },
+    { theme: "Город", w: "école", g: "f", pl: "écoles", ru: "школа", rupl: "школы", rg: "f", rin: "в школе" },
+    { theme: "Город", w: "banque", g: "f", pl: "banques", ru: "банк", rupl: "банки", rg: "m", rin: "в банке" },
+    { theme: "Город", w: "café", g: "m", pl: "cafés", ru: "кафе", rupl: "кафе", rg: "n", rin: "в кафе" },
+    { theme: "Город", w: "restaurant", g: "m", pl: "restaurants", ru: "ресторан", rupl: "рестораны", rg: "m", rin: "в ресторане" },
+    { theme: "Город", w: "musée", g: "m", pl: "musées", ru: "музей", rupl: "музеи", rg: "m", rin: "в музее" },
+    { theme: "Город", w: "magasin", g: "m", pl: "magasins", ru: "магазин", rupl: "магазины", rg: "m", rin: "в магазине" },
+    { theme: "Город", w: "hôtel", g: "m", pl: "hôtels", ru: "гостиница", rupl: "гостиницы", rg: "f", rin: "в гостинице" },
 
     { theme: "Еда", w: "pain", g: "m", noPl: true, ru: "хлеб", rg: "m" },
     { theme: "Еда", w: "fromage", g: "m", noPl: true, ru: "сыр", rg: "m" },
     { theme: "Еда", w: "lait", g: "m", noPl: true, ru: "молоко", rg: "n" },
-    { theme: "Еда", w: "viande", g: "f", noPl: true, ru: "мясо" },
+    { theme: "Еда", w: "viande", g: "f", noPl: true, ru: "мясо", rg: "n" },
     { theme: "Еда", w: "vin", g: "m", noPl: true, ru: "вино", rg: "n" },
-    { theme: "Еда", w: "pomme", g: "f", pl: "pommes", ru: "яблоко", rupl: "яблоки" },
+    { theme: "Еда", w: "pomme", g: "f", pl: "pommes", ru: "яблоко", rupl: "яблоки", rg: "n" },
     { theme: "Еда", w: "gâteau", g: "m", pl: "gâteaux", ru: "торт", rupl: "торты", rg: "m" },
     { theme: "Еда", w: "poisson", g: "m", pl: "poissons", ru: "рыба", rupl: "рыбы", rg: "f" },
-    { theme: "Еда", w: "salade", g: "f", pl: "salades", ru: "салат", rupl: "салаты" },
+    { theme: "Еда", w: "salade", g: "f", pl: "salades", ru: "салат", rupl: "салаты", rg: "m" },
 
     { theme: "Время", w: "jour", g: "m", pl: "jours", ru: "день", rupl: "дни", rg: "m" },
-    { theme: "Время", w: "nuit", g: "f", pl: "nuits", ru: "ночь", rupl: "ночи" },
-    { theme: "Время", w: "semaine", g: "f", pl: "semaines", ru: "неделя", rupl: "недели" },
+    { theme: "Время", w: "nuit", g: "f", pl: "nuits", ru: "ночь", rupl: "ночи", rg: "f" },
+    { theme: "Время", w: "semaine", g: "f", pl: "semaines", ru: "неделя", rupl: "недели", rg: "f" },
     { theme: "Время", w: "mois", g: "m", pl: "mois", ru: "месяц", rupl: "месяцы", rg: "m" },
     { theme: "Время", w: "matin", g: "m", pl: "matins", ru: "утро", rupl: "утра", rg: "n" },
     { theme: "Время", w: "soir", g: "m", pl: "soirs", ru: "вечер", rupl: "вечера", rg: "m" },
 
     { theme: "Досуг", w: "film", g: "m", pl: "films", ru: "фильм", rupl: "фильмы", rg: "m" },
-    { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка" },
-    { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", rg: "m" }
+    { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка", rg: "f" },
+    { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", rg: "m" },
+    { theme: "Дом и вещи", w: "stylo", g: "m", pl: "stylos", ru: "ручка", rupl: "ручки", rg: "f" },
+
+    { theme: "Анкета", w: "prénom", g: "m", pl: "prénoms", ru: "имя", rupl: "имена", rg: "n" },
+    { theme: "Анкета", w: "nom", g: "m", pl: "noms", ru: "фамилия", rupl: "фамилии", rg: "f" },
+    { theme: "Анкета", w: "âge", g: "m", noPl: true, ru: "возраст", rg: "m" },
+    { theme: "Анкета", w: "adresse", g: "f", pl: "adresses", ru: "адрес", rupl: "адреса", rg: "m" },
+    { theme: "Анкета", w: "code postal", g: "m", noPl: true, ru: "почтовый индекс", rg: "m" },
+    { theme: "Анкета", w: "numéro de téléphone", g: "m", noPl: true, ru: "номер телефона", rg: "m" },
+    { theme: "Анкета", w: "pays", g: "m", pl: "pays", ru: "страна", rupl: "страны", rg: "f" }
   ],
 
   places: [
@@ -165,7 +174,8 @@ window.COURSE = {
     { name: "Paris", kind: "city", ru: "в Париж" , ruIn: "в Париже" },
     { name: "Moscou", kind: "city", ru: "в Москву" , ruIn: "в Москве" },
     { name: "Londres", kind: "city", ru: "в Лондон" , ruIn: "в Лондоне" },
-    { name: "Rome", kind: "city", ru: "в Рим" , ruIn: "в Риме" }
+    { name: "Rome", kind: "city", ru: "в Рим" , ruIn: "в Риме" },
+    { name: "Lyon", kind: "city", ru: "в Лион", ruIn: "в Лионе" }
   ],
 
   vocab: [
@@ -186,11 +196,28 @@ window.COURSE = {
     { fr: "préféré", ru: "любимый", theme: "Полезные слова" },
     { fr: "de", ru: "из (les acteurs de mon film)", theme: "Полезные слова" },
     { fr: "mon", ru: "мой", theme: "Притяжательные" },
+    { fr: "ma", ru: "моя", theme: "Притяжательные" },
+    { fr: "mes", ru: "мои", theme: "Притяжательные" },
     { fr: "ton", ru: "твой", theme: "Притяжательные" },
-    { fr: "son", ru: "его / её", theme: "Притяжательные" },
-    { fr: "notre", ru: "наш", theme: "Притяжательные" },
-    { fr: "votre", ru: "ваш", theme: "Притяжательные" },
-    { fr: "leur", ru: "их", theme: "Притяжательные" },
+    { fr: "ta", ru: "твоя", theme: "Притяжательные" },
+    { fr: "tes", ru: "твои", theme: "Притяжательные" },
+    { fr: "son", ru: "его / её (м.р.)", theme: "Притяжательные" },
+    { fr: "sa", ru: "его / её (ж.р.)", theme: "Притяжательные" },
+    { fr: "ses", ru: "его / её (мн.ч.)", theme: "Притяжательные" },
+    { fr: "notre", ru: "наш / наша", theme: "Притяжательные" },
+    { fr: "nos", ru: "наши", theme: "Притяжательные" },
+    { fr: "votre", ru: "ваш / ваша", theme: "Притяжательные" },
+    { fr: "vos", ru: "ваши", theme: "Притяжательные" },
+    { fr: "leur", ru: "их (ед.ч.)", theme: "Притяжательные" },
+    { fr: "leurs", ru: "их (мн.ч.)", theme: "Притяжательные" },
+    { fr: "où", ru: "где? / куда?", theme: "Вопросы" },
+    { fr: "quel", ru: "какой? (м.р.)", theme: "Вопросы" },
+    { fr: "quelle", ru: "какая? (ж.р.)", theme: "Вопросы" },
+    { fr: "quels", ru: "какие? (м.р. мн.ч.)", theme: "Вопросы" },
+    { fr: "quelles", ru: "какие? (ж.р. мн.ч.)", theme: "Вопросы" },
+    { fr: "comment", ru: "как?", theme: "Вопросы" },
+    { fr: "dans", ru: "в (внутри)", theme: "Вопросы" },
+    { fr: "Je m'appelle…", ru: "Меня зовут…", theme: "Анкета" },
     { fr: "Ça va ?", ru: "Как дела? (безлично)", theme: "Фразы" },
     { fr: "Comment vas-tu ?", ru: "Как ты?", theme: "Фразы" },
     { fr: "Comment allez-vous ?", ru: "Как вы?", theme: "Фразы" },
@@ -261,6 +288,7 @@ window.COURSE = {
   --pink: #ff92dc;
   --peach: #ffe0bd;
   --cream: #fff6ea;
+  --sky: #8fd3ff;
   color-scheme: light;
 }
 * { box-sizing: border-box; }
@@ -428,6 +456,16 @@ textarea.field { min-height: 110px; resize: vertical; }
 .shake { animation: shake .35s; }
 @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 .refs { margin-top: 14px; }
+.chipsline { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.flabel { font-weight: 800; margin: 12px 0 6px; }
+.wfield { font-size: 20px; }
+.wfield + .flabel { margin-top: 14px; }
+.diff { background: rgba(255,255,255,.6); border-radius: 14px; padding: 10px 12px; font-size: 15px; display: grid; gap: 4px; }
+.diff .fr { font-size: 17px; }
+.bad-w { background: var(--coral); color: #fff; border-radius: 6px; padding: 0 4px; }
+.miss-w { background: var(--lime); border-radius: 6px; padding: 0 4px; font-weight: 800; }
+.lbl2 { font-weight: 800; color: var(--muted); margin-right: 4px; font-family: "Nunito", sans-serif; }
+.alt { font-size: 13px; color: var(--muted); }
 
 /* ---------- dock ---------- */
 .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to top, var(--bg) 70%, rgba(255,243,227,0)); }
@@ -511,7 +549,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "7 · 25.10";
+  const VERSION = "8 · 06.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -602,7 +640,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
   const uniq = a => [...new Set(a)];
-  const norm = s => String(s).toLowerCase().replace(/[’`]/g, "'").replace(/[.,!?«»;:—]/g, " ").replace(/\s*-\s*/g, "-").replace(/\s*'\s*/g, "'").replace(/\s+/g, " ").trim();
+  const norm = s => String(s).toLowerCase().replace(/[’`]/g, "'").replace(/[.,!?«»;:—]/g, " ").replace(/\s*-\s*/g, "-").replace(/\s*'\s*/g, "'").replace(/\s+/g, " ").trim().replace(/(\d)\s+(?=\d)/g, "$1");
   const bare = s => norm(s).normalize("NFD").replace(/[̀-ͯ]/g, "");
   const tokenize = s => s.split(" ").reduce((a, t) => { if (/^[?!.]+$/.test(t) && a.length) a[a.length - 1] += " " + t; else a.push(t); return a; }, []);
   const reEsc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -702,10 +740,20 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const RU_GEN = { je: "меня", tu: "тебя", il: "него", elle: "неё", nous: "нас", vous: "вас", ils: "них", elles: "них" };
   const RU_DAT = { je: "Мне", tu: "Тебе", il: "Ему", elle: "Ей", nous: "Нам", vous: "Вам", ils: "Им", elles: "Им" };
   const RU_GO = { je: "Я еду", tu: "Ты едешь", il: "Он едет", elle: "Она едет", nous: "Мы едем", vous: "Вы едете", ils: "Они едут", elles: "Они едут" };
-  const POSS_FR = { je: "mon", tu: "ton", il: "son", elle: "son", nous: "notre", vous: "votre", ils: "leur", elles: "leur" };
-  const POSS_RU = { je: { m: "мой", f: "моя", n: "моё" }, tu: { m: "твой", f: "твоя", n: "твоё" }, il: "его / её", elle: "его / её",
-    nous: { m: "наш", f: "наша", n: "наше" }, vous: { m: "ваш", f: "ваша", n: "ваше" }, ils: "их", elles: "их" };
-  const ruPoss = (p, rg) => typeof POSS_RU[p] === "string" ? POSS_RU[p] : POSS_RU[p][rg];
+  // притяжательные: [м.р., ж.р., мн.ч.]
+  const FRP = { je: ["mon", "ma", "mes"], tu: ["ton", "ta", "tes"], il: ["son", "sa", "ses"], elle: ["son", "sa", "ses"],
+    nous: ["notre", "notre", "nos"], vous: ["votre", "votre", "vos"], ils: ["leur", "leur", "leurs"], elles: ["leur", "leur", "leurs"] };
+  const RUP = { je: { m: "мой", f: "моя", n: "моё", pl: "мои" }, tu: { m: "твой", f: "твоя", n: "твоё", pl: "твои" }, il: "его", elle: "её",
+    nous: { m: "наш", f: "наша", n: "наше", pl: "наши" }, vous: { m: "ваш", f: "ваша", n: "ваше", pl: "ваши" }, ils: "их", elles: "их" };
+  const possFr = (p, n, pl) => FRP[p][pl ? 2 : n.g === "f" && !vowel(n.w) ? 1 : 0];
+  const possRu = (p, n, pl, amb) => { const r = RUP[p]; if (typeof r === "string") return amb && (p === "il" || p === "elle") ? "его / её" : r; return r[pl ? "pl" : n.rg]; };
+  function possWhy(p, n, pl) {
+    const f = possFr(p, n, pl);
+    let w = pl ? `Мн.ч. → <b>${f}</b>.` : n.g === "f" && vowel(n.w) ? `${esc(n.w)} — ж.р., но начинается с гласной → <b>${f}</b> (как mon amie).` : `${esc(n.w)} — ${G_RU[n.g]} → <b>${f}</b>.`;
+    if (p === "il" || p === "elle") w += " Форму выбираем по роду предмета, а не владельца.";
+    return w;
+  }
+  const RU_QUEL = { m: "Какой", f: "Какая", n: "Какое", pl: "Какие" };
   const PLACE = Object.fromEntries(C.places.map(p => [p.name, p]));
 
   // словарик: слова + существительные (с артиклем un/une — сразу виден род)
@@ -717,14 +765,16 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   //  ФРАЗЫ ИЗ ВСЕХ СЛОВ (шаблоны)
   // ================================================================
   const HAVE_TH = ["Семья", "Дом и вещи"];
+  const POSS_NOUNS = () => C.nouns.filter(n => n.rg && ["Семья", "Дом и вещи", "Досуг", "Профессии", "Анкета"].includes(n.theme));
+  const NO_POSS_PL = ["père", "mère", "mari", "femme"];
   const P4 = ["je", "tu", "il", "elle"];
   const profsM = () => C.nouns.filter(n => n.theme === "Профессии" && n.g === "m");
   function profFor(p, n) { const pr = pairOf(n); if (p === "elle" && pr) return pr; if ((p === "je" || p === "tu") && pr && Math.random() < .5) return pr; return n; }
   const TPL = {
-    cest: { verb: "être", make: () => ["cest", pick(C.nouns).w],
+    cest: { verb: "être", make: () => ["cest", pick(C.nouns.filter(n => n.theme !== "Анкета")).w],
       build: ([, w]) => { const n = NOUN[w]; if (!n) return null; const a = indefOf(n);
         return { fr: `C'est ${a} ${n.w}.`, ru: `Это ${n.ru}.`, slots: [{ w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
-    cesont: { verb: "être", make: () => ["cesont", pick(C.nouns.filter(n => !n.noPl)).w],
+    cesont: { verb: "être", make: () => ["cesont", pick(C.nouns.filter(n => !n.noPl && n.theme !== "Анкета")).w],
       build: ([, w]) => { const n = NOUN[w]; if (!n || n.noPl) return null;
         return { fr: `Ce sont des ${n.pl}.`, ru: `Это ${n.rupl}.`, slots: [{ w: "des", k: "art" }, { w: n.pl, k: "noun" }] }; } },
     avoir: { verb: "avoir", make: () => ["avoir", pick(PRON), pick(C.nouns.filter(n => HAVE_TH.includes(n.theme))).w],
@@ -732,13 +782,17 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         return { fr: `${cap(pf(p, f))} ${a} ${n.w}.`, ru: `У ${RU_GEN[p]} есть ${n.ru}.`, slots: [{ w: f, k: "verb" }, { w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
     age: { verb: "avoir", make: () => ["age", pick(PRON), String(rnd(2, NMAX))],
       build: ([, p, num]) => { const v = VERB.avoir, n = +num; if (!v || !(n >= 2 && n <= NMAX)) return null; const f = formOf(v, p);
-        return { fr: `${cap(pf(p, f))} ${nword(n)} ans.`, ru: `${RU_DAT[p]} ${n} ${ruYears(n)}.`, slots: [{ w: f, k: "verb" }] }; } },
+        return { fr: `${cap(pf(p, f))} ${nword(n)} ans.`, alts: [`${cap(pf(p, f))} ${n} ans.`], ru: `${RU_DAT[p]} ${n} ${ruYears(n)}.`, slots: [{ w: f, k: "verb" }] }; } },
     aller: { verb: "aller", make: () => ["aller", pick(PRON), pick(C.places).name],
       build: ([, p, name]) => { const pl = PLACE[name], v = VERB.aller; if (!pl || !v) return null; const f = formOf(v, p), pr = PREP[pl.kind];
         return { fr: `${cap(pf(p, f))} ${pr} ${name}.`, ru: `${RU_GO[p]} ${pl.ru}.`, slots: [{ w: f, k: "verb" }, { w: pr, k: "prep" }] }; } },
-    poss: { verb: "être", make: () => ["poss", pick(PRON), pick(C.nouns.filter(n => n.g === "m" && n.rg && ["Семья", "Дом и вещи", "Досуг"].includes(n.theme))).w],
-      build: ([, p, w]) => { const n = NOUN[w]; if (!n || !n.rg) return null; const ps = POSS_FR[p];
-        return { fr: `C'est ${ps} ${n.w}.`, ru: `Это ${ruPoss(p, n.rg)} ${n.ru}.`, slots: [{ w: ps, k: "poss" }, { w: n.w, k: "noun" }] }; } },
+    poss: { verb: "être", make: () => { const n = pick(POSS_NOUNS()); const pl = !n.noPl && !NO_POSS_PL.includes(n.w) && Math.random() < .3; return ["poss", pick(PRON), n.w, pl ? "1" : "0"]; },
+      build: ([, p, w, pls]) => { const n = NOUN[w]; if (!n || !n.rg || !FRP[p]) return null; const pl = pls === "1" && !n.noPl, ps = possFr(p, n, pl), rw = pl ? n.rupl : n.ru;
+        return { fr: pl ? `Ce sont ${ps} ${n.pl}.` : `C'est ${ps} ${n.w}.`, ru: `Это ${possRu(p, n, pl)} ${rw}.`, ruAmb: `Это ${possRu(p, n, pl, true)} ${rw}.`,
+          slots: [{ w: ps, k: "poss" }, { w: pl ? n.pl : n.w, k: "noun" }] }; } },
+    travdans: { verb: "travailler", make: () => ["travdans", pick(PRON), pick(C.nouns.filter(n => n.rin)).w],
+      build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.rin || !v) return null; const f = formOf(v, p), a = indefOf(n);
+        return { fr: `${cap(pf(p, f))} dans ${a} ${n.w}.`, ru: `${cap(ruOf(v, p))} ${n.rin}.`, slots: [{ w: f, k: "verb" }, { w: "dans", k: "prep" }, { w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
     etre: { verb: "être", make: () => { const p = pick(P4); return ["etre", p, profFor(p, pick(profsM())).w]; },
       build: ([, p, w]) => { const n = NOUN[w], v = VERB["être"]; if (!n || !v) return null; const f = formOf(v, p);
         return { fr: `${cap(pf(p, f))} ${n.w}.`, ru: `${RU_NOM[p]} ${n.ru}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] }; } },
@@ -749,6 +803,57 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.ins || !v) return null; const f = formOf(v, p);
         return { fr: `${cap(pf(p, f))} comme ${n.w}.`, ru: `${cap(ruOf(v, p))} ${n.ins}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] }; } }
   };
+  // ВОПРОСЫ И ОТВЕТЫ (анкета)
+  const FIRST = [["Lucie", "Люси"], ["Pierre", "Пьер"], ["Marie", "Мари"], ["Paul", "Поль"], ["Julie", "Жюли"], ["Thomas", "Тома"]];
+  const LAST = [["Martin", "Мартен"], ["Dubois", "Дюбуа"], ["Bernard", "Бернар"], ["Petit", "Пти"]];
+  const ADDR_CITY = [["Lyon", "в Лионе"], ["Paris", "в Париже"], ["Nice", "в Ницце"], ["Lille", "в Лилле"]];
+  const VT = () => pick(["vous", "tu"]);
+  const tv = (t, a, b) => t === "vous" ? a : b;
+  const two = () => String(rnd(10, 99));
+  const QA = {
+    age: { hint: "возраст", make: () => [VT(), String(rnd(18, NMAX))],
+      q: ([t]) => tv(t, ["Quel âge avez-vous ?", "Quel est votre âge ?"], ["Quel âge as-tu ?", "Quel est ton âge ?"]), qru: ([t]) => tv(t, "Сколько вам лет?", "Сколько тебе лет?"),
+      a: ([, n]) => [`J'ai ${n} ans.`, `J'ai ${nword(+n)} ans.`], aru: ([, n]) => `Мне ${n} ${ruYears(+n)}.` },
+    prenom: { hint: "имя", make: () => [VT(), String(rnd(0, FIRST.length - 1))],
+      q: ([t]) => tv(t, ["Quel est votre prénom ?"], ["Quel est ton prénom ?"]), qru: ([t]) => tv(t, "Какое у вас имя?", "Какое у тебя имя?"),
+      a: ([, i]) => { const x = FIRST[+i][0]; return [`Mon prénom est ${x}.`, `Je m'appelle ${x}.`, `Je suis ${x}.`]; }, aru: ([, i]) => `Моё имя — ${FIRST[+i][1]}.` },
+    nom: { hint: "фамилия", make: () => [VT(), String(rnd(0, LAST.length - 1))],
+      q: ([t]) => tv(t, ["Quel est votre nom ?"], ["Quel est ton nom ?"]), qru: ([t]) => tv(t, "Какая у вас фамилия?", "Какая у тебя фамилия?"),
+      a: ([, i]) => [`Mon nom est ${LAST[+i][0]}.`], aru: ([, i]) => `Моя фамилия — ${LAST[+i][1]}.` },
+    adresse: { hint: "адрес", make: () => [VT(), String(rnd(1, 40)), String(rnd(0, ADDR_CITY.length - 1))],
+      q: ([t]) => tv(t, ["Quelle est votre adresse ?"], ["Quelle est ton adresse ?"]), qru: ([t]) => tv(t, "Какой у вас адрес?", "Какой у тебя адрес?"),
+      a: ([, n, c]) => [`Mon adresse est ${n} rue de Paris à ${ADDR_CITY[+c][0]}.`], aru: ([, n, c]) => `Мой адрес — ${n} rue de Paris, ${ADDR_CITY[+c][1]}.` },
+    cp: { hint: "индекс", make: () => [VT(), String(rnd(1, 95)).padStart(2, "0") + String(rnd(0, 999)).padStart(3, "0")],
+      q: ([t]) => tv(t, ["Quel est votre code postal ?"], ["Quel est ton code postal ?"]), qru: ([t]) => tv(t, "Какой у вас почтовый индекс?", "Какой у тебя почтовый индекс?"),
+      a: ([, c]) => [`Mon code postal est ${c}.`], aru: ([, c]) => `Мой почтовый индекс — ${c}.` },
+    tel: { hint: "телефон", make: () => [VT(), ["06", two(), two(), two(), two()].join(" ")],
+      q: ([t]) => tv(t, ["Quel est votre numéro de téléphone ?"], ["Quel est ton numéro de téléphone ?"]), qru: ([t]) => tv(t, "Какой у вас номер телефона?", "Какой у тебя номер телефона?"),
+      a: ([, n]) => [`Mon numéro de téléphone est ${n}.`], aru: ([, n]) => `Мой номер телефона — ${n}.` },
+    ville: { hint: "город", make: () => [VT(), pick(C.places.filter(x => x.kind === "city")).name],
+      q: ([t]) => tv(t, ["Dans quelle ville habitez-vous ?", "Où habitez-vous ?"], ["Dans quelle ville habites-tu ?", "Où habites-tu ?"]), qru: ([t]) => tv(t, "В каком городе вы живёте?", "В каком городе ты живёшь?"),
+      a: ([, c]) => [`J'habite à ${c}.`], aru: ([, c]) => `Я живу ${PLACE[c] ? PLACE[c].ruIn : c}.` },
+    pays: { hint: "страна", make: () => [VT(), pick(C.places.filter(x => x.kind !== "city")).name],
+      q: ([t]) => tv(t, ["Dans quel pays habitez-vous ?", "Où habitez-vous ?"], ["Dans quel pays habites-tu ?", "Où habites-tu ?"]), qru: ([t]) => tv(t, "В какой стране вы живёте?", "В какой стране ты живёшь?"),
+      a: ([, c]) => PLACE[c] ? [`J'habite ${PREP[PLACE[c].kind]} ${c}.`] : [], aru: ([, c]) => `Я живу ${PLACE[c] ? PLACE[c].ruIn : c}.` },
+    travail: { hint: "работа", make: () => [VT(), pick(C.nouns.filter(n => n.rin)).w],
+      q: ([t]) => tv(t, ["Où travaillez-vous ?"], ["Où travailles-tu ?"]), qru: ([t]) => tv(t, "Где вы работаете?", "Где ты работаешь?"),
+      a: ([, w]) => NOUN[w] ? [`Je travaille dans ${indefOf(NOUN[w])} ${w}.`] : [], aru: ([, w]) => `Я работаю ${NOUN[w] ? NOUN[w].rin : ""}.` },
+    aller: { hint: "куда", make: () => [VT(), pick(C.places).name],
+      q: ([t]) => tv(t, ["Où allez-vous ?"], ["Où vas-tu ?"]), qru: ([t]) => tv(t, "Куда вы едете?", "Куда ты едешь?"),
+      a: ([, c]) => PLACE[c] ? [`Je vais ${PREP[PLACE[c].kind]} ${c}.`] : [], aru: ([, c]) => `Я еду ${PLACE[c] ? PLACE[c].ru : c}.` },
+    cava: { hint: "дела", make: () => [VT()],
+      q: ([t]) => tv(t, ["Comment allez-vous ?", "Comment ça va ?", "Ça va ?"], ["Comment vas-tu ?", "Comment ça va ?", "Ça va ?"]), qru: ([t]) => tv(t, "Как у вас дела?", "Как у тебя дела?"),
+      a: () => ["Je vais bien.", "Ça va bien.", "Ça va."], aru: () => "У меня всё хорошо." }
+  };
+  const qaKeys = (n = 40) => uniq(Array.from({ length: n }, () => { const k = pick(Object.keys(QA)); return "q|" + [k, ...QA[k].make()].join("~"); }));
+  const xKeys = (tpls, n = 40) => phraseKeys(tpls, n).map(k => "x|" + k.slice(2));
+  const oKeys = (n = 50) => uniq(Array.from({ length: n }, () => { const nn = pick(POSS_NOUNS()); return `o|${pick(PRON)}~${nn.w}~${!nn.noPl && !NO_POSS_PL.includes(nn.w) && Math.random() < .3 ? 1 : 0}`; }));
+  const K_NOUNS = () => C.nouns.filter(n => n.rg && (["Анкета", "Дом и вещи", "Досуг"].includes(n.theme) || n.w === "ami" || n.w === "amie"));
+  const kKeys = (n = 40) => uniq(Array.from({ length: n }, () => {
+    if (Math.random() < .2) return `k|${pick(["ville", "pays"])}~0~${VT()}~d`;
+    const nn = pick(K_NOUNS()); return `k|${nn.w}~${!nn.noPl && Math.random() < .3 ? 1 : 0}~${VT()}`;
+  }));
+
   const tplFor = infs => Object.keys(TPL).filter(t => VERB[TPL[t].verb] && (!infs || infs.includes(TPL[t].verb)));
   function phraseKeys(tpls, n = 40) {
     const out = [];
@@ -848,8 +953,8 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       const base = { say: s.fr, sayRu: s.ru, explain: "" };
       if (m === "fr2ru") {
         const ds = [];
-        for (let i = 0; i < 30 && ds.length < 2; i++) { const o = T.build(T.make()); if (o && o.ru !== s.ru && !ds.includes(o.ru)) ds.push(o.ru); }
-        return { ...base, type: "choice", kind: "Переведи на русский", prompt: s.fr, options: [s.ru, ...ds], answer: s.ru, noRu: true };
+        for (let i = 0; i < 30 && ds.length < 2; i++) { const o = T.build(T.make()); const r = o && (o.ruAmb || o.ru); if (r && r !== (s.ruAmb || s.ru) && !ds.includes(r)) ds.push(r); }
+        return { ...base, sayRu: s.ruAmb || s.ru, type: "choice", kind: "Переведи на русский", prompt: s.fr, options: [s.ruAmb || s.ru, ...ds], answer: s.ruAmb || s.ru, noRu: true };
       }
       if (m === "ru2fr1" || m === "art1") {
         const slot = m === "art1" ? s.slots.find(z => z.k === "art") : pick(s.slots);
@@ -945,6 +1050,66 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       if (pairs.length < 3) return null;
       return { type: "match", kind: "Соедини пары", prompt: "Слово и перевод", pairs, noKey: true, explain: "" };
     },
+    // притяжательные: o|pron~mot~pl
+    o(p, _, modes) {
+      const [pp, w, pls] = String(p).split("~"), n = NOUN[w]; if (!n || !n.rg || !FRP[pp]) return null;
+      const pl = pls === "1" && !n.noPl, f = possFr(pp, n, pl), word = pl ? n.pl : n.w, rw = pl ? n.rupl : n.ru;
+      const ruPh = `${possRu(pp, n, pl)} ${rw}`, frPh = `${f} ${word}`, slot = pl ? 2 : (n.g === "f" && !vowel(n.w) ? 1 : 0);
+      const m = pickMode(["oc", "oin", "oru", "ofr", "owr"], modes); if (!m) return null;
+      const base = { say: frPh, sayRu: `${possRu(pp, n, pl, true)} ${rw}`, explain: possWhy(pp, n, pl) };
+      const others = shuffle(PRON.filter(q => FRP[q][slot] !== f && possRu(q, n, pl, true) !== possRu(pp, n, pl, true)));
+      if (m === "oc") {
+        const opts = uniq(FRP[pp].concat(others.map(q => FRP[q][slot]))).filter(x => x !== f);
+        return { ...base, type: "choice", kind: "mon · ma · mes", prompt: `___ ${word}`, ru: ruPh, options: [f, ...uniq(FRP[pp]).filter(x => x !== f), ...opts].filter((x, i, a) => a.indexOf(x) === i).slice(0, 3), answer: f };
+      }
+      if (m === "oin") return { ...base, type: "input", kind: "Впиши слово", prompt: `___ ${word}`, ru: ruPh, answers: [f] };
+      if (m === "owr") return { ...base, type: "input", kind: "Напиши сама", ask: "Напиши по-французски", prompt: ruPh, answers: [frPh] };
+      const ds = uniq(others.map(q => `${FRP[q][slot]} ${word}`)).filter(x => x !== frPh).slice(0, 2);
+      if (m === "oru") return { ...base, type: "choice", kind: "Выбери перевод", prompt: ruPh, options: [frPh, ...ds], answer: frPh };
+      const dr = uniq(others.map(q => `${possRu(q, n, pl, true)} ${rw}`)).slice(0, 2), right = `${possRu(pp, n, pl, true)} ${rw}`;
+      return { ...base, type: "choice", kind: "Переведи", prompt: frPh, options: [right, ...dr], answer: right, noRu: true };
+    },
+    // quel / quelle: k|mot~pl~vous|tu[~d]
+    k(spec, _, modes) {
+      if (pickMode(["kc"], modes) === null) return null;
+      const [w, pls, own, d] = String(spec).split("~"), n = NOUN[w]; if (!n || !FRP[own]) return null;
+      const pl = pls === "1" && !n.noPl, form = pl ? (n.g === "f" ? "quelles" : "quels") : (n.g === "f" ? "quelle" : "quel");
+      let prompt, ru, say;
+      if (d) {
+        const hab = own === "vous" ? "habitez-vous" : "habites-tu";
+        prompt = `Dans ___ ${n.w} ${hab} ?`; say = `Dans ${form} ${n.w} ${hab} ?`;
+        ru = n.w === "ville" ? tv(own, "В каком городе вы живёте?", "В каком городе ты живёшь?") : tv(own, "В какой стране вы живёте?", "В какой стране ты живёшь?");
+      } else {
+        const tail = `${pl ? "sont" : "est"} ${possFr(own, n, pl)} ${pl ? n.pl : n.w} ?`;
+        prompt = `___ ${tail}`; say = `${cap(form)} ${tail}`;
+        ru = `${RU_QUEL[pl ? "pl" : n.rg]} ${possRu(own, n, pl)} ${pl ? n.rupl : n.ru}?`;
+      }
+      const ans = d ? form : cap(form);
+      const opts = ["quel", "quelle", "quels", "quelles"].map(x => d ? x : cap(x));
+      return { type: "choice", kind: "Quel · quelle", prompt, ru, options: opts, answer: ans, say, sayRu: ru,
+        explain: `${esc(n.w)} — ${G_RU[n.g]}${pl ? ", мн.ч." : ""} → <b>${form}</b>.` };
+    },
+    // перевод с русского целиком: x|tpl~…
+    x(spec, _, modes) {
+      const parts = String(spec).split("~"), T = TPL[parts[0]]; if (!T) return null;
+      const s = T.build(parts); if (!s) return null;
+      const m = pickMode(["x1", "x2"], modes); if (!m) return null;
+      return { type: "write", kind: "Переведи на французский", prompt: s.ru, fields: [{ answers: [s.fr, ...(s.alts || [])] }],
+        chips: m === "x1" ? shuffle(tokenize(s.fr)) : null, say: s.fr, sayRu: s.ru, explain: "" };
+    },
+    // вопросы и ответы: q|тема~…
+    q(spec, _, modes) {
+      const parts = String(spec).split("~"), Q = QA[parts[0]]; if (!Q) return null;
+      const a = parts.slice(1), qs = Q.q(a), as = Q.a(a), qru = Q.qru(a), aru = Q.aru(a);
+      if (!qs.length || !as.length) return null;
+      const m = pickMode(["qa", "qq", "qt", "qd"], modes); if (!m) return null;
+      const t = a[0], tvTxt = t === "vous" ? "на «вы»" : "на «ты»";
+      if (m === "qa") return { type: "write", kind: "Ответь на вопрос", ask: "Ответь по-французски", prompt: qs[0], ru: `Ответ: ${aru}`, fields: [{ answers: as }], say: as[0], sayRu: aru, explain: "" };
+      if (m === "qq") return { type: "write", kind: "Задай вопрос", ask: `Задай вопрос ${tvTxt}`, prompt: as[0], ru: `Тема: ${Q.hint}`, fields: [{ answers: qs }], say: qs[0], sayRu: qru, explain: "" };
+      if (m === "qt") return { type: "write", kind: "Переведи вопрос", ask: "Напиши по-французски", prompt: qru, fields: [{ answers: qs }], say: qs[0], sayRu: qru, explain: "" };
+      return { type: "write", kind: "Диалог целиком", ask: "Переведи диалог на французский", prompt: "", fields: [{ label: "— " + qru, answers: qs }, { label: "— " + aru, answers: as }],
+        say: `${qs[0]} ${as[0]}`, sayRu: `${qru} — ${aru}`, explain: "" };
+    },
     L(id) { const x = LESSON_EX[id]; return x ? { ...x.ex } : null; }
   };
 
@@ -1003,6 +1168,15 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
           keys: () => phraseKeys(["cest", "cesont", "avoir"], 40), modes: ["art1"] },
         { id: "a6", t: "Мн. число", d: "une voiture → des voitures", lvl: 3, icon: "pen", keys: nounKeys, modes: ["plural"] }
       ] },
+    { id: "poss", title: "Притяжательные", short: "Мой · моя", fr: "les possessifs", a: "var(--lime)", b: "var(--coral)", seed: 71,
+      count: { prefixes: ["o|"], goal: 40, unit: "заданий" },
+      drills: [
+        { id: "o1", t: "mon · ma · mes", d: "Выбери нужную форму", lvl: 1, icon: "cards", keys: () => oKeys(), modes: ["oc"] },
+        { id: "o2", t: "Моя машина = ?", d: "Выбери перевод туда и обратно", lvl: 1, icon: "globe", keys: () => oKeys(), modes: ["oru", "ofr"] },
+        { id: "o3", t: "Впиши слово", d: "___ voiture → ma", lvl: 2, icon: "pen", keys: () => oKeys(), modes: ["oin"] },
+        { id: "o4", t: "C'est ma… · Ce sont mes…", d: "Фразы с притяжательными", lvl: 2, icon: "puzzle", keys: () => phraseKeys(["poss"], 40), modes: ["fr2ru", "ru2fr1"] },
+        { id: "o5", t: "Напиши сама", d: "моя машина → ma voiture", lvl: 3, icon: "pen", keys: () => oKeys(), modes: ["owr"] }
+      ] },
     { id: "vocab", title: "Словарик", fr: "le vocabulaire", a: "var(--mint)", b: "var(--pink)", seed: 51,
       mastery: () => [...VOCAB.map(w => "w|" + w.fr), ...(C.lessons.vocab || []).flatMap(l => l.exercises.map(e => "L|" + e.id))],
       drills: [
@@ -1011,20 +1185,30 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         { id: "w3", t: "Правописание", d: "Написать по-французски", lvl: 3, icon: "pen", keys: vocKeys, modes: ["write", "dict"] }
       ] },
     { id: "phrases", title: "Перевод", fr: "les phrases", a: "var(--pink)", b: "var(--yellow)", seed: 64,
-      masteryCount: true,
+      count: { prefixes: ["t|"], goal: 50, unit: "фраз" },
       drills: [
         { id: "p1", t: "С французского", d: "Выбери правильный перевод", lvl: 1, icon: "globe", keys: () => phraseKeys(tplFor(), 60), modes: ["fr2ru"] },
         { id: "p3", t: "Вставь одно слово", d: "С русского: впиши пропущенное слово", lvl: 2, icon: "pen", keys: () => phraseKeys(tplFor(), 60), modes: ["ru2fr1"] },
         { id: "p4", t: "Диктант фраз", d: "Послушай и запиши целиком", lvl: 3, icon: "ear", keys: () => phraseKeys(tplFor(), 60), modes: ["dict"] }
+      ] },
+    { id: "write", title: "Пишу сама", fr: "j'écris", a: "var(--sky)", b: "var(--violet)", seed: 83,
+      count: { prefixes: ["x|", "q|", "k|"], goal: 60, unit: "заданий" },
+      drills: [
+        { id: "s1", t: "Quel · quelle · quels · quelles", d: "Какое слово в вопросе", lvl: 1, icon: "cards", keys: () => kKeys(), modes: ["kc"] },
+        { id: "s2", t: "Перевод · легко", d: "С русского, слова-подсказки уже есть", lvl: 1, icon: "globe", keys: () => xKeys(["cest", "poss", "etre", "age", "avoir"], 40), modes: ["x1"] },
+        { id: "s3", t: "Ответь на вопрос", d: "Вопрос по-французски → твой ответ", lvl: 2, icon: "pen", keys: () => qaKeys(), modes: ["qa"] },
+        { id: "s4", t: "Задай вопрос", d: "Есть ответ → напиши вопрос к нему", lvl: 2, icon: "puzzle", keys: () => qaKeys(), modes: ["qq"] },
+        { id: "s5", t: "Перевод · средне", d: "Фразы из всех слов, без подсказок", lvl: 2, icon: "globe", keys: () => xKeys(tplFor(), 50), modes: ["x2"] },
+        { id: "s6", t: "Вопросы с русского", d: "Переведи вопрос на французский", lvl: 3, icon: "pen", keys: () => qaKeys(), modes: ["qt"] },
+        { id: "s7", t: "Диалог целиком", d: "И вопрос, и ответ — сама", lvl: 3, icon: "mix", keys: () => qaKeys(), modes: ["qd"] }
       ] }
   ];
   const SEC = Object.fromEntries(SECTIONS.map(s => [s.id, s]));
   const LVL = { 1: "Легко", 2: "Средне", 3: "Сложно" };
-  const PHRASE_GOAL = 50;
   function mastery(s) {
-    if (s.masteryCount) {
-      const ok = Object.keys(S.items).filter(k => k.startsWith("t|") && S.items[k].ok > 0 && !S.srs[k]).length;
-      return { ok: Math.min(ok, PHRASE_GOAL), total: PHRASE_GOAL, pc: Math.min(100, Math.round(ok / PHRASE_GOAL * 100)), unit: "фраз" };
+    if (s.count) {
+      const ok = Object.keys(S.items).filter(k => s.count.prefixes.some(p => k.startsWith(p)) && S.items[k].ok > 0 && !S.srs[k]).length, g = s.count.goal;
+      return { ok: Math.min(ok, g), total: g, pc: Math.min(100, Math.round(ok / g * 100)), unit: s.count.unit };
     }
     const k = uniq(s.mastery()); const ok = k.filter(x => S.items[x] && S.items[x].ok > 0 && !S.srs[x]).length;
     return { ok, total: k.length, pc: k.length ? Math.round(ok / k.length * 100) : 0 };
@@ -1081,6 +1265,24 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         <div class="rule-h"><span class="badge">куда?</span>страны и города</div>
         <div class="prep-row"><div><b>à</b>город</div><div><b>en</b>страна ж.р.</div><div><b>au</b>страна м.р.</div><div><b>aux</b>страна мн.ч.</div></div>
 </div>`;
+    }
+    if (id === "poss") {
+      const rows = [["я", "je"], ["ты", "tu"], ["он / она", "il"], ["мы", "nous"], ["вы", "vous"], ["они", "ils"]];
+      return `<div class="rule">
+        <table class="tbl"><tr><th></th><th>м.р.</th><th>ж.р.</th><th>мн.ч.</th></tr>
+          ${rows.map(([r, p]) => `<tr><th>${r}</th>${FRP[p].map(f => `<td>${f}</td>`).join("")}</tr>`).join("")}
+          <tr><th>ж.р. + гласная</th><td class="hl" colspan="3">mon amie · mon adresse</td></tr></table>
+        <div class="scheme"><span class="w">ta voiture</span><span class="w">son livre</span><span class="w">ses enfants</span><span class="w">leurs stylos</span></div>
+        <div class="scheme"><span class="w">son</span><span class="arr">/</span><span class="w">sa</span><span class="arr">=</span><span>род предмета, не владельца</span></div></div>`;
+    }
+    if (id === "write") {
+      return `<div class="rule">
+        <div class="scheme"><span class="w dark">Où ?</span><span class="arr">=</span><span>где? куда?</span></div>
+        <table class="tbl"><tr><th></th><th>м.р.</th><th>ж.р.</th></tr>
+          <tr><th>какой?</th><td>quel</td><td>quelle</td></tr><tr><th>какие?</th><td>quels</td><td>quelles</td></tr></table>
+        <div class="scheme"><span class="w">Quel âge avez-vous ?</span><span class="arr">→</span><span class="w">J'ai 29 ans.</span></div>
+        <div class="scheme"><span class="w">Quelle est votre adresse ?</span><span class="arr">→</span><span class="w">Mon adresse est…</span></div>
+        <div class="scheme"><span class="w">Où habitez-vous ?</span><span class="arr">→</span><span class="w">J'habite en France.</span></div></div>`;
     }
     if (id === "vocab") {
       return `<div class="rule">
@@ -1206,6 +1408,11 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       h += `<div class="card"><h3>Из конспекта</h3>${C.articles.sentences.map(x => exLine(x.fr, x.ru)).join("")}</div>
         <div class="card"><h3>Страны и города</h3>${["city", "f", "m", "pl"].map(k => C.places.filter(p => p.kind === k).map(p => `<div class="vrow">${sayBtn(`${PREP[k]} ${p.name}`)}<span class="fr">${PREP[k]} ${esc(p.name)}</span><span class="ru">${esc(p.ru)}</span></div>`).join("")).join("")}</div>
         <div class="card"><h3>Слова с артиклями</h3>${artNouns().map(n => `<div class="vrow">${sayBtn(withDef(defOf(n), n.w))}<span class="fr">${indefOf(n)} ${esc(n.w)} · ${esc(withDef(defOf(n), n.w))}</span><span class="ru">${esc(n.ru)}</span></div>`).join("")}</div>`;
+    } else if (id === "poss") {
+      h += `<div class="card"><h3>Примеры</h3>${Array.from({ length: 8 }, () => TPL.poss.build(TPL.poss.make())).filter(Boolean).map(x => exLine(x.fr, x.ru)).join("")}</div>`;
+    } else if (id === "write") {
+      h += `<div class="card"><h3>Вопросы и ответы</h3>${Object.keys(QA).map(k => { const Q = QA[k], a = Q.make();
+        return exLine(Q.q(a)[0], Q.qru(a)) + exLine(Q.a(a)[0], Q.aru(a)); }).join("")}</div>`;
     } else if (id === "vocab") {
       C.themes.forEach(t => {
         const ws = VOCAB.filter(w => w.theme === t); if (!ws.length) return;
@@ -1236,7 +1443,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     for (let tries = 0; out.length < n && tries < 300; tries++) {
       const ex = exFor(pick(weighted), modes);
       if (!ex) continue;
-      const sig = JSON.stringify([ex.type, ex.prompt, ex.audio, ex.pairs && ex.pairs.map(p => p[0]).sort(), ex.words, ex.answer]);
+      const sig = JSON.stringify([ex.type, ex.prompt, ex.audio, ex.pairs && ex.pairs.map(p => p[0]).sort(), ex.words, ex.answer, ex.fields && ex.fields.map(f => f.answers[0])]);
       if (seen.has(sig)) continue;
       seen.add(sig); out.push(ex);
     }
@@ -1273,7 +1480,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     let set = dueKeys().sort((a, b) => S.srs[a].box - S.srs[b].box).slice(0, SIZE).map(k => exFor(k)).filter(Boolean), revision = true;
     if (!set.length) {
       const seen = Object.keys(S.items).filter(k => exFor(k));
-      set = seen.length >= 6 ? buildSet(seen, ["conjc", "pron", "end", "fr2ru", "ru2fr", "hearc", "w2d", "gender", "indef", "def", "prep", "art1", "hear", "fill"]) : mixFrom(SECTIONS.flatMap(s => s.drills.filter(d => d.lvl === 1)), SIZE);
+      set = seen.length >= 6 ? buildSet(seen, ["conjc", "pron", "end", "oc", "oru", "kc", "fr2ru", "ru2fr", "hearc", "w2d", "gender", "indef", "def", "prep", "art1", "hear", "fill"]) : mixFrom(SECTIONS.flatMap(s => s.drills.filter(d => d.lvl === 1)), SIZE);
       revision = false;
     }
     startSession(set, { title: "Повторение", revision, back: home, again: startRevision });
@@ -1311,7 +1518,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     const b = $("#chk"); b.onclick = onCheck; return b;
   }
 
-  function grade(ok, correct, note, hinted) {
+  function grade(ok, correct, note, hinted, quiet) {
     const it = R.queue.shift(), ex = it.ex, k = ex.key;
     enterLock = Date.now() + 400;
     if (k) { S.items[k] = S.items[k] || { ok: 0, bad: 0 }; S.items[k][ok ? "ok" : "bad"]++; }
@@ -1326,6 +1533,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       R.queue.push({ ex, retry: true });
     }
     save();
+    if (quiet) return;
     const sayText = ex.say ?? ex.answer ?? "";
     const title = ok ? (note ? "Почти!" : hinted ? "Верно, с подсказкой" : pick(["Верно!", "Bravo !", "Super !", "Très bien !"])) : "Не совсем";
     let body = "";
@@ -1359,7 +1567,58 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   function hideDock() { $dock.hidden = true; $dockIn.innerHTML = ""; }
 
   // ---------- типы заданий ----------
+  // подсветка: что лишнее у тебя / чего не хватает
+  const wordsOf = t => String(t).split(/\s+/).filter(Boolean);
+  const diffMark = (txt, other, cls) => { const set = new Set(wordsOf(other).map(bare)); return wordsOf(txt).map(w => set.has(bare(w)) || !bare(w) ? esc(w) : `<span class="${cls}">${esc(w)}</span>`).join(" "); };
+  const closest = (answers, v) => { const u = new Set(wordsOf(v).map(bare)); let best = answers[0], sc = -1; answers.forEach(a => { const s = wordsOf(a).filter(w => u.has(bare(w))).length; if (s > sc) { sc = s; best = a; } }); return best; };
+
   const RENDER = {
+    write(ex, w) {
+      let hinted = false;
+      const F = ex.fields;
+      w.innerHTML = (ex.chips ? `<div class="chipsline">${ex.chips.map(c => `<span class="w">${esc(c)}</span>`).join("")}</div>` : "") +
+        F.map((f, i) => `${f.label ? `<div class="flabel">${esc(f.label)}</div>` : ""}<input class="field wfield" id="wf${i}" autocomplete="off" autocapitalize="sentences" autocorrect="off" spellcheck="false" enterkeyhint="${i < F.length - 1 ? "next" : "done"}" placeholder="По-французски">`).join("") +
+        `<div class="tools">${["é", "è", "ê", "à", "ç", "â", "ô", "œ", "'", "-", "?"].map(c => `<button data-c="${c}" type="button">${c}</button>`).join("")}<button class="hint" type="button" id="hint">Подсказка</button></div>`;
+      const ins = [...w.querySelectorAll(".wfield")];
+      let last = ins[0];
+      const chk = checkDock(() => {
+        if (ins.some(i => !i.value.trim()) || ins[0].disabled) return;
+        ins.forEach(i => i.disabled = true);
+        const res = F.map((f, i) => f.answers.some(a => norm(a) === norm(ins[i].value)) ? 2 : f.answers.some(a => bare(a) === bare(ins[i].value)) ? 1 : 0);
+        if (res.every(r => r > 0)) return grade(true, null, res.some(r => r === 1) ? "Проверь значки над буквами." : null, hinted);
+        const body = F.map((f, i) => {
+          const v = ins[i].value;
+          if (res[i]) return `<div class="diff"><div><span class="lbl2">Верно:</span><span class="fr">${esc(v)}</span></div></div>`;
+          const b = closest(f.answers, v), alts = f.answers.filter(a => a !== b);
+          return `<div class="diff"><div><span class="lbl2">Ты:</span><span class="fr">${diffMark(v, b, "bad-w")}</span></div>
+            <div><span class="lbl2">Верно:</span><span class="fr">${diffMark(b, v, "miss-w")}</span></div>${alts.length ? `<div class="alt">Можно и так: ${alts.map(esc).join(" · ")}</div>` : ""}</div>`;
+        }).join("");
+        enterLock = Date.now() + 400;
+        showDock("fb bad", `<div class="fb-h">Не совсем ${sayBtn(ex.say)}</div>${body}${ex.sayRu ? `<div class="fb-why">${esc(ex.sayRu)}</div>` : ""}
+          <div class="two"><button class="btn ghost" id="mine">Мой вариант верный</button><button class="btn" id="nx">Дальше<span class="kbd">Enter</span></button></div>`);
+        $("#nx").onclick = () => { grade(false, null, null, false, true); next(); };
+        $("#mine").onclick = () => { grade(true, null, null, hinted, true); next(); };
+        speak(ex.say);
+      });
+      const sync = () => chk.disabled = ins.some(i => !i.value.trim());
+      ins.forEach((inp, idx) => {
+        inp.onfocus = () => last = inp;
+        inp.oninput = sync;
+        inp.onkeydown = e => { if (e.key === "Enter" && idx < ins.length - 1) { e.preventDefault(); e.stopPropagation(); ins[idx + 1].focus(); } };
+      });
+      w.querySelectorAll("[data-c]").forEach(b => b.onclick = () => {
+        const inp = last, p = inp.selectionStart ?? inp.value.length;
+        inp.value = inp.value.slice(0, p) + b.dataset.c + inp.value.slice(inp.selectionEnd ?? p);
+        inp.focus(); inp.setSelectionRange(p + 1, p + 1); sync();
+      });
+      w.querySelector("#hint").onclick = () => {
+        const j = ins.indexOf(last), a = closest(F[j].answers, last.value); let i = 0;
+        while (i < last.value.length && i < a.length && last.value[i].toLowerCase() === a[i].toLowerCase()) i++;
+        last.value = a.slice(0, i + 1); hinted = true; last.focus(); sync();
+      };
+      if (!matchMedia("(pointer: coarse)").matches) ins[0].focus();
+    },
+
     choice(ex, w) {
       let sel = null;
       w.innerHTML = `<div class="opts">` + shuffle(uniq(ex.options)).map((o, i) => `<button class="opt" data-o="${esc(o)}"><span class="k">${i + 1}</span>${esc(o)}</button>`).join("") + `</div>`;
