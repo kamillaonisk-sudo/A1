@@ -551,7 +551,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "9 · 06.11";
+  const VERSION = "10 · 06.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -901,11 +901,39 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   }));
 
   const tplFor = infs => Object.keys(TPL).filter(t => VERB[TPL[t].verb] && (!infs || infs.includes(TPL[t].verb)));
+  // та же фраза в другом роде: il ↔ elle, ami ↔ amie, acteur ↔ actrice…
+  const SWAPP = { il: "elle", elle: "il", ils: "elles", elles: "ils" };
+  const twinSpec = parts => parts.map((x, i) => i === 0 ? x : SWAPP[x] || (NOUN[x] && NOUN[x].pair) || x);
+  function twinOf(parts) {
+    const T = TPL[parts[0]]; if (!T) return null;
+    const tp = twinSpec(parts), s = T.build(parts), t = T.build(tp);
+    return s && t && t.fr !== s.fr ? { s, t, tp } : null;
+  }
+  const GENDER_TPL = ["etre", "travail", "famjob", "famlive", "famwork", "famgo", "cest", "avoir", "poss", "ou", "de"];
   function phraseKeys(tpls, n = 40) {
     const out = [];
-    for (let i = 0; i < n * 2 && out.length < n; i++) { const t = pick(tpls); if (!t) break; const sp = TPL[t].make(); if (TPL[t].build(sp)) out.push("t|" + sp.join("~")); }
+    for (let i = 0; i < n * 2 && out.length < n; i++) {
+      const t = pick(tpls); if (!t) break;
+      let sp = TPL[t].make(); if (!TPL[t].build(sp)) continue;
+      // примерно поровну мужского и женского рода
+      if (Math.random() < .5) { const tw = twinOf(sp); if (tw) sp = tw.tp; }
+      out.push("t|" + sp.join("~"));
+    }
     return uniq(out);
   }
+  // слово, которым отличаются две версии фразы (для «Он или она?»)
+  function genderGap(s, t) {
+    const a = s.fr.split(" "), b = t.fr.split(" ");
+    if (a.length !== b.length) return null;
+    const idx = a.map((w, i) => w !== b[i] ? i : -1).filter(i => i >= 0);
+    if (!idx.length) return null;
+    const i = idx[idx.length - 1], clean = w => w.replace(/[.?!,]+$/, "");
+    const right = clean(a[i]), wrong = clean(b[i]);
+    if (right === wrong) return null;
+    const prompt = a.map((w, j) => j === i ? w.replace(clean(w), "___") : w).join(" ");
+    return { prompt, right, wrong };
+  }
+  const genderWhy = w => { const n = NOUN[w]; return n ? `${esc(n.w)} — ${G_RU[n.g]}, ${esc(n.ru)}.` + pairNote(n) : "Форма меняется вместе с родом."; };
   function sampleSentences(inf, n) {
     const t = tplFor([inf]); const out = [];
     for (let i = 0; i < 20 && out.length < n && t.length; i++) { const T = TPL[pick(t)], s = T.build(T.make()); if (s && !out.some(o => o.fr === s.fr)) out.push(s); }
@@ -995,10 +1023,15 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       const parts = spec.split("~"), T = TPL[parts[0]]; if (!T) return null;
       const s = T.build(parts); if (!s) return null;
       const hasArt = s.slots.some(z => z.k === "art");
-      const m = pickMode(["fr2ru", "ru2fr1", "order", "dict"].concat(hasArt ? ["art1"] : []), modes); if (!m) return null;
+      const tw = twinOf(parts), gap = tw && genderGap(s, tw.t);
+      const m = pickMode(["fr2ru", "ru2fr1", "order", "dict"].concat(hasArt ? ["art1"] : [], gap ? ["gch"] : []), modes); if (!m) return null;
       const base = { say: s.fr, sayRu: s.ru, explain: "" };
+      if (m === "gch") return { ...base, type: "choice", kind: "Он или она?", ask: "Выбери слово нужного рода", prompt: gap.prompt, ru: s.ru,
+        options: [gap.right, gap.wrong], answer: gap.right, explain: genderWhy(gap.right) };
       if (m === "fr2ru") {
         const ds = [];
+        // первый неверный вариант — та же фраза в другом роде
+        if (tw) { const r = tw.t.ruAmb || tw.t.ru; if (r !== (s.ruAmb || s.ru)) ds.push(r); }
         for (let i = 0; i < 30 && ds.length < 2; i++) { const o = T.build(T.make()); const r = o && (o.ruAmb || o.ru); if (r && r !== (s.ruAmb || s.ru) && !ds.includes(r)) ds.push(r); }
         return { ...base, sayRu: s.ruAmb || s.ru, type: "choice", kind: "Переведи на русский", prompt: s.fr, options: [s.ruAmb || s.ru, ...ds], answer: s.ruAmb || s.ru, noRu: true };
       }
@@ -1139,7 +1172,14 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     x(spec, _, modes) {
       const parts = String(spec).split("~"), T = TPL[parts[0]]; if (!T) return null;
       const s = T.build(parts); if (!s) return null;
-      const m = pickMode(["x1", "x2"], modes); if (!m) return null;
+      const tw = twinOf(parts);
+      const m = pickMode(["x1", "x2"].concat(tw ? ["gsw"] : []), modes); if (!m) return null;
+      if (m === "gsw") {
+        const toF = (tw.tp.filter(x => NOUN[x] && NOUN[x].g === "f").length + tw.tp.filter(x => x === "elle" || x === "elles").length) >
+                    (parts.filter(x => NOUN[x] && NOUN[x].g === "f").length + parts.filter(x => x === "elle" || x === "elles").length);
+        return { type: "write", kind: "Поменяй род", ask: `Перепиши в ${toF ? "женском" : "мужском"} роде`, prompt: s.fr, ru: `По-русски: ${tw.t.ru}`,
+          fields: [{ answers: [tw.t.fr, ...(tw.t.alts || [])] }], say: tw.t.fr, sayRu: tw.t.ru, explain: "" };
+      }
       return { type: "write", kind: "Переведи на французский", prompt: s.ru, fields: [{ answers: [s.fr, ...(s.alts || [])] }],
         chips: m === "x1" ? shuffle(tokenize(s.fr)) : null, say: s.fr, sayRu: s.ru, explain: "" };
     },
@@ -1235,6 +1275,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       drills: [
         { id: "p1", t: "С французского", d: "Выбери правильный перевод", lvl: 1, icon: "globe", keys: () => phraseKeys(tplFor(), 60), modes: ["fr2ru"] },
         { id: "p3", t: "Вставь одно слово", d: "С русского: впиши пропущенное слово", lvl: 2, icon: "pen", keys: () => phraseKeys(tplFor(), 60), modes: ["ru2fr1"] },
+        { id: "p5", t: "Он или она?", d: "Выбери слово нужного рода", lvl: 1, icon: "cards", keys: () => phraseKeys(GENDER_TPL, 60), modes: ["gch"] },
         { id: "p4", t: "Диктант фраз", d: "Послушай и запиши целиком", lvl: 3, icon: "ear", keys: () => phraseKeys(tplFor(), 60), modes: ["dict"] }
       ] },
     { id: "write", title: "Пишу сама", fr: "j'écris", a: "var(--sky)", b: "var(--violet)", seed: 83,
@@ -1246,6 +1287,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         { id: "s4", t: "Задай вопрос", d: "Есть ответ → напиши вопрос к нему", lvl: 2, icon: "puzzle", keys: () => qaKeys(), modes: ["qq"] },
         { id: "s5", t: "Перевод · средне", d: "Фразы из всех слов, без подсказок", lvl: 2, icon: "globe", keys: () => xKeys(tplFor(), 60), modes: ["x2"] },
         { id: "s6", t: "Вопросы с русского", d: "Переведи вопрос на французский", lvl: 3, icon: "pen", keys: () => qaKeys(), modes: ["qt"] },
+        { id: "s8", t: "Поменяй род", d: "Mon ami est acteur → Mon amie est actrice", lvl: 2, icon: "mix", keys: () => xKeys(GENDER_TPL, 60), modes: ["gsw"] },
         { id: "s7", t: "Диалог целиком", d: "И вопрос, и ответ — сама", lvl: 3, icon: "mix", keys: () => qaKeys(), modes: ["qd"] }
       ] }
   ];
