@@ -485,6 +485,26 @@ textarea.field { min-height: 110px; resize: vertical; }
 .shake { animation: shake .35s; }
 @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 .refs { margin-top: 14px; }
+.exam-card { position: relative; overflow: hidden; display: block; width: 100%; text-align: left; border: 0; margin-top: 14px; border-radius: 22px; background: var(--ink); color: #fff; padding: 18px 18px 16px; min-height: 128px; }
+.exam-card .in { position: relative; display: grid; gap: 4px; max-width: 70%; }
+.exam-card b { font-size: 22px; font-weight: 900; }
+.exam-card span { font-size: 13.5px; opacity: .85; }
+.exam-card .best { display: inline-block; margin-top: 6px; background: var(--lime); color: var(--ink); border-radius: 99px; padding: 2px 10px; font-weight: 800; font-size: 12.5px; opacity: 1; width: max-content; }
+.part { display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--muted); font-size: 13px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .05em; }
+.part b { background: var(--ink); color: #fff; border-radius: 8px; width: 24px; height: 24px; display: grid; place-items: center; font-size: 13px; }
+.reading { background: var(--card); border: 1.5px solid var(--line); border-radius: 18px; padding: 14px 16px; margin-bottom: 16px; font: 500 17px/1.55 "Fredoka", sans-serif; }
+.reading .say { float: right; margin: 0 0 6px 10px; }
+.star { color: #c77d00; font-weight: 900; }
+.plist { display: grid; gap: 8px; margin: 10px 0 4px; }
+.plist div { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center; font-weight: 700; font-size: 14px; }
+.plist .bar2 { grid-column: 2 / 4; height: 7px; background: #f0e2cf; border-radius: 99px; overflow: hidden; }
+.plist .bar2 i { display: block; height: 100%; background: var(--green); }
+.rv { background: var(--card); border: 1.5px solid var(--line); border-left: 5px solid var(--green); border-radius: 16px; padding: 12px 14px; display: grid; gap: 4px; font-size: 14.5px; }
+.rv.bad { border-left-color: var(--coral); }
+.rv-h { display: flex; align-items: center; gap: 8px; font-weight: 800; font-size: 13px; color: var(--muted); }
+.rv-q { font: 600 16px "Fredoka", sans-serif; white-space: pre-line; }
+.rv .ans { display: flex; align-items: center; gap: 8px; }
+.rv .say { width: 28px; height: 28px; }
 .pic { background: var(--card); border: 1.5px solid var(--line); border-radius: 22px; padding: 6px; margin-bottom: 16px; max-width: 340px; }
 .pic svg, .pcard svg, .opts.pics svg { width: 100%; height: auto; display: block; }
 .opts.pics { grid-template-columns: repeat(3, 1fr); }
@@ -590,7 +610,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "11 · 07.11";
+  const VERSION = "12 · 07.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -943,6 +963,120 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       a: () => ["Je vais bien.", "Ça va bien.", "Ça va."], aru: () => "У меня всё хорошо." }
   };
   const ppKeys = () => PREPS.map((_, i) => "pp|" + i);
+
+  // ================= КОНТРОЛЬНАЯ =================
+  const FEM_NAMES = ["Lucie", "Marie", "Julie"];
+  const RU_TO = { restaurant: "в ресторан", café: "в кафе", musée: "в музей", magasin: "в магазин", banque: "в банк", gare: "на вокзал", école: "в школу", hôtel: "в гостиницу" };
+  const auArt = n => vowel(n.w) ? "à l'" : n.g === "f" ? "à la" : "au";
+  // ★ à + le = au (продолжение правила de + le = du)
+  function makeAu() {
+    const n = pick(Object.keys(RU_TO).map(w => NOUN[w]).filter(Boolean)), p = pick(PRON), v = VERB.aller; if (!n || !v) return null;
+    const head = cap(pf(p, formOf(v, p))), a = auArt(n), fr = `${head} ${glue(a, n.w)}.`;
+    return { type: "choice", kind: "★ au · à la · à l'", prompt: `${head} ___ ${n.w}.`, ru: `${RU_GO[p]} ${RU_TO[n.w]}.`, options: ["au", "à la", "à l'", "aux"], answer: a,
+      say: fr, sayRu: `${RU_GO[p]} ${RU_TO[n.w]}.`, star: true,
+      explain: `Новое правило, как de + le = du: <b>à + le = au</b>, à + la = à la, à + l' = à l'. ${esc(n.w)} — ${vowel(n.w) ? "с гласной" : G_RU[n.g]} → <b>${a}</b>.` };
+  }
+  // найди лишнее слово
+  function makeIntrus() {
+    const th = pick(["Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время"]);
+    const ins = shuffle(C.nouns.filter(n => n.theme === th)).slice(0, 3), out = pick(C.nouns.filter(n => n.theme !== th && !["Анкета"].includes(n.theme)));
+    if (ins.length < 3 || !out) return null;
+    const lab = n => nounLabel(n);
+    return { type: "choice", kind: "Найди лишнее", prompt: "Какое слово лишнее?", options: [...ins, out].map(lab), answer: lab(out), say: lab(out), sayRu: out.ru,
+      explain: `${esc(lab(out))} — ${esc(out.ru)}, тема «${esc(out.theme)}». Остальные — «${esc(th)}»: ${ins.map(n => esc(n.ru)).join(", ")}.` };
+  }
+  // текст для чтения + вопросы
+  function makeReading() {
+    const i = rnd(0, FIRST.length - 1), [nm, nmRu] = FIRST[i], fem = FEM_NAMES.includes(nm);
+    const cities = C.places.filter(x => x.kind === "city");
+    const age = rnd(19, 45), city = pick(cities), job0 = pick(profsM()), job = fem ? (pairOf(job0) || job0) : job0;
+    const at = pick(C.nouns.filter(n => n.rin));
+    const sib = NOUN[pick(["frère", "sœur"])], sf = sib.g === "f";
+    const sibNm = pick(FIRST.filter(x => x[0] !== nm && FEM_NAMES.includes(x[0]) === sf)), sibAge = rnd(15, 50);
+    const sibPlace = pick(C.places.filter(x => x.name !== city.name)), sJob0 = pick(profsM().filter(x => x !== job0)), sJob = sf ? (pairOf(sJob0) || sJob0) : sJob0;
+    const SP = sf ? "Elle" : "Il", SPru = sf ? "Она" : "Он", sp = PREP[sibPlace.kind];
+    const lines = [
+      [`Bonjour ! Je m'appelle ${nm}.`, `Привет! Меня зовут ${nmRu}.`],
+      [`J'ai ${nword(age)} ans.`, `Мне ${age} ${ruYears(age)}.`],
+      [`J'habite à ${city.name}.`, `Я живу ${city.ruIn}.`],
+      [`Je suis ${job.w}, je travaille dans ${indefOf(at)} ${at.w}.`, `Я ${job.ru}, работаю ${at.rin}.`],
+      [`${cap(possFr("je", sib))} ${sib.w} s'appelle ${sibNm[0]}.`, `${cap(possRu("je", sib))} ${sib.ru} — ${sibNm[1]}.`],
+      [`${SP} a ${nword(sibAge)} ans.`, `${SPru === "Она" ? "Ей" : "Ему"} ${sibAge} ${ruYears(sibAge)}.`],
+      [`${SP} habite ${sp} ${sibPlace.name}, ${SP.toLowerCase()} est ${sJob.w}.`, `${SPru} живёт ${sibPlace.ruIn}, ${SPru.toLowerCase()} ${sJob.ru}.`]
+    ];
+    const text = lines.map(l => l[0]).join(" "), textRu = lines.map(l => l[1]).join(" ");
+    const near = n => shuffle(uniq([n + 1, n - 1, n + 10, n - 10, n + 2].filter(x => x > 10 && x < 70 && x !== n))).slice(0, 2).map(String);
+    const VF = (stmt, truth, line) => ({ prompt: stmt, options: ["Vrai", "Faux"], answer: truth ? "Vrai" : "Faux", explain: `Vrai = правда, Faux = неправда. В тексте: «${esc(line)}»` });
+    const otherJob = pick(profsM().filter(x => x !== job0)), oj = fem ? (pairOf(otherJob) || otherJob) : otherJob;
+    const t1 = Math.random() < .5, t2 = Math.random() < .5;
+    const pool = [
+      { prompt: `Quel âge a ${nm} ?`, options: [String(age), ...near(age)], answer: String(age), explain: `В тексте: «${esc(lines[1][0])}» — ${age}.` },
+      { prompt: `Où habite ${nm} ?`, options: [`à ${city.name}`, ...shuffle(cities.filter(x => x !== city)).slice(0, 2).map(x => `à ${x.name}`)], answer: `à ${city.name}`, explain: `В тексте: «${esc(lines[2][0])}»` },
+      VF(`${nm} est ${t1 ? job.w : oj.w}.`, t1, lines[3][0]),
+      { prompt: `Où travaille ${nm} ?`, options: uniq([`dans ${indefOf(at)} ${at.w}`, ...shuffle(C.nouns.filter(n => n.rin && n !== at)).slice(0, 2).map(n => `dans ${indefOf(n)} ${n.w}`)]), answer: `dans ${indefOf(at)} ${at.w}`, explain: `В тексте: «${esc(lines[3][0])}»` },
+      { prompt: `Comment s'appelle ${sf ? "la sœur" : "le frère"} de ${nm} ?`, options: [sibNm[0], ...shuffle(FIRST.filter(x => x[0] !== sibNm[0] && x[0] !== nm)).slice(0, 2).map(x => x[0])], answer: sibNm[0], star: true,
+        explain: `★ s'appelle — «его/её зовут» (как je m'appelle). В тексте: «${esc(lines[4][0])}»` },
+      { prompt: `Quel âge a ${sibNm[0]} ?`, options: [String(sibAge), ...near(sibAge)], answer: String(sibAge), explain: `В тексте: «${esc(lines[5][0])}» — ${sibAge}.` },
+      VF(`${sibNm[0]} habite ${t2 ? `${sp} ${sibPlace.name}` : `à ${city.name}`}.`, t2, lines[6][0])
+    ];
+    return shuffle(pool).slice(0, 4).map(q => ({ type: "choice", kind: "Чтение", reading: text, readingRu: textRu, say: q.answer, explain: q.explain, prompt: q.prompt, options: q.options, answer: q.answer, star: q.star }));
+  }
+  const allVerbKeys = () => C.verbs.flatMap(v => prons(v).map(p => `vf|${v.inf}|${p}`));
+  const allNumKeys = () => Array.from({ length: NMAX }, (_, i) => "n|" + (i + 1));
+  const PARTS = { A: "Écoute · Аудирование", B: "Lecture · Чтение", C: "Grammaire · Грамматика", D: "Vocabulaire · Лексика", E: "Écriture · Письмо" };
+  function one(keys, modes) { return buildSet(keys, modes, 1)[0]; }
+  function buildExam() {
+    const tag = (ex, part) => ex ? Object.assign(ex, { part }) : null;
+    const listenPhrase = () => { const ex = exFor(pick(phraseKeys(tplFor(), 10)), ["fr2ru"]); if (!ex) return null; return Object.assign(ex, { audio: ex.prompt, prompt: "", kind: "Послушай и выбери перевод" }); };
+    const A = [one(allNumKeys(), ["hearc"]), one(ppKeys(), ["phear"]), one(VOCAB.map(w => "w|" + w.fr), ["hear"]), listenPhrase()].map(e => tag(e, "A"));
+    const B = makeReading().map(e => tag(e, "B"));
+    const gram = shuffle([
+      () => one(allVerbKeys(), ["conjc"]), () => one(oKeys(), ["oc"]), () => one(kKeys(), ["kc"]),
+      () => one(C.nouns.filter(n => !n.both).map(n => "a|" + n.w), [pick(["def", "indef"])]), () => one(lKeys(20, true), ["lde"]), () => one(phraseKeys(GENDER_TPL, 20), ["gch"])
+    ]).slice(0, 5).map(f => f()).concat([makeAu()]);
+    const C_ = shuffle(gram).map(e => tag(e, "C"));
+    const D = [one(VOCAB.map(w => "w|" + w.fr), ["fr2ru"]), one(VOCAB.map(w => "w|" + w.fr), ["ru2fr"]), makeIntrus()].map(e => tag(e, "D"));
+    const E = [one(xKeys(tplFor(), 20), ["x2"]), one(qaKeys(20), ["qa"]), one(qaKeys(20), ["qq"])].map(e => tag(e, "E"));
+    return [...A, ...B, ...C_, ...D, ...E].filter(Boolean);
+  }
+  function openExam() {
+    const last = S.exams && S.exams[0];
+    $app.innerHTML = `<div class="ex-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h2 style="font-size:24px">Контрольная</h2></div>
+      <div class="card"><h3 class="fr">Contrôle · niveau A1</h3>
+        <p class="muted" style="margin:0 0 6px">20 заданий в пяти частях, как в учебнике. Ответы проверяются в конце, подсказок нет. Оценка — по-французски, из 20.</p>
+        <div class="plist">${Object.entries(PARTS).map(([k, v]) => `<div><b class="w dark" style="padding:0;justify-content:center;width:26px;height:26px">${k}</b><span>${v}</span><span></span></div>`).join("")}</div>
+        <p class="muted" style="margin:10px 0 0"><span class="star">★</span> — задание чуть дальше пройденного: новое правило или оборот, который легко вывести из того, что ты уже знаешь.</p>
+        ${last ? `<p style="margin:10px 0 0;font-weight:800">Прошлая оценка: ${last.note}/20 · ${last.d}</p>` : ""}</div>`;
+    $("#bk").onclick = home;
+    showDock("", `<button class="btn" id="go">Начать контрольную</button>`);
+    $("#go").onclick = () => startSession(buildExam(), { title: "Контрольная", exam: true, results: [], back: home, again: openExam });
+    window.scrollTo(0, 0);
+  }
+  function examResult() {
+    const res = R.results, ok = res.filter(r => r.ok).length, note = Math.round(ok / Math.max(1, res.length) * 20);
+    const mention = note >= 18 ? "Excellent !" : note >= 15 ? "Très bien !" : note >= 12 ? "Bien !" : note >= 10 ? "Assez bien" : "Il faut réviser";
+    const ru = note >= 18 ? "отлично" : note >= 15 ? "очень хорошо" : note >= 12 ? "хорошо" : note >= 10 ? "неплохо" : "нужно повторить";
+    S.exams = [{ note, d: dayStr() }, ...(S.exams || [])].slice(0, 10); S.xp += 30; save();
+    const parts = Object.keys(PARTS).map(k => { const rs = res.filter(r => r.ex.part === k), o = rs.filter(r => r.ok).length;
+      return rs.length ? `<div><b class="w dark" style="padding:0;justify-content:center;width:26px;height:26px">${k}</b><span>${PARTS[k]}</span><span>${o}/${rs.length}</span><span class="bar2"><i style="width:${o / rs.length * 100}%"></i></span></div>` : ""; }).join("");
+    const reading = res.find(r => r.ex.reading);
+    const corr = ex => ex.fields ? ex.fields.map(f => f.answers[0]).join(" / ") : ex.type === "choice" ? ex.answer : ex.answers ? ex.answers[0] : "";
+    const list = res.map((r, i) => { const ex = r.ex, c = corr(ex);
+      return `<div class="rv ${r.ok ? "" : "bad"}"><div class="rv-h">${i + 1}. ${ex.part} · ${esc(ex.kind)} · ${r.ok ? "верно" : "ошибка"}</div>
+        <div class="rv-q">${esc(ex.prompt || (ex.audio ? "(на слух) " + ex.audio : (ex.fields || []).map(f => f.label || "").join("\n")))}</div>
+        ${ex.ru && !ex.noRu && !/[а-яё]/i.test(ex.prompt || "") ? `<div class="muted">${esc(ex.ru)}</div>` : ""}
+        ${r.ok ? "" : `<div>Твой ответ: <span class="bad-w">${esc(r.given || "—")}</span></div>`}
+        <div class="ans">${ex.say ? sayBtn(ex.say) : ""}<span>Верно: <b class="fr">${esc(c)}</b>${ex.say && ex.say !== c ? ` · <span class="fr">${esc(ex.say)}</span>` : ""}</span></div>
+        ${ex.sayRu ? `<div class="muted">${esc(ex.sayRu)}</div>` : ""}${ex.explain ? `<div class="muted">${ex.explain}</div>` : ""}</div>`; }).join("");
+    $app.innerHTML = `<div class="result" style="--a:var(--ink)">${art("var(--lime)", 123, 1, 400, 240)}<div class="big"><b id="score">${note}/20</b><span>${mention}</span></div></div>
+      <h2 class="res-h fr">${mention}</h2><p class="res-p">Верно ${ok} из ${res.length} · ${ru} · +${R.xp + 30} баллов</p>
+      <div class="card" style="margin-top:16px"><h3>По частям</h3><div class="plist">${parts}</div></div>
+      ${reading ? `<div class="card" style="margin-top:12px"><h3>Текст для чтения</h3><div class="fr" style="font-size:16px">${esc(reading.ex.reading)}</div><p class="muted" style="margin:8px 0 0">${esc(reading.ex.readingRu)}</p></div>` : ""}
+      <h3 class="h-sm">Разбор</h3><div class="cards" style="margin-top:8px">${list}</div>`;
+    showDock("", `<div class="two"><button class="btn ghost" id="bk">На главную</button><button class="btn" id="ag">Новая контрольная</button></div>`);
+    $("#bk").onclick = home; $("#ag").onclick = openExam;
+    enterLock = Date.now() + 400;
+  }
   const lKeys = (n = 40, deOnly) => phraseKeys(["lieu"], n * 2).map(k => k.slice(2)).filter(k => { const pr = PREPS[+k.split("~")[2]]; return pr && pr.fr !== "entre" && (!deOnly || pr.de); }).map(k => "l|" + k.split("~").slice(1).join("~")).slice(0, n);
   const qaKeys = (n = 40) => uniq(Array.from({ length: n }, () => { const k = pick(Object.keys(QA)); return "q|" + [k, ...QA[k].make()].join("~"); }));
   const xKeys = (tpls, n = 40) => phraseKeys(tpls, n).map(k => "x|" + k.slice(2));
@@ -1580,6 +1714,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       <div class="daily"><div class="ring"><svg viewBox="0 0 78 78"><circle cx="39" cy="39" r="34" fill="none" stroke="#f0e2cf" stroke-width="6"/>
         ${pc ? `<circle cx="39" cy="39" r="34" fill="none" stroke="#17171c" stroke-width="6" stroke-linecap="round" stroke-dasharray="${(L * pc / 100).toFixed(1)} ${L.toFixed(1)}"/>` : ""}</svg><b>${pc}%</b></div>
         <div><h3>Цель дня: ${GOAL} ответов</h3><p>${n >= GOAL ? "Цель выполнена. Bravo !" : `Сегодня ${n}. Ещё ${GOAL - n} до цели.`}</p></div></div>
+      <button class="exam-card" id="exam">${art("var(--violet)", 123, 2, 400, 130)}<span class="in"><b>Контрольная</b><span>20 заданий · 5 частей · оценка из 20, как в учебнике</span>${S.exams && S.exams[0] ? `<span class="best">последняя: ${S.exams[0].note}/20</span>` : ""}</span></button>
       <div class="row-h"><h2>Разделы</h2></div><div class="bento">`;
     const shape = ["tall", "", "", "", ""];
     SECTIONS.forEach((s, i) => {
@@ -1592,6 +1727,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     $app.innerHTML = h;
     $app.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => section(b.dataset.sec));
     $("#bigtest").onclick = runBigTest;
+    $("#exam").onclick = openExam;
     $("#reset").onclick = confirmReset;
     showDock("", `<div class="two"><button class="btn ghost" id="rev">${due ? `Ошибки · ${due}` : "Повторение"}</button><button class="btn" id="bt">Общий тест</button></div>`);
     $("#rev").onclick = startRevision;
@@ -1763,27 +1899,39 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     const acc = R.sec ? R.sec.a : "var(--lime)";
     let h = `<div class="ex-top"><button class="round" id="x" aria-label="Выйти">${ICON.close}</button>
       <div class="prog"><i style="width:${R.done / R.total * 100}%"></i></div><span class="count">${R.done}/${R.total}</span></div>
+      ${R.exam && ex.part ? `<div class="part"><b>${ex.part}</b>${PARTS[ex.part]}</div>` : ""}
       <span class="kind" style="--a:${acc}">${esc(ex.kind)}${retry ? " · ещё раз" : ""}</span>`;
     if (ex.ask) h += `<div class="ask">${esc(ex.ask)}</div>`;
     if (ex.audio) h += `<div class="listen"><button class="play" data-say="${esc(ex.audio)}">${ICON.speak}Слушать</button>
       <button class="play slow" data-say="${esc(ex.audio)}" data-slow="1" aria-label="Медленно">0.6×</button></div>`;
     if (ex.pic) h += `<div class="pic">${ex.pic}</div>`;
+    if (ex.reading) h += `<div class="reading">${sayBtn(ex.reading)}${esc(ex.reading)}</div>`;
     if (ex.prompt) h += `<div class="qwrap"><div class="q ${ruQ ? "ru" : ""}">${esc(ex.prompt)}</div>${ex.ru && !ruQ && !ex.noRu ? `<div class="q-ru">${esc(ex.ru)}</div>` : ""}</div>`;
     h += `<div id="work"></div>`;
     if (ex.audio && !hasTTS) h += `<p class="muted">Этот браузер не умеет озвучивать текст.</p>`;
     $app.innerHTML = h;
     $("#x").onclick = () => { if (hasTTS) speechSynthesis.cancel(); R.back(); };
     RENDER[ex.type](ex, $("#work"));
+    if (R.exam) { const hb = $("#hint"); if (hb) hb.remove(); }
     if (ex.audio) setTimeout(() => speak(ex.audio), 250);
     window.scrollTo(0, 0);
   }
 
   function checkDock(onCheck) {
-    showDock("", `<button class="btn" id="chk" disabled>Проверить<span class="kbd">Enter</span></button>`);
+    showDock("", `<button class="btn" id="chk" disabled>${R && R.exam ? "Ответить" : "Проверить"}<span class="kbd">Enter</span></button>`);
     const b = $("#chk"); b.onclick = onCheck; return b;
   }
 
   function grade(ok, correct, note, hinted, quiet) {
+    if (R.exam) {
+      // контрольная: без подсказок и разбора — всё в конце
+      const it = R.queue.shift(), ex = it.ex, k = ex.key;
+      if (k) { S.items[k] = S.items[k] || { ok: 0, bad: 0 }; S.items[k][ok ? "ok" : "bad"]++; if (!ok) srsWrong(k); }
+      if (ok) { touchDay(); S.xp += 10; R.xp += 10; }
+      R.results.push({ ex, ok, given: R.given }); R.given = null; R.done++;
+      save(); enterLock = Date.now() + 300;
+      return next();
+    }
     const it = R.queue.shift(), ex = it.ex, k = ex.key;
     enterLock = Date.now() + 400;
     if (k) { S.items[k] = S.items[k] || { ok: 0, bad: 0 }; S.items[k][ok ? "ok" : "bad"]++; }
@@ -1812,6 +1960,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   }
 
   function finish() {
+    if (R.exam) return examResult();
     const pct = R.total ? R.firstOk / R.total : 1;
     if (R.lesson) { const p = S.lessons[R.lesson.id]; S.lessons[R.lesson.id] = { best: Math.max(pct, p ? p.best : 0) }; }
     if (R.drill) S.best[R.drill] = Math.max(pct, S.best[R.drill] || 0);
@@ -1850,6 +1999,8 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         if (ins.some(i => !i.value.trim()) || ins[0].disabled) return;
         ins.forEach(i => i.disabled = true);
         const res = F.map((f, i) => f.answers.some(a => norm(a) === norm(ins[i].value)) ? 2 : f.answers.some(a => bare(a) === bare(ins[i].value)) ? 1 : 0);
+        R.given = ins.map(i => i.value).join(" / ");
+        if (R.exam) return grade(res.every(r => r > 0));
         if (res.every(r => r > 0)) return grade(true, null, res.some(r => r === 1) ? "Проверь значки над буквами." : null, hinted);
         const body = F.map((f, i) => {
           const v = ins[i].value;
@@ -1890,7 +2041,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       const btns = [...w.querySelectorAll(".opt")];
       const chk = checkDock(() => {
         btns.forEach(b => { b.disabled = true; b.classList.remove("sel"); if (b.dataset.o === ex.answer) b.classList.add("ok"); else if (b.dataset.o === sel) b.classList.add("bad"); });
-        grade(sel === ex.answer, esc(ex.answer));
+        R.given = sel; grade(sel === ex.answer, esc(ex.answer));
       });
       btns.forEach(b => b.onclick = () => { sel = b.dataset.o; btns.forEach(x => x.classList.toggle("sel", x === b)); chk.disabled = false; });
     },
@@ -1903,7 +2054,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       const chk = checkDock(() => {
         if (!inp.value.trim() || inp.disabled) return;
         inp.disabled = true;
-        const v = inp.value;
+        const v = inp.value; R.given = v;
         if (ex.answers.some(a => norm(a) === norm(v))) return grade(true, null, null, hinted);
         if (ex.answers.some(a => bare(a) === bare(v))) return grade(true, null, "Проверь значки над буквами.", hinted);
         grade(false, esc(ex.answers[0]));
