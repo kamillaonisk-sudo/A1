@@ -78,7 +78,7 @@ window.COURSE = {
     ]
   },
 
-  themes: ["Приветствия", "Вопросы", "Анкета", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Полезные слова", "Притяжательные", "Фразы"],
+  themes: ["Приветствия", "Вопросы", "Анкета", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Полезные слова", "Притяжательные", "Предлоги места", "Фразы"],
 
   nouns: [
     { theme: "Семья", w: "père", g: "m", pl: "pères", ru: "отец", rupl: "отцы", rg: "m", pair: "mère" },
@@ -148,6 +148,7 @@ window.COURSE = {
     { theme: "Досуг", w: "film", g: "m", pl: "films", ru: "фильм", rupl: "фильмы", rg: "m", gpl: "фильмов" },
     { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка", rg: "f" },
     { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", rg: "m" },
+    { theme: "Дом и вещи", w: "boîte", g: "f", pl: "boîtes", ru: "коробка", rupl: "коробки", rg: "f", gpl: "коробок" },
     { theme: "Дом и вещи", w: "stylo", g: "m", pl: "stylos", ru: "ручка", rupl: "ручки", rg: "f", gpl: "ручек" },
 
     { theme: "Анкета", w: "prénom", g: "m", pl: "prénoms", ru: "имя", rupl: "имена", rg: "n" },
@@ -225,6 +226,32 @@ window.COURSE = {
     { fr: "Ça va aller.", ru: "Всё наладится.", theme: "Фразы" },
     { fr: "J'ai des amis.", ru: "У меня есть друзья.", theme: "Фразы" }
   ],
+
+  // предлоги места: tr — как читается, ipa — международная транскрипция
+  // rc — падеж в русском (loc: на столе, ins: под столом, gen: напротив стола), rp — русский предлог
+  preps: [
+    { fr: "sur", ru: "на", tr: "сюр", ipa: "syʁ", rc: "loc", rp: "на" },
+    { fr: "sous", ru: "под", tr: "су", ipa: "su", rc: "ins", rp: "под" },
+    { fr: "dans", ru: "в", tr: "дан", ipa: "dɑ̃", rc: "loc", rp: "в" },
+    { fr: "devant", ru: "перед, спереди", tr: "дёвáн", ipa: "də.vɑ̃", rc: "ins", rp: "перед" },
+    { fr: "derrière", ru: "за, сзади", tr: "дэрьéр", ipa: "dɛ.ʁjɛʁ", rc: "ins", rp: "за" },
+    { fr: "à côté", de: true, ru: "рядом, около", tr: "а котэ́", ipa: "a ko.te", rc: "ins", rp: "рядом с" },
+    { fr: "en face", de: true, ru: "напротив", tr: "ан фас", ipa: "ɑ̃ fas", rc: "gen", rp: "напротив" },
+    { fr: "à gauche", de: true, ru: "слева", tr: "а гош", ipa: "a ɡoʃ", rc: "gen", rp: "слева от" },
+    { fr: "à droite", de: true, ru: "справа", tr: "а друáт", ipa: "a dʁwat", rc: "gen", rp: "справа от" },
+    { fr: "entre", ru: "между", tr: "антр", ipa: "ɑ̃tʁ", rc: "ins2", rp: "между" },
+    { fr: "parmi", ru: "среди", tr: "пармú", ipa: "paʁ.mi" },
+    { fr: "au-dessus", de: true, ru: "над, сверху", tr: "о дёсю́", ipa: "o də.sy", rc: "ins", rp: "над" },
+    { fr: "au-dessous", de: true, ru: "под, снизу", tr: "о дёсý", ipa: "o də.su", rc: "ins", rp: "под" }
+  ],
+  // падежи для фраз «где?»: [кого/чего, кем/чем, (на/в) чём]
+  cases: {
+    table: ["стола", "столом", "столе"], chaise: ["стула", "стулом", "стуле"], sac: ["сумки", "сумкой", "сумке"],
+    boîte: ["коробки", "коробкой", "коробке"], maison: ["дома", "домом", "доме"], voiture: ["машины", "машиной", "машине"],
+    banque: ["банка", "банком", "банке"], café: ["кафе", "кафе", "кафе"], restaurant: ["ресторана", "рестораном", "ресторане"],
+    musée: ["музея", "музеем", "музее"], magasin: ["магазина", "магазином", "магазине"], hôtel: ["гостиницы", "гостиницей", "гостинице"],
+    école: ["школы", "школой", "школе"], gare: ["вокзала", "вокзалом", "вокзале"]
+  },
 
   lessons: {
     vocab: [
@@ -458,6 +485,18 @@ textarea.field { min-height: 110px; resize: vertical; }
 .shake { animation: shake .35s; }
 @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
 .refs { margin-top: 14px; }
+.pic { background: var(--card); border: 1.5px solid var(--line); border-radius: 22px; padding: 6px; margin-bottom: 16px; max-width: 340px; }
+.pic svg, .pcard svg, .opts.pics svg { width: 100%; height: auto; display: block; }
+.opts.pics { grid-template-columns: repeat(3, 1fr); }
+.opts.pics .opt { padding: 6px; justify-content: center; }
+.opts.pics .opt .k { display: none; }
+.pgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 6px; }
+.w.txt { display: inline-block; }
+.pcard { border: 1.5px solid var(--line); border-radius: 16px; background: var(--card); padding: 6px 8px 8px; text-align: left; display: grid; gap: 1px; }
+.pcard .fr { font-size: 14.5px; line-height: 1.15; }
+.tr { color: var(--violet); font-weight: 800; font-size: 13px; }
+.ipa { color: var(--muted); font-size: 12px; }
+.pcard .ru { font-size: 12.5px; color: var(--muted); }
 .chipsline { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .flabel { font-weight: 800; margin: 12px 0 6px; }
 .wfield { font-size: 20px; }
@@ -551,7 +590,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "10 · 06.11";
+  const VERSION = "11 · 07.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -760,7 +799,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 
   // словарик: слова + существительные (с артиклем un/une — сразу виден род)
   const nounLabel = n => `${indefOf(n)} ${n.w}`;
-  const VOCAB = C.vocab.concat(C.nouns.map(n => ({ fr: nounLabel(n), ru: n.ru, theme: n.theme, noun: n })));
+  const VOCAB = C.vocab.concat(C.nouns.map(n => ({ fr: nounLabel(n), ru: n.ru, theme: n.theme, noun: n })), (C.preps || []).map(x => ({ fr: x.de ? x.fr + " de" : x.fr, ru: x.ru, theme: "Предлоги места" })));
   const WORD = Object.fromEntries(VOCAB.map(w => [w.fr, w]));
 
   // ================================================================
@@ -836,6 +875,18 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       build: ([, v, i]) => { const x = FIRST[+i]; if (!x) return null;
         return +v ? { fr: `Salut ! Je suis ${x[0]}.`, ru: `Привет! Я ${x[1]}.`, slots: [{ w: "Salut", k: "w" }, { w: "suis", k: "verb" }] }
                   : { fr: `Bonjour, je m'appelle ${x[0]}.`, alts: [`Bonjour, je suis ${x[0]}.`], ru: `Здравствуйте, меня зовут ${x[1]}.`, slots: [{ w: "Bonjour", k: "w" }] }; } },
+    lieu: { verb: "être", make: () => {
+        if (Math.random() < .5) { const o = pick(Object.keys(FURN).filter(w => NOUN[w])), sub = pick(THINGS.filter(w => w !== o && NOUN[w])); return ["lieu", sub, String(PI[pick(FURN[o])]), o]; }
+        const [a, b, c] = shuffle(CITY.filter(w => NOUN[w])); const x = pick(CITY_P); return x === "entre" ? ["lieu", a, String(PI[x]), b, c] : ["lieu", a, String(PI[x]), b];
+      },
+      build: ([, sw, pi, ow, ow2]) => {
+        const sub = NOUN[sw], x = PREPS[+pi], o = NOUN[ow], o2 = ow2 && NOUN[ow2]; if (!sub || !x || !o || x.fr === "parmi") return null;
+        const S1 = cap(withDef(defOf(sub), sub.w)), rw = ruWhere(x, o, o2); if (!rw) return null;
+        if (x.fr === "entre") { if (!o2) return null;
+          return { fr: `${S1} est entre ${withDef(defOf(o), o.w)} et ${withDef(defOf(o2), o2.w)}.`, ru: `${cap(sub.ru)} ${rw}.`, slots: [{ w: "entre", k: "prep" }, { w: o.w, k: "noun" }] }; }
+        const ch = chunkOf(x, o);
+        return { fr: `${S1} est ${glue(ch, o.w)}.`, ru: `${cap(sub.ru)} ${rw}.`, chunk: ch, head: `${S1} est`, noun: o.w, prep: x,
+          slots: [{ w: sub.w, k: "noun" }, { w: o.w, k: "noun" }].concat(x.de ? [] : [{ w: x.fr, k: "prep" }]) }; } },
     travdans: { verb: "travailler", make: () => ["travdans", pick(PRON), pick(C.nouns.filter(n => n.rin)).w],
       build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.rin || !v) return null; const f = formOf(v, p), a = indefOf(n);
         return { fr: `${cap(pf(p, f))} dans ${a} ${n.w}.`, ru: `${cap(ruOf(v, p))} ${n.rin}.`, slots: [{ w: f, k: "verb" }, { w: "dans", k: "prep" }, { w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
@@ -891,6 +942,8 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       q: ([t]) => tv(t, ["Comment allez-vous ?", "Comment ça va ?", "Ça va ?"], ["Comment vas-tu ?", "Comment ça va ?", "Ça va ?"]), qru: ([t]) => tv(t, "Как у вас дела?", "Как у тебя дела?"),
       a: () => ["Je vais bien.", "Ça va bien.", "Ça va."], aru: () => "У меня всё хорошо." }
   };
+  const ppKeys = () => PREPS.map((_, i) => "pp|" + i);
+  const lKeys = (n = 40, deOnly) => phraseKeys(["lieu"], n * 2).map(k => k.slice(2)).filter(k => { const pr = PREPS[+k.split("~")[2]]; return pr && pr.fr !== "entre" && (!deOnly || pr.de); }).map(k => "l|" + k.split("~").slice(1).join("~")).slice(0, n);
   const qaKeys = (n = 40) => uniq(Array.from({ length: n }, () => { const k = pick(Object.keys(QA)); return "q|" + [k, ...QA[k].make()].join("~"); }));
   const xKeys = (tpls, n = 40) => phraseKeys(tpls, n).map(k => "x|" + k.slice(2));
   const oKeys = (n = 50) => uniq(Array.from({ length: n }, () => { const nn = pick(POSS_NOUNS()); return `o|${pick(PRON)}~${nn.w}~${!nn.noPl && !NO_POSS_PL.includes(nn.w) && Math.random() < .3 ? 1 : 0}`; }));
@@ -899,6 +952,78 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     if (Math.random() < .2) return `k|${pick(["ville", "pays"])}~0~${VT()}~d`;
     const nn = pick(K_NOUNS()); return `k|${nn.w}~${!nn.noPl && Math.random() < .3 ? 1 : 0}~${VT()}`;
   }));
+
+  // ПРЕДЛОГИ МЕСТА
+  const PREPS = C.preps || [];
+  const PI = Object.fromEntries(PREPS.map((x, i) => [x.fr, i]));
+  const pLabel = x => x.de ? `${x.fr} (de)` : x.fr;
+  const CASES = C.cases || {};
+  const deArt = n => vowel(n.w) ? "de l'" : n.g === "f" ? "de la" : "du";
+  const glue = (a, w) => a.endsWith("'") ? a + w : a + " " + w;
+  const chunkOf = (x, n) => x.de ? `${x.fr} ${deArt(n)}` : `${x.fr} ${defOf(n)}`;
+  const withSo = (rp, w) => rp.endsWith(" с") && /^[сзшж][^аеёиоуыэюя]/i.test(w) ? rp + "о " + w : rp + " " + w;
+  function ruWhere(x, n, n2) {
+    const c = CASES[n.w]; if (!c) return null;
+    if (x.rc === "loc") return `${x.rp} ${c[2]}`;
+    if (x.rc === "gen") return `${x.rp} ${c[0]}`;
+    if (x.rc === "ins") return withSo(x.rp, c[1]);
+    if (x.rc === "ins2" && n2 && CASES[n2.w]) return `между ${c[1]} и ${CASES[n2.w][1]}`;
+    return null;
+  }
+  const trOf = x => `[${x.tr}${x.de ? " дё" : ""}] /${x.ipa}${x.de ? " də" : ""}/`;
+  // где можно что-то поставить
+  const THINGS = ["livre", "stylo", "téléphone", "ordinateur", "pomme", "gâteau", "boîte", "sac"];
+  const FURN = { table: ["sur", "sous", "devant", "derrière", "à côté", "à gauche", "à droite", "au-dessus"], chaise: ["sur", "sous", "devant", "derrière", "à côté", "à gauche", "à droite"],
+    sac: ["dans", "sur", "à côté"], boîte: ["dans", "sur", "sous", "à côté", "derrière", "devant"] };
+  const CITY = ["banque", "café", "restaurant", "musée", "magasin", "hôtel", "école", "gare"];
+  const CITY_P = ["à côté", "en face", "derrière", "devant", "à gauche", "à droite", "entre"];
+
+  // рисунки: девочка и коробка
+  function boxSvg(x, y, s, part) {
+    const d = s * .3, st = 'stroke="#17171c" stroke-width="2.4" stroke-linejoin="round"';
+    const top = `<polygon points="${x},${y - s} ${x + d},${y - s - d} ${x + s + d},${y - s - d} ${x + s},${y - s}" fill="#fff27a" ${st}/>`;
+    const front = `<rect x="${x}" y="${y - s}" width="${s}" height="${s}" fill="#f0d54a" ${st}/><polygon points="${x + s},${y - s} ${x + s + d},${y - s - d} ${x + s + d},${y - d} ${x + s},${y}" fill="#d2b334" ${st}/>`;
+    return part === "top" ? top : part === "front" ? front : top + front;
+  }
+  function girlSvg(cx, fy, back) {
+    const st = 'stroke="#17171c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+    const hy = fy - 46;
+    const face = back ? `<circle cx="${cx}" cy="${hy}" r="9.5" fill="#3a2418" ${st}/>` :
+      `<circle cx="${cx}" cy="${hy}" r="9.5" fill="#ffd3b4" ${st}/><path d="M${cx - 9.5},${hy - 1} q1,-10 9.5,-10 q8.5,0 9.5,10 q-5,-4 -9.5,-4 q-4.5,0 -9.5,4z" fill="#3a2418"/>
+       <circle cx="${cx - 3.2}" cy="${hy + 1.5}" r="1.2" fill="#17171c"/><circle cx="${cx + 3.2}" cy="${hy + 1.5}" r="1.2" fill="#17171c"/><path d="M${cx - 2.5},${hy + 4.5} q2.5,2.2 5,0" fill="none" ${st}/>`;
+    return `<g>
+      <path d="M${cx - 5},${fy - 13} L${cx - 6},${fy}M${cx + 5},${fy - 13} L${cx + 6},${fy}" fill="none" ${st}/>
+      <path d="M${cx - 9},${fy - 30} L${cx - 19},${fy - 20}M${cx + 9},${fy - 30} L${cx + 19},${fy - 20}" fill="none" ${st}/>
+      <path d="M${cx - 5},${fy - 35} L${cx + 5},${fy - 35} L${cx + 14},${fy - 12} L${cx - 14},${fy - 12}Z" fill="#e8344a" ${st}/>
+      <circle cx="${cx - 11}" cy="${hy - 3}" r="4.5" fill="#3a2418" ${st}/><circle cx="${cx + 11}" cy="${hy - 3}" r="4.5" fill="#3a2418" ${st}/>
+      ${face}</g>`;
+  }
+  const arrow = (x, y1, y2) => `<path d="M${x},${y1} L${x},${y2} M${x - 5},${y2 + (y2 > y1 ? -6 : 6)} L${x},${y2} L${x + 5},${y2 + (y2 > y1 ? -6 : 6)}" fill="none" stroke="#7b5cf7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+  function scene(fr) {
+    const G = 108, ground = `<path d="M6,${G} L154,${G}" stroke="#17171c" stroke-opacity=".18" stroke-width="2" stroke-dasharray="4 5"/>`;
+    const S = {
+      "sur": boxSvg(52, G, 44) + girlSvg(80, G - 52),
+      "sous": girlSvg(80, G) + boxSvg(60, G - 58, 36),
+      "dans": boxSvg(52, G, 46, "top") + girlSvg(82, G - 18) + boxSvg(52, G, 46, "front"),
+      "devant": boxSvg(54, G - 12, 42) + girlSvg(76, G + 6),
+      "derrière": girlSvg(84, G - 16) + boxSvg(52, G + 4, 48),
+      "à côté": boxSvg(40, G, 40) + girlSvg(104, G),
+      "en face": boxSvg(18, G - 40, 30) + `<path d="M98,${G - 50} L62,${G - 62}" stroke="#7b5cf7" stroke-width="2.5" stroke-dasharray="4 4" stroke-linecap="round"/>` + girlSvg(116, G + 6, true),
+      "à gauche": girlSvg(26, G) + boxSvg(84, G, 40) + `<path d="M50,${G - 70} L18,${G - 70} M24,${G - 75} L18,${G - 70} L24,${G - 65}" fill="none" stroke="#7b5cf7" stroke-width="2.5" stroke-linecap="round"/>`,
+      "à droite": boxSvg(22, G, 40) + girlSvg(134, G) + `<path d="M108,${G - 70} L142,${G - 70} M136,${G - 75} L142,${G - 70} L136,${G - 65}" fill="none" stroke="#7b5cf7" stroke-width="2.5" stroke-linecap="round"/>`,
+      "entre": boxSvg(8, G, 34) + girlSvg(80, G) + boxSvg(108, G, 34),
+      "parmi": boxSvg(30, G - 22, 28) + boxSvg(96, G - 22, 28) + girlSvg(80, G - 4) + boxSvg(4, G, 30) + boxSvg(118, G, 30),
+      "au-dessus": boxSvg(56, G, 34) + girlSvg(80, G - 50) + arrow(30, G - 40, G - 76),
+      "au-dessous": boxSvg(58, G - 74, 32) + girlSvg(80, G) + arrow(30, G - 82, G - 50)
+    };
+    return `<svg viewBox="0 0 160 120" role="img" aria-label="${esc(fr)}">${ground}${S[fr] || ""}</svg>`;
+  }
+  function picSentence(x) {
+    if (x.fr === "parmi") return { fr: "La fille est parmi les boîtes.", ru: "Девочка среди коробок." };
+    if (x.fr === "entre") return { fr: "La fille est entre les boîtes.", ru: "Девочка между коробками." };
+    return { fr: `La fille est ${glue(chunkOf(x, NOUN["boîte"] || { w: "boîte", g: "f" }), "boîte")}.`, ru: `Девочка ${ruWhere(x, { w: "boîte" })}.` };
+  }
+  const HEAR_GROUPS = [["sur", "sous", "au-dessus", "au-dessous"], ["devant", "derrière", "dans"], ["à gauche", "à droite", "à côté"], ["entre", "en face", "parmi"]];
 
   const tplFor = infs => Object.keys(TPL).filter(t => VERB[TPL[t].verb] && (!infs || infs.includes(TPL[t].verb)));
   // та же фраза в другом роде: il ↔ elle, ami ↔ amie, acteur ↔ actrice…
@@ -1196,6 +1321,36 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       return { type: "write", kind: "Диалог целиком", ask: "Переведи диалог на французский", prompt: "", fields: [{ label: "— " + qru, answers: qs }, { label: "— " + aru, answers: as }],
         say: `${qs[0]} ${as[0]}`, sayRu: `${qru} — ${aru}`, explain: "" };
     },
+    // предлог по картинке: pp|индекс
+    pp(i, _, modes) {
+      const x = PREPS[+i]; if (!x) return null;
+      const m = pickMode(["pic", "pick", "pru", "pfr", "phear"], modes); if (!m) return null;
+      const ps = picSentence(x), others = shuffle(PREPS.filter(y => y !== x));
+      const base = { say: ps.fr, sayRu: ps.ru, explain: `<b>${esc(pLabel(x))}</b> ${esc(trOf(x))} — ${esc(x.ru)}.` + (x.de ? " Дальше идёт de: de + le = du, de + la = de la, de + l' = de l'." : "") };
+      if (m === "pic") return { ...base, type: "choice", kind: "Где девочка?", pic: scene(x.fr), prompt: "Où est la fille ?", ru: "Где девочка?",
+        options: [pLabel(x), ...others.slice(0, 3).map(pLabel)], answer: pLabel(x) };
+      if (m === "pick") { const opts = [x, ...others.slice(0, 2)];
+        return { ...base, type: "choice", kind: "Найди картинку", audio: pLabel(x).replace(" (de)", ""), prompt: pLabel(x), ru: `${trOf(x)} — ${x.ru}`, pics: true,
+          options: opts.map(y => y.fr), optHtml: Object.fromEntries(opts.map(y => [y.fr, scene(y.fr)])), answer: x.fr }; }
+      if (m === "pru") return { ...base, type: "choice", kind: "Переведи", prompt: x.ru, options: [pLabel(x), ...others.slice(0, 2).map(pLabel)], answer: pLabel(x) };
+      if (m === "pfr") return { ...base, type: "choice", kind: "Переведи", prompt: pLabel(x), ru: trOf(x), options: [x.ru, ...others.slice(0, 2).map(y => y.ru)], answer: x.ru };
+      const grp = HEAR_GROUPS.find(g => g.includes(x.fr)) || [];
+      const opts = uniq([x.fr, ...shuffle(grp.filter(y => y !== x.fr))]).slice(0, 3);
+      return { ...base, type: "choice", kind: "Что ты услышала?", audio: x.fr, prompt: "", options: opts, answer: x.fr };
+    },
+    // предлог во фразе: l|lieu~…
+    l(spec, _, modes) {
+      const parts = ["lieu", ...String(spec).split("~")], s = TPL.lieu.build(parts); if (!s || !s.chunk) return null;
+      const m = pickMode(["lc", "lde"].filter(k => k !== "lde" || s.prep.de), modes); if (!m) return null;
+      const o = NOUN[s.noun], sep = " ";
+      const base = { say: s.fr, sayRu: s.ru, explain: `<b>${esc(pLabel(s.prep))}</b> ${esc(trOf(s.prep))} — ${esc(s.prep.ru)}.` };
+      if (m === "lde") return { ...base, type: "choice", kind: "du · de la · de l'", prompt: `${s.head} ${s.prep.fr} ___${sep}${s.noun}.`, ru: s.ru,
+        options: ["du", "de la", "de l'", "de le"], answer: deArt(o),
+        explain: `${esc(o.w)} — ${vowel(o.w) ? "начинается с гласной" : G_RU[o.g]} → <b>${deArt(o)}</b>. de + le = du (никогда «de le»).` };
+      const pool = (FURN[s.noun] || CITY_P).filter(f => f !== s.prep.fr && f !== "entre").map(f => chunkOf(PREPS[PI[f]], o));
+      return { ...base, type: "choice", kind: "Предлог во фразе", prompt: `${s.head} ___${sep}${s.noun}.`, ru: s.ru,
+        options: [s.chunk, ...shuffle(uniq(pool)).slice(0, 2)], answer: s.chunk };
+    },
     L(id) { const x = LESSON_EX[id]; return x ? { ...x.ex } : null; }
   };
 
@@ -1253,6 +1408,18 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         { id: "a5", t: "Артикль во фразе", d: "C'est un… · J'ai une… · Ce sont des…", lvl: 2, icon: "puzzle",
           keys: () => phraseKeys(["cest", "cesont", "avoir"], 40), modes: ["art1"] },
         { id: "a6", t: "Мн. число", d: "une voiture → des voitures", lvl: 3, icon: "pen", keys: nounKeys, modes: ["plural"] }
+      ] },
+    { id: "prep", title: "Предлоги места", fr: "les prépositions", a: "var(--yellow)", b: "var(--pink)", seed: 91,
+      count: { prefixes: ["pp|", "l|", "t|lieu", "x|lieu"], goal: 40, unit: "заданий" },
+      drills: [
+        { id: "r1", t: "Где девочка?", d: "Смотри на картинку и выбирай предлог", lvl: 1, icon: "globe", keys: ppKeys, modes: ["pic"] },
+        { id: "r2", t: "Найди картинку", d: "Слово → правильный рисунок", lvl: 1, icon: "cards", keys: ppKeys, modes: ["pick"] },
+        { id: "r3", t: "Перевод слов", d: "devant = перед, sous = под…", lvl: 1, icon: "cards", keys: ppKeys, modes: ["pru", "pfr"] },
+        { id: "r4", t: "Что ты услышала?", d: "sur / sous, dessus / dessous", lvl: 2, icon: "ear", keys: ppKeys, modes: ["phear"] },
+        { id: "r5", t: "Предлог во фразе", d: "Le livre est ___ table.", lvl: 2, icon: "puzzle", keys: () => lKeys(40), modes: ["lc"] },
+        { id: "r6", t: "du · de la · de l'", d: "à côté du café, en face de la gare", lvl: 2, icon: "pen", keys: () => lKeys(40, true), modes: ["lde"] },
+        { id: "r7", t: "Переведи фразу", d: "С французского на русский", lvl: 2, icon: "globe", keys: () => phraseKeys(["lieu"], 40), modes: ["fr2ru"] },
+        { id: "r8", t: "Напиши сама", d: "Книга на столе → Le livre est sur la table.", lvl: 3, icon: "pen", keys: () => xKeys(["lieu"], 40), modes: ["x2"] }
       ] },
     { id: "poss", title: "Притяжательные", fr: "les possessifs", a: "var(--lime)", b: "var(--coral)", seed: 71,
       count: { prefixes: ["o|"], goal: 40, unit: "заданий" },
@@ -1354,6 +1521,12 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         <div class="prep-row"><div><b>à</b>город</div><div><b>en</b>страна ж.р.</div><div><b>au</b>страна м.р.</div><div><b>aux</b>страна мн.ч.</div></div>
 </div>`;
     }
+    if (id === "prep") {
+      return `<div class="rule"><div class="pgrid">${PREPS.map(x => `<button class="pcard" data-say="${esc(x.fr)}">${scene(x.fr)}<span class="fr">${esc(pLabel(x))}</span><span class="tr">[${esc(x.tr)}${x.de ? " дё" : ""}]</span><span class="ru">${esc(x.ru)}</span></button>`).join("")}</div>
+        <div class="scheme"><span class="w">de + le</span><span class="arr">→</span><span class="w dark">du</span><span class="w">de + la</span><span class="arr">→</span><span class="w dark">de la</span><span class="w">de + l'</span><span class="arr">→</span><span class="w dark">de l'</span></div>
+        <div class="scheme"><span class="w txt">à côté <b>du</b> café</span><span class="w txt">en face <b>de la</b> gare</span><span class="w txt">à gauche <b>de l'</b>hôtel</span></div>
+        <div class="scheme"><span class="w">dessus [сю] ↑</span><span class="w">dessous [су] ↓</span><span class="w">sur [сюр]</span><span class="w">sous [су]</span></div></div>`;
+    }
     if (id === "poss") {
       const rows = [["я", "je"], ["ты", "tu"], ["он / она", "il"], ["мы", "nous"], ["вы", "vous"], ["они", "ils"]];
       return `<div class="rule">
@@ -1414,7 +1587,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       h += `<button class="tile ${shape[i]}" data-sec="${s.id}" style="--a:${s.a}">${art(s.b, s.seed, i % 3, 200, shape[i] === "tall" ? 250 : 120)}
         <span class="fr-t">${s.fr}</span><span class="pcb">${m.pc}%</span><span class="lbl"><b class="${(s.short || s.title).length > 11 ? "long" : ""}">${s.short || s.title}</b></span></button>`;
     });
-    h += `<button class="tile wide" id="bigtest" style="--a:var(--ink)">${art("var(--lime)", 77, 1, 400, 120)}<span class="fr-t">le test</span><span class="pcb">${SIZE} заданий</span><span class="lbl"><b style="color:#fff">Общий тест</b></span></button>`;
+    h += `<button class="tile" id="bigtest" style="--a:var(--ink)">${art("var(--lime)", 77, 1, 200, 120)}<span class="fr-t">le test</span><span class="pcb">${SIZE} заданий</span><span class="lbl"><b style="color:#fff">Общий тест</b></span></button>`;
     h += `</div><button class="linkbtn" id="reset">Сбросить прогресс</button><p class="muted" style="text-align:center;font-size:12px;margin:0">Версия ${VERSION}</p>`;
     $app.innerHTML = h;
     $app.querySelectorAll("[data-sec]").forEach(b => b.onclick = () => section(b.dataset.sec));
@@ -1496,6 +1669,9 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       h += `<div class="card"><h3>Из конспекта</h3>${C.articles.sentences.map(x => exLine(x.fr, x.ru)).join("")}</div>
         <div class="card"><h3>Страны и города</h3>${["city", "f", "m", "pl"].map(k => C.places.filter(p => p.kind === k).map(p => `<div class="vrow">${sayBtn(`${PREP[k]} ${p.name}`)}<span class="fr">${PREP[k]} ${esc(p.name)}</span><span class="ru">${esc(p.ru)}</span></div>`).join("")).join("")}</div>
         <div class="card"><h3>Слова с артиклями</h3>${artNouns().map(n => `<div class="vrow">${sayBtn(withDef(defOf(n), n.w))}<span class="fr">${indefOf(n)} ${esc(n.w)} · ${esc(withDef(defOf(n), n.w))}</span><span class="ru">${esc(n.ru)}</span></div>`).join("")}</div>`;
+    } else if (id === "prep") {
+      h += `<div class="card"><h3>Как читается</h3>${PREPS.map(x => `<div class="vrow">${sayBtn(x.fr)}<span><span class="fr">${esc(pLabel(x))}</span><br><span class="tr">[${esc(x.tr)}${x.de ? " дё" : ""}]</span> <span class="ipa">/${esc(x.ipa)}${x.de ? " də" : ""}/</span></span><span class="ru">${esc(x.ru)}</span></div>`).join("")}</div>
+        <div class="card"><h3>Примеры</h3>${Array.from({ length: 10 }, () => TPL.lieu.build(TPL.lieu.make())).filter(Boolean).map(x => exLine(x.fr, x.ru)).join("")}</div>`;
     } else if (id === "poss") {
       h += `<div class="card"><h3>Примеры</h3>${Array.from({ length: 8 }, () => TPL.poss.build(TPL.poss.make())).filter(Boolean).map(x => exLine(x.fr, x.ru)).join("")}</div>`;
     } else if (id === "write") {
@@ -1591,6 +1767,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     if (ex.ask) h += `<div class="ask">${esc(ex.ask)}</div>`;
     if (ex.audio) h += `<div class="listen"><button class="play" data-say="${esc(ex.audio)}">${ICON.speak}Слушать</button>
       <button class="play slow" data-say="${esc(ex.audio)}" data-slow="1" aria-label="Медленно">0.6×</button></div>`;
+    if (ex.pic) h += `<div class="pic">${ex.pic}</div>`;
     if (ex.prompt) h += `<div class="qwrap"><div class="q ${ruQ ? "ru" : ""}">${esc(ex.prompt)}</div>${ex.ru && !ruQ && !ex.noRu ? `<div class="q-ru">${esc(ex.ru)}</div>` : ""}</div>`;
     h += `<div id="work"></div>`;
     if (ex.audio && !hasTTS) h += `<p class="muted">Этот браузер не умеет озвучивать текст.</p>`;
@@ -1700,7 +1877,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         inp.focus(); inp.setSelectionRange(p + 1, p + 1); sync();
       });
       w.querySelector("#hint").onclick = () => {
-        const j = ins.indexOf(last), a = closest(F[j].answers, last.value); let i = 0;
+        const j = ins.indexOf(last), lv = last.value.toLowerCase(), a = F[j].answers.find(x => x.toLowerCase().startsWith(lv)) || closest(F[j].answers, last.value); let i = 0;
         while (i < last.value.length && i < a.length && last.value[i].toLowerCase() === a[i].toLowerCase()) i++;
         last.value = a.slice(0, i + 1); hinted = true; last.focus(); sync();
       };
@@ -1709,7 +1886,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 
     choice(ex, w) {
       let sel = null;
-      w.innerHTML = `<div class="opts">` + shuffle(uniq(ex.options)).map((o, i) => `<button class="opt" data-o="${esc(o)}"><span class="k">${i + 1}</span>${esc(o)}</button>`).join("") + `</div>`;
+      w.innerHTML = `<div class="opts${ex.pics ? " pics" : ""}">` + shuffle(uniq(ex.options)).map((o, i) => `<button class="opt" data-o="${esc(o)}" aria-label="${esc(o)}"><span class="k">${i + 1}</span>${ex.optHtml ? ex.optHtml[o] : esc(o)}</button>`).join("") + `</div>`;
       const btns = [...w.querySelectorAll(".opt")];
       const chk = checkDock(() => {
         btns.forEach(b => { b.disabled = true; b.classList.remove("sel"); if (b.dataset.o === ex.answer) b.classList.add("ok"); else if (b.dataset.o === sel) b.classList.add("bad"); });
