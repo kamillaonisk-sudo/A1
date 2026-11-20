@@ -67,7 +67,7 @@ window.COURSE = {
       ] }
   ],
 
-  numbers: { max: 69 },
+  numbers: { max: 79 },
 
   articles: {
     sentences: [
@@ -148,6 +148,9 @@ window.COURSE = {
     { theme: "Досуг", w: "film", g: "m", pl: "films", ru: "фильм", rupl: "фильмы", rg: "m", gpl: "фильмов" },
     { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка", rg: "f" },
     { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", rg: "m" },
+    { theme: "Дом и вещи", w: "fleur", g: "f", pl: "fleurs", ru: "цветок", rupl: "цветы", rg: "m", gpl: "цветов" },
+    { theme: "Дом и вещи", w: "vase", g: "m", pl: "vases", ru: "ваза", rupl: "вазы", rg: "f", gpl: "ваз" },
+    { theme: "Дом и вещи", w: "bouteille", g: "f", pl: "bouteilles", ru: "бутылка", rupl: "бутылки", rg: "f", gpl: "бутылок" },
     { theme: "Дом и вещи", w: "boîte", g: "f", pl: "boîtes", ru: "коробка", rupl: "коробки", rg: "f", gpl: "коробок" },
     { theme: "Дом и вещи", w: "stylo", g: "m", pl: "stylos", ru: "ручка", rupl: "ручки", rg: "f", gpl: "ручек" },
 
@@ -217,6 +220,11 @@ window.COURSE = {
     { fr: "quels", ru: "какие? (м.р. мн.ч.)", theme: "Вопросы" },
     { fr: "quelles", ru: "какие? (ж.р. мн.ч.)", theme: "Вопросы" },
     { fr: "comment", ru: "как?", theme: "Вопросы" },
+    { fr: "quoi", ru: "что?", theme: "Вопросы" },
+    { fr: "Qu'est-ce que c'est ?", ru: "Что это?", theme: "Вопросы" },
+    { fr: "C'est quoi ça ?", ru: "Что это такое? (разг.)", theme: "Вопросы" },
+    { fr: "Est-ce que… ?", ru: "вопрос «да / нет»", theme: "Вопросы" },
+    { fr: "n'est-ce pas ?", ru: "не так ли?", theme: "Вопросы" },
     { fr: "dans", ru: "в (внутри)", theme: "Вопросы" },
     { fr: "Je m'appelle…", ru: "Меня зовут…", theme: "Анкета" },
     { fr: "Ça va ?", ru: "Как дела? (безлично)", theme: "Фразы" },
@@ -247,7 +255,7 @@ window.COURSE = {
   // падежи для фраз «где?»: [кого/чего, кем/чем, (на/в) чём]
   cases: {
     table: ["стола", "столом", "столе"], chaise: ["стула", "стулом", "стуле"], sac: ["сумки", "сумкой", "сумке"],
-    boîte: ["коробки", "коробкой", "коробке"], maison: ["дома", "домом", "доме"], voiture: ["машины", "машиной", "машине"],
+    boîte: ["коробки", "коробкой", "коробке"], vase: ["вазы", "вазой", "вазе"], bouteille: ["бутылки", "бутылкой", "бутылке"], maison: ["дома", "домом", "доме"], voiture: ["машины", "машиной", "машине"],
     banque: ["банка", "банком", "банке"], café: ["кафе", "кафе", "кафе"], restaurant: ["ресторана", "рестораном", "ресторане"],
     musée: ["музея", "музеем", "музее"], magasin: ["магазина", "магазином", "магазине"], hôtel: ["гостиницы", "гостиницей", "гостинице"],
     école: ["школы", "школой", "школе"], gare: ["вокзала", "вокзалом", "вокзале"]
@@ -643,7 +651,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "14 · 20.11";
+  const VERSION = "15 · 20.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -806,11 +814,14 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 
   const UNITS = ["", "un", "deux", "trois", "quatre", "cinq", "six", "sept", "huit", "neuf", "dix", "onze", "douze", "treize", "quatorze", "quinze", "seize", "dix-sept", "dix-huit", "dix-neuf"];
   const TENS = { 2: "vingt", 3: "trente", 4: "quarante", 5: "cinquante", 6: "soixante" };
-  function nword(n) { if (n < 20) return UNITS[n]; const t = TENS[Math.floor(n / 10)], u = n % 10; return u === 0 ? t : u === 1 ? t + " et un" : t + "-" + UNITS[u]; }
+  function nword(n) { if (n < 20) return UNITS[n]; if (n >= 70 && n < 80) return n === 71 ? "soixante et onze" : "soixante-" + UNITS[n - 60]; const t = TENS[Math.floor(n / 10)], u = n % 10; return u === 0 ? t : u === 1 ? t + " et un" : t + "-" + UNITS[u]; }
   const nAnswers = n => { const w = nword(n); return w.includes(" et ") ? [w, w.replace(/ /g, "-")] : [w]; };
   function nExplain(n) {
     if (n <= 16) return `${n} — отдельное слово.`;
     if (n < 20) return `${n} = dix + ${UNITS[n - 10]}.`;
+    if (n === 70) return `70 = 60 + 10 → soixante-dix.`;
+    if (n === 71) return `71 = 60 + 11 → soixante et onze («et», как в 21, 31…).`;
+    if (n > 71 && n < 80) return `${n} = 60 + ${n - 60} → soixante-${UNITS[n - 60]}.`;
     if (n % 10 === 0) return `Это десяток.`;
     if (n % 10 === 1) return `На конце 1 → «et un».`;
     return `Десяток + единицы через дефис: ${TENS[Math.floor(n / 10)]}-${UNITS[n % 10]}.`;
@@ -929,16 +940,16 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         return +v ? { fr: `Salut ! Je suis ${x[0]}.`, ru: `Привет! Я ${x[1]}.`, slots: [{ w: "Salut", k: "w" }, { w: "suis", k: "verb" }] }
                   : { fr: `Bonjour, je m'appelle ${x[0]}.`, alts: [`Bonjour, je suis ${x[0]}.`], ru: `Здравствуйте, меня зовут ${x[1]}.`, slots: [{ w: "Bonjour", k: "w" }] }; } },
     lieu: { verb: "être", make: () => {
-        if (Math.random() < .5) { const o = pick(Object.keys(FURN).filter(w => NOUN[w])), sub = pick(THINGS.filter(w => w !== o && NOUN[w])); return ["lieu", sub, String(PI[pick(FURN[o])]), o]; }
+        if (Math.random() < .5) return lieuThing();
         const [a, b, c] = shuffle(CITY.filter(w => NOUN[w])); const x = pick(CITY_P); return x === "entre" ? ["lieu", a, String(PI[x]), b, c] : ["lieu", a, String(PI[x]), b];
       },
       build: ([, sw, pi, ow, ow2]) => {
-        const sub = NOUN[sw], x = PREPS[+pi], o = NOUN[ow], o2 = ow2 && NOUN[ow2]; if (!sub || !x || !o || x.fr === "parmi") return null;
-        const S1 = cap(withDef(defOf(sub), sub.w)), rw = ruWhere(x, o, o2); if (!rw) return null;
+        const sub = NOUN[sw], x = PREPS[+pi], o = NOUN[ow], plS = ow2 === "pl" && sub && !sub.noPl, o2 = ow2 && !plS && NOUN[ow2]; if (!sub || !x || !o || x.fr === "parmi") return null;
+        const S1 = plS ? `Les ${sub.pl}` : cap(withDef(defOf(sub), sub.w)), V = plS ? "sont" : "est", sRu = plS ? sub.rupl : sub.ru, rw = ruWhere(x, o, o2); if (!rw) return null;
         if (x.fr === "entre") { if (!o2) return null;
-          return { fr: `${S1} est entre ${withDef(defOf(o), o.w)} et ${withDef(defOf(o2), o2.w)}.`, ru: `${cap(sub.ru)} ${rw}.`, slots: [{ w: "entre", k: "prep" }, { w: o.w, k: "noun" }] }; }
+          return { fr: `${S1} ${V} entre ${withDef(defOf(o), o.w)} et ${withDef(defOf(o2), o2.w)}.`, ru: `${cap(sRu)} ${rw}.`, subj: S1, verb: V, sRu, slots: [{ w: "entre", k: "prep" }, { w: o.w, k: "noun" }] }; }
         const ch = chunkOf(x, o);
-        return { fr: `${S1} est ${glue(ch, o.w)}.`, ru: `${cap(sub.ru)} ${rw}.`, chunk: ch, head: `${S1} est`, noun: o.w, prep: x,
+        return { fr: `${S1} ${V} ${glue(ch, o.w)}.`, ru: `${cap(sRu)} ${rw}.`, chunk: ch, head: `${S1} ${V}`, noun: o.w, prep: x, subj: S1, verb: V, sRu,
           slots: [{ w: sub.w, k: "noun" }, { w: o.w, k: "noun" }].concat(x.de ? [] : [{ w: x.fr, k: "prep" }]) }; } },
     travdans: { verb: "travailler", make: () => ["travdans", pick(PRON), pick(C.nouns.filter(n => n.rin)).w],
       build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.rin || !v) return null; const f = formOf(v, p), a = indefOf(n);
@@ -991,6 +1002,18 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     aller: { hint: "куда", make: () => [VT(), pick(C.places).name],
       q: ([t]) => tv(t, ["Où allez-vous ?"], ["Où vas-tu ?"]), qru: ([t]) => tv(t, "Куда вы едете?", "Куда ты едешь?"),
       a: ([, c]) => PLACE[c] ? [`Je vais ${PREP[PLACE[c].kind]} ${c}.`] : [], aru: ([, c]) => `Я еду ${PLACE[c] ? PLACE[c].ru : c}.` },
+    quoi: { hint: "что это", noTv: true, make: () => ["vous", pick(["chaise", "table", "livre", "stylo", "fleur", "vase", "bouteille", "sac", "boîte", "pomme"].filter(w => NOUN[w]))],
+      q: () => ["Qu'est-ce que c'est ?", "C'est quoi ?", "C'est quoi ça ?"], qru: () => "Что это?",
+      a: ([, w]) => NOUN[w] ? [`C'est ${indefOf(NOUN[w])} ${w}.`] : [], aru: ([, w]) => `Это ${NOUN[w] ? NOUN[w].ru : w}.` },
+    estce: { hint: "да или нет", noTv: true, make: () => ["vous", pick(["chaise", "table", "livre", "stylo", "fleur", "vase", "bouteille", "voiture", "maison"].filter(w => NOUN[w]))],
+      q: ([, w]) => { const n = NOUN[w]; if (!n) return []; const a = indefOf(n); return [`Est-ce que c'est ${a} ${w} ?`, `Est-ce ${a} ${w} ?`, `C'est ${a} ${w}, n'est-ce pas ?`]; },
+      qru: ([, w]) => `Это ${NOUN[w] ? NOUN[w].ru : w}?`,
+      a: ([, w]) => NOUN[w] ? [`Oui, c'est ${indefOf(NOUN[w])} ${w}.`] : [], aru: ([, w]) => `Да, это ${NOUN[w] ? NOUN[w].ru : w}.` },
+    ouest: { hint: "где", noTv: true, make: () => ["vous", ...lieuThing().slice(1)],
+      q: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); if (!s || !s.subj) return []; const low = s.subj.charAt(0).toLowerCase() + s.subj.slice(1);
+        return [`Où ${s.verb} ${low} ?`, `${s.subj} ${s.verb} où ?`]; },
+      qru: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); return s ? `Где ${s.sRu}?` : ""; },
+      a: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); return s ? [s.fr] : []; }, aru: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); return s ? s.ru : ""; } },
     cava: { hint: "дела", make: () => [VT()],
       q: ([t]) => tv(t, ["Comment allez-vous ?", "Comment ça va ?", "Ça va ?"], ["Comment vas-tu ?", "Comment ça va ?", "Ça va ?"]), qru: ([t]) => tv(t, "Как у вас дела?", "Как у тебя дела?"),
       a: () => ["Je vais bien.", "Ça va bien.", "Ça va."], aru: () => "У меня всё хорошо." }
@@ -1400,9 +1423,16 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   }
   const trOf = x => `[${x.tr}${x.de ? " дё" : ""}] /${x.ipa}${x.de ? " də" : ""}/`;
   // где можно что-то поставить
-  const THINGS = ["livre", "stylo", "téléphone", "ordinateur", "pomme", "gâteau", "boîte", "sac"];
+  const THINGS = ["livre", "stylo", "téléphone", "ordinateur", "pomme", "gâteau", "boîte", "sac", "fleur", "vase", "bouteille"];
   const FURN = { table: ["sur", "sous", "devant", "derrière", "à côté", "à gauche", "à droite", "au-dessus"], chaise: ["sur", "sous", "devant", "derrière", "à côté", "à gauche", "à droite"],
-    sac: ["dans", "sur", "à côté"], boîte: ["dans", "sur", "sous", "à côté", "derrière", "devant"] };
+    sac: ["dans", "sur", "à côté"], boîte: ["dans", "sur", "sous", "à côté", "derrière", "devant"], vase: ["à côté", "devant", "derrière"], bouteille: ["à côté", "devant", "derrière", "à gauche", "à droite"] };
+  // предметы на столе / на стуле, иногда во мн.ч. (Les fleurs sont dans le vase.)
+  function lieuThing() {
+    if (NOUN.fleur && NOUN.vase && Math.random() < .15) return ["lieu", "fleur", String(PI["dans"]), "vase", "pl"];
+    const o = pick(Object.keys(FURN).filter(w => NOUN[w])), sub = pick(THINGS.filter(w => w !== o && NOUN[w])), n = NOUN[sub];
+    const pl = !n.noPl && Math.random() < .3;
+    return ["lieu", sub, String(PI[pick(FURN[o])]), o].concat(pl ? ["pl"] : []);
+  }
   const CITY = ["banque", "café", "restaurant", "musée", "magasin", "hôtel", "école", "gare"];
   const CITY_P = ["à côté", "en face", "derrière", "devant", "à gauche", "à droite", "entre"];
 
@@ -1741,10 +1771,15 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       const parts = String(spec).split("~"), Q = QA[parts[0]]; if (!Q) return null;
       const a = parts.slice(1), qs = Q.q(a), as = Q.a(a), qru = Q.qru(a), aru = Q.aru(a);
       if (!qs.length || !as.length) return null;
-      const m = pickMode(["qa", "qq", "qt", "qd"], modes); if (!m) return null;
-      const t = a[0], tvTxt = t === "vous" ? "на «вы»" : "на «ты»";
+      const m = pickMode(["qa", "qq", "qt", "qd"].concat(qs.length > 1 ? ["qalt"] : []), modes); if (!m) return null;
+      const t = a[0], tvTxt = Q.noTv ? "" : t === "vous" ? "на «вы»" : "на «ты»";
+      if (m === "qalt") {
+        const right = pick(qs.slice(1)), wrong = shuffle(Object.keys(QA).filter(k => k !== parts[0])).map(k => { const A = QA[k].make(); return QA[k].q(A)[0]; }).filter(x => x && !qs.includes(x)).slice(0, 2);
+        return { type: "choice", kind: "Как ещё спросить?", ask: "Выбери вопрос с тем же смыслом", prompt: qs[0], ru: qru, options: [right, ...wrong], answer: right, say: right, sayRu: qru,
+          explain: `Все эти вопросы значат одно и то же: ${qs.map(esc).join(" · ")}.` };
+      }
       if (m === "qa") return { type: "write", kind: "Ответь на вопрос", ask: "Ответь по-французски", prompt: qs[0], ru: `Ответ: ${aru}`, fields: [{ answers: as }], say: as[0], sayRu: aru, explain: "" };
-      if (m === "qq") return { type: "write", kind: "Задай вопрос", ask: `Задай вопрос ${tvTxt}`, prompt: as[0], ru: `Тема: ${Q.hint}`, fields: [{ answers: qs }], say: qs[0], sayRu: qru, explain: "" };
+      if (m === "qq") return { type: "write", kind: "Задай вопрос", ask: `Задай вопрос ${tvTxt}`.trim(), prompt: as[0], ru: `Тема: ${Q.hint}`, fields: [{ answers: qs }], say: qs[0], sayRu: qru, explain: "" };
       if (m === "qt") return { type: "write", kind: "Переведи вопрос", ask: "Напиши по-французски", prompt: qru, fields: [{ answers: qs }], say: qs[0], sayRu: qru, explain: "" };
       return { type: "write", kind: "Диалог целиком", ask: "Переведи диалог на французский", prompt: "", fields: [{ label: "— " + qru, answers: qs }, { label: "— " + aru, answers: as }],
         say: `${qs[0]} ${as[0]}`, sayRu: `${qru} — ${aru}`, explain: "" };
@@ -1801,7 +1836,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const vInfs = () => vList().map(v => v.inf);
   const verbKeys = () => vList().flatMap(v => prons(v).map(p => `vf|${v.inf}|${p}`));
   const sentKeys = () => vList().flatMap(v => v.examples.map((_, i) => `vs|${v.inf}|${i}`));
-  const numRange = () => ({ "1-20": [1, 20], "21-69": [21, NMAX], all: [1, NMAX] })[S.prefs.nr || "all"];
+  const numRange = () => ({ "1-20": [1, 20], "21-69": [21, 59], "60-79": [60, NMAX], all: [1, NMAX] })[S.prefs.nr || "all"];
   const numKeys = () => { const [a, b] = numRange(); const k = []; for (let n = a; n <= b; n++) k.push("n|" + n); return k; };
   const nounKeys = () => artNouns().map(n => "a|" + n.w);
   const vTheme = () => S.prefs.vt || "";
@@ -1877,6 +1912,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     { id: "write", title: "Пишу сама", fr: "j'écris", a: "var(--sky)", b: "var(--violet)", seed: 83,
       count: { prefixes: ["x|", "q|", "k|"], goal: 60, unit: "заданий" },
       drills: [
+        { id: "s9", t: "Как ещё спросить?", d: "Est-ce que… = Est-ce… = …, n'est-ce pas ?", lvl: 1, icon: "cards", keys: () => qaKeys(), modes: ["qalt"] },
         { id: "s1", t: "Quel · quelle · quels · quelles", d: "Какое слово в вопросе", lvl: 1, icon: "cards", keys: () => kKeys(), modes: ["kc"] },
         { id: "s2", t: "Перевод · легко", d: "С русского, слова-подсказки уже есть", lvl: 1, icon: "globe", keys: () => xKeys(["cest", "poss", "etre", "age", "avoir", "ou", "greet", "de", "famjob"], 50), modes: ["x1"] },
         { id: "s3", t: "Ответь на вопрос", d: "Вопрос по-французски → твой ответ", lvl: 2, icon: "pen", keys: () => qaKeys(), modes: ["qa"] },
@@ -1938,6 +1974,10 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         <div class="scheme">${[20, 30, 40, 50, 60].map(n => `<span class="w">${n} ${nword(n)}</span>`).join("")}</div>
         <div class="scheme"><span class="w">vingt</span><span class="arr">+</span><span class="w">deux</span><span class="arr">→</span><span class="w dark">vingt-deux</span></div>
         <div class="scheme"><span class="w">vingt</span><span class="arr">+</span><span class="w">un</span><span class="arr">→</span><span class="w dark">vingt et un</span></div>
+        <div class="rule-h"><span class="badge">70–79</span>60 + 10…19</div>
+        <div class="scheme"><span class="w">soixante</span><span class="arr">+</span><span class="w">dix</span><span class="arr">→</span><span class="w dark">soixante-dix</span><span class="w">70</span></div>
+        <div class="scheme"><span class="w">soixante</span><span class="arr">+</span><span class="w">onze</span><span class="arr">→</span><span class="w dark">soixante et onze</span><span class="w">71</span></div>
+        <div class="scheme"><span class="w">soixante</span><span class="arr">+</span><span class="w">dix-neuf</span><span class="arr">→</span><span class="w dark">soixante-dix-neuf</span><span class="w">79</span></div>
 </div>`;
     }
     if (id === "articles") {
@@ -1973,7 +2013,16 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
           <tr><th>какой?</th><td>quel</td><td>quelle</td></tr><tr><th>какие?</th><td>quels</td><td>quelles</td></tr></table>
         <div class="scheme"><span class="w">Quel âge avez-vous ?</span><span class="arr">→</span><span class="w">J'ai 29 ans.</span></div>
         <div class="scheme"><span class="w">Quelle est votre adresse ?</span><span class="arr">→</span><span class="w">Mon adresse est…</span></div>
-        <div class="scheme"><span class="w">Où habitez-vous ?</span><span class="arr">→</span><span class="w">J'habite en France.</span></div></div>`;
+        <div class="scheme"><span class="w">Où habitez-vous ?</span><span class="arr">→</span><span class="w">J'habite en France.</span></div>
+        <div class="rule-sep"></div>
+        <div class="rule-h"><span class="badge">что это?</span></div>
+        <div class="scheme"><span class="w">Qu'est-ce que c'est ?</span><span class="arr">=</span><span class="w">C'est quoi ?</span><span class="arr">=</span><span class="w">C'est quoi ça ?</span></div>
+        <div class="scheme"><span class="arr">→</span><span class="w">C'est une chaise.</span><span class="w">Ce sont des chaises.</span></div>
+        <div class="rule-h"><span class="badge">да / нет</span>три способа спросить</div>
+        <div class="scheme"><span class="w">Est-ce que c'est une chaise ?</span><span class="w">Est-ce une chaise ?</span><span class="w">C'est une chaise, n'est-ce pas ?</span></div>
+        <div class="rule-h"><span class="badge">где?</span></div>
+        <div class="scheme"><span class="w">Où est la chaise ?</span><span class="arr">=</span><span class="w">La chaise est où ?</span></div>
+        <div class="scheme"><span class="w">Où sont les fleurs ?</span><span class="arr">→</span><span class="w">Les fleurs sont dans le vase.</span></div></div>`;
     }
     if (id === "vocab") {
       return `<div class="rule">
@@ -2045,7 +2094,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         <div class="bar-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h1 class="fr">${s.fr}</h1></div></div>
       <div class="sheet"><h2>${s.title}</h2><div class="sub">Освоено ${m.ok} из ${m.total}${m.unit ? " " + m.unit : ""}</div><div class="meter"><i style="width:${m.pc}%"></i></div>`;
     if (id === "verbs") h += chips("vg", [[0, "Все"], [1, "I группа"], [2, "II"], [3, "III"]]);
-    if (id === "numbers") h += chips("nr", [["all", `1–${NMAX}`], ["1-20", "1–20"], ["21-69", `21–${NMAX}`]]);
+    if (id === "numbers") h += chips("nr", [["all", `1–${NMAX}`], ["1-20", "1–20"], ["21-69", "21–59"], ["60-79", `60–${NMAX}`]]);
     if (id === "vocab") h += chips("vt", [["", "Все темы"], ...C.themes.map(t => [t, t])]);
     h += ruleCard(id);
     if (id === "verbs") h += `<h3 class="h-sm">Мои глаголы</h3>` + (vList().map(v => verbDrop(v)).join("") || `<p class="muted">Пока пусто — пришли глаголы этой группы.</p>`);
