@@ -346,7 +346,7 @@ svg.art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .daily p { margin: 4px 0 0; font-size: 14px; color: var(--muted); }
 .row-h { display: flex; align-items: baseline; justify-content: space-between; margin: 26px 0 12px; }
 .row-h h2 { font-size: 26px; }
-.bento { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 118px; gap: 12px; }
+.bento { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 118px; gap: 12px; grid-auto-flow: dense; }
 .tile { position: relative; overflow: hidden; border: 0; border-radius: 22px; padding: 0; text-align: left; background: var(--a); }
 .tile.tall { grid-row: span 2; }
 .tile.wide { grid-column: span 2; }
@@ -505,6 +505,30 @@ textarea.field { min-height: 110px; resize: vertical; }
 .rv-q { font: 600 16px "Fredoka", sans-serif; white-space: pre-line; }
 .rv .ans { display: flex; align-items: center; gap: 8px; }
 .rv .say { width: 28px; height: 28px; }
+.dset { display: grid; gap: 14px; margin-top: 16px; }
+.dset .lbl3 { font-weight: 900; font-size: 15px; margin-bottom: 6px; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; background: #f3ece2; border-radius: 16px; padding: 4px; }
+.seg button { border: 0; background: none; border-radius: 12px; padding: 9px 6px; font-weight: 800; font-size: 14px; line-height: 1.2; }
+.seg button small { display: block; font-weight: 600; font-size: 11.5px; color: var(--muted); }
+.seg button.on { background: var(--card); box-shadow: 0 2px 0 var(--line); }
+.tips { margin: 0; padding-left: 18px; display: grid; gap: 4px; font-size: 14px; }
+.dplay { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.dplay .play { padding: 14px 18px; font-size: 15px; }
+.dplay .play.slow { padding: 14px 16px; }
+.dnum { font: 700 44px "Fredoka", sans-serif; color: var(--violet); line-height: 1; margin-bottom: 6px; }
+.paper { border: 2px dashed var(--line); border-radius: 18px; padding: 18px; text-align: center; color: var(--muted); font-weight: 700; background: repeating-linear-gradient(to bottom, transparent 0 31px, rgba(23,23,28,.07) 31px 32px); }
+.dans { display: grid; gap: 6px; }
+.dans .big { font: 600 22px/1.3 "Fredoka", sans-serif; }
+.watch { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; }
+.watch .w { font-size: 14px; padding: 2px 8px; }
+.watch .lab { color: var(--muted); font-weight: 800; }
+.sheet-row { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1.5px solid var(--line); }
+.sheet-row:last-child { border-bottom: 0; }
+.sheet-row .n { font: 700 18px "Fredoka", sans-serif; color: var(--violet); }
+.mark { display: flex; gap: 6px; margin-top: 6px; }
+.mark button { border: 1.5px solid var(--line); background: var(--card); border-radius: 99px; padding: 4px 12px; font-weight: 800; font-size: 13px; }
+.mark button.on.ok { background: var(--lime); border-color: var(--green); }
+.mark button.on.bad { background: #ffb4a6; border-color: var(--coral); }
 .ask-btn { justify-self: start; margin-top: 4px; border: 1.5px solid var(--violet); color: var(--violet); background: #f3efff; border-radius: 99px; padding: 6px 14px; font-weight: 800; font-size: 13.5px; }
 .askbox { display: grid; gap: 8px; margin-top: 6px; }
 .msgs { display: grid; gap: 6px; }
@@ -619,7 +643,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "13 · 07.11";
+  const VERSION = "14 · 20.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -1088,6 +1112,202 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     $("#bk").onclick = home; $("#ag").onclick = openExam;
     enterLock = Date.now() + 400;
     setupAsk(res, corr, reading);
+  }
+
+  // ================= ДИКТАНТ =================
+  const DDEF = { where: "app", what: "mix", dir: "ear", check: "each", n: 10 };
+  const dset = () => Object.assign({}, DDEF, S.prefs.dict || {});
+  // фраза по частям: по 2–3 слова, как диктует учитель
+  function chunksOf(fr) {
+    const w = fr.split(" "), out = []; let cur = [];
+    w.forEach((x, i) => { cur.push(x); const end = /[,.!?]$/.test(x) || i === w.length - 1; if (end || cur.length >= 3 || (cur.length >= 2 && w.length - i > 2 && Math.random() < .4)) { out.push(cur.join(" ")); cur = []; } });
+    if (cur.length) out.push(cur.join(" "));
+    return out;
+  }
+  let seqTimer = null;
+  function speakSeq(parts, rate) {
+    if (!hasTTS) return;
+    speechSynthesis.cancel(); clearTimeout(seqTimer);
+    let i = 0;
+    const go = () => { if (i >= parts.length) return; const u = new SpeechSynthesisUtterance(parts[i++]); u.lang = "fr-FR"; if (frVoice) u.voice = frVoice; u.rate = rate; u.onend = () => { seqTimer = setTimeout(go, 1100); }; speechSynthesis.speak(u); };
+    go();
+  }
+  // на что смотреть при проверке
+  function watchOut(fr) {
+    const words = fr.replace(/[.,!?]/g, " ").split(/\s+/).filter(Boolean);
+    const acc = uniq(words.filter(w => /[éèêëàâîïôûùçœ]/i.test(w)));
+    const apo = uniq(words.filter(w => w.includes("'")));
+    const silent = uniq(words.filter(w => w.length > 3 && /(ent|es|s|x|t|d)$/i.test(w) && !/[éèê]s$/i.test(w) && !["dans", "sous", "mois", "fils", "pays"].includes(w.toLowerCase()) || /^(sont|ont|vont|est|et)$/i.test(w)));
+    let h = "";
+    if (acc.length) h += `<div class="watch"><span class="lab">акценты:</span>${acc.map(w => `<span class="w">${esc(w)}</span>`).join("")}</div>`;
+    if (apo.length) h += `<div class="watch"><span class="lab">апостроф:</span>${apo.map(w => `<span class="w">${esc(w)}</span>`).join("")}</div>`;
+    if (silent.length) h += `<div class="watch"><span class="lab">не читается конец:</span>${silent.map(w => `<span class="w">${esc(w)}</span>`).join("")}</div>`;
+    return h;
+  }
+  function dictItem(kind, dir) {
+    if (kind === "numbers") {
+      const n = rnd(1, NMAX), w = nword(n);
+      return { key: "n|" + n, fr: w, say: String(n), ru: String(n), answers: nAnswers(n), label: "Число", ruPrompt: `${n}` };
+    }
+    if (kind === "words") {
+      const v = pick(VOCAB.filter(x => !/[?!.…]/.test(x.fr)));
+      return { key: "w|" + v.fr, fr: v.fr, say: v.fr, ru: v.ru, answers: v.noun ? [v.fr, v.noun.w] : [v.fr], label: v.noun ? "Слово с артиклем" : "Слово", ruPrompt: v.ru };
+    }
+    const k = pick(phraseKeys(tplFor(), 6)), parts = k.slice(2).split("~"), T = TPL[parts[0]], x = T && T.build(parts);
+    if (!x) return dictItem("words", dir);
+    return { key: k, fr: x.fr, say: x.fr, ru: x.ru, answers: [x.fr, ...(x.alts || [])], label: "Фраза", ruPrompt: x.ru };
+  }
+  function seg(key, opts) {
+    const cur = dset()[key];
+    return `<div class="seg">${opts.map(([v, t, sm]) => `<button data-dk="${key}" data-dv="${v}" class="${cur === v ? "on" : ""}">${t}${sm ? `<small>${sm}</small>` : ""}</button>`).join("")}</div>`;
+  }
+  function dictSetup() {
+    const s = SEC.dict, m = mastery(s);
+    $app.innerHTML = `<div class="hero" style="--a:${s.a}">${art(s.b, s.seed + 7, 2, 400, 170)}
+        <div class="bar-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h1 class="fr">${s.fr}</h1></div></div>
+      <div class="sheet"><h2>Диктант</h2><div class="sub">Верно записано: ${S.dictOk || 0}</div><div class="meter"><i style="width:${m.pc}%"></i></div>
+        <div class="dset">
+          <div><div class="lbl3">Где пишу</div>${seg("where", [["app", "В приложении", "проверка сама"], ["paper", "В блокноте", "сверяю сама"]])}</div>
+          <div><div class="lbl3">Что пишу</div>${seg("what", [["words", "Слова"], ["numbers", "Числа"], ["phrases", "Фразы"], ["mix", "Всё"]])}</div>
+          <div><div class="lbl3">Откуда</div>${seg("dir", [["ear", "На слух", "французский"], ["ru", "С русского", "перевожу"]])}</div>
+          <div><div class="lbl3">Когда проверять</div>${seg("check", [["each", "После каждого"], ["end", "В конце", "как в школе"]])}</div>
+          <div><div class="lbl3">Сколько</div>${seg("n", [[5, "5"], [10, "10"], [15, "15"]])}</div>
+        </div>
+        <div class="rule" style="margin-top:18px"><div class="rule-h"><span class="badge">как писать</span>методика диктанта</div>
+          <ol class="tips">
+            <li>Сначала послушай <b>целиком</b> — пойми смысл, не пиши.</li>
+            <li>Потом <b>по частям</b>: пишешь, пока идёт пауза.</li>
+            <li>В конце послушай <b>ещё раз целиком</b> и проверь себя.</li>
+            <li>Смотри на <b>род и число</b>: un/une, mon/ma, -s во мн.ч.</li>
+            <li>Не забывай <b>акценты</b> (é, è, à, ç) и <b>апостроф</b> (j', l', d').</li>
+            <li>Немые окончания пишутся, но не читаются: <b>amis, travaillent, vingt</b>.</li>
+          </ol></div>
+      </div>`;
+    $("#bk").onclick = home;
+    $app.querySelectorAll("[data-dk]").forEach(b => b.onclick = () => {
+      const v = b.dataset.dv; S.prefs.dict = Object.assign(dset(), { [b.dataset.dk]: isNaN(+v) ? v : +v }); save(); dictSetup();
+    });
+    showDock("", `<button class="btn" id="dgo">Начать диктант · ${dset().n}</button>`);
+    $("#dgo").onclick = dictStart;
+    window.scrollTo(0, 0);
+  }
+  let D = null;
+  function dictStart() {
+    const st = dset(), kinds = st.what === "mix" ? ["words", "numbers", "phrases", "phrases"] : [st.what];
+    const items = [], seen = new Set();
+    for (let t = 0; items.length < st.n && t < 200; t++) { const it = dictItem(pick(kinds), st.dir); if (!seen.has(it.fr)) { seen.add(it.fr); items.push(it); } }
+    D = { st, items, i: 0, res: [] };
+    dictShow();
+  }
+  function dictRec(it, ok, given) {
+    const k = it.key;
+    if (k) { S.items[k] = S.items[k] || { ok: 0, bad: 0 }; S.items[k][ok ? "ok" : "bad"]++; if (!ok) srsWrong(k); }
+    if (ok) { touchDay(); S.xp += 10; S.dictOk = (S.dictOk || 0) + 1; }
+    save();
+  }
+  function dictShow() {
+    const { st, items, i } = D, it = items[i];
+    if (!it) return dictEnd();
+    const ear = st.dir === "ear", chunks = chunksOf(it.say === it.fr ? it.fr : it.say);
+    let h = `<div class="ex-top"><button class="round" id="x" aria-label="Выйти">${ICON.close}</button>
+        <div class="prog"><i style="width:${i / items.length * 100}%"></i></div><span class="count">${i + 1}/${items.length}</span></div>
+      <span class="kind" style="--a:var(--peach)">${esc(it.label)} · ${ear ? "на слух" : "с русского"}</span>`;
+    if (ear) {
+      h += `<div class="dnum">№ ${i + 1}</div><div class="dplay">
+        <button class="play" id="pAll">${ICON.speak}Целиком</button>
+        ${chunks.length > 1 ? `<button class="play slow" id="pParts">По частям</button>` : ""}
+        <button class="play slow" id="pSlow">Медленно</button></div>`;
+      if (it.label === "Число") h += `<p class="muted" style="margin:0 0 12px">Запиши число <b>буквами</b>.</p>`;
+      else h += `<p class="muted" style="margin:0 0 12px">Слов: ${it.fr.split(" ").length}</p>`;
+    } else {
+      h += `<div class="qwrap"><div class="q ru">${esc(it.ruPrompt)}</div>${it.label === "Число" ? `<div class="q-ru">Напиши буквами по-французски</div>` : `<div class="q-ru">Напиши по-французски</div>`}</div>`;
+    }
+    h += st.where === "app"
+      ? `<input class="field" id="din" autocomplete="off" autocapitalize="sentences" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="По-французски">
+         <div class="tools">${["é", "è", "ê", "à", "ç", "â", "ô", "œ", "'", "-"].map(c => `<button data-c="${c}" type="button">${c}</button>`).join("")}</div>`
+      : `<div class="paper">Запиши под номером ${i + 1} в блокнот</div>`;
+    h += `<div id="dres"></div>`;
+    $app.innerHTML = h;
+    $("#x").onclick = () => { if (hasTTS) speechSynthesis.cancel(); clearTimeout(seqTimer); dictSetup(); };
+    if (ear) {
+      $("#pAll").onclick = () => speak(it.say);
+      $("#pSlow").onclick = () => speak(it.say, true);
+      if ($("#pParts")) $("#pParts").onclick = () => speakSeq(chunks, .7);
+      setTimeout(() => speak(it.say), 300);
+    }
+    const inp = $("#din");
+    if (inp) {
+      $app.querySelectorAll("[data-c]").forEach(b => b.onclick = () => { const p = inp.selectionStart ?? inp.value.length; inp.value = inp.value.slice(0, p) + b.dataset.c + inp.value.slice(inp.selectionEnd ?? p); inp.focus(); inp.setSelectionRange(p + 1, p + 1); inp.oninput(); });
+      if (!matchMedia("(pointer: coarse)").matches) inp.focus();
+    }
+    const end = st.check === "end";
+    const label = st.where === "paper" ? (end ? (i + 1 < items.length ? "Записала, дальше" : "Записала, к проверке") : "Записала, показать ответ") : (end ? "Дальше" : "Проверить");
+    showDock("", `<button class="btn" id="chk" ${st.where === "app" ? "disabled" : ""}>${label}<span class="kbd">Enter</span></button>`);
+    if (inp) inp.oninput = () => { $("#chk").disabled = !inp.value.trim(); };
+    $("#chk").onclick = () => {
+      const given = inp ? inp.value : null;
+      if (inp && !given.trim()) return;
+      if (end) { if (given != null) D.res[i] = { given, ok: dictOk(it, given) }; D.i++; enterLock = Date.now() + 300; return dictShow(); }
+      dictReveal(it, given);
+    };
+    window.scrollTo(0, 0);
+  }
+  const dictOk = (it, v) => it.answers.some(a => norm(a) === norm(v)) ? 2 : it.answers.some(a => bare(a) === bare(v)) ? 1 : 0;
+  function answerBlock(it, given) {
+    let h = `<div class="dans">`;
+    if (given != null) {
+      const r = dictOk(it, given), b = closest(it.answers, given);
+      h += r ? `<div class="fb-why">${r === 1 ? "Почти: проверь значки над буквами." : ""}</div>` :
+        `<div class="diff"><div><span class="lbl2">Ты:</span><span class="fr">${diffMark(given, b, "bad-w")}</span></div><div><span class="lbl2">Верно:</span><span class="fr">${diffMark(b, given, "miss-w")}</span></div></div>`;
+    }
+    h += `<div class="fb-ans">${sayBtn(it.say)}<div><div class="big">${esc(it.answers[0])}</div><div class="ru">${esc(it.label === "Число" ? it.say : it.ru)}</div></div></div>${watchOut(it.answers[0])}</div>`;
+    return h;
+  }
+  function dictReveal(it, given) {
+    enterLock = Date.now() + 400;
+    if (D.st.where === "app") {
+      const r = dictOk(it, given), ok = r > 0;
+      dictRec(it, ok, given);
+      $("#din").disabled = true;
+      showDock("fb " + (ok ? "ok" : "bad"), `<div class="fb-h">${ok ? pick(["Верно!", "Bravo !", "Très bien !"]) : "Не совсем"}</div>${answerBlock(it, given)}<button class="btn" id="nx">Дальше<span class="kbd">Enter</span></button>`);
+      D.res[D.i] = { given, ok };
+      $("#nx").onclick = () => { D.i++; dictShow(); };
+      speak(it.say);
+      return;
+    }
+    // блокнот: сверяю сама
+    showDock("fb", `<div class="fb-h">Сверь с блокнотом</div>${answerBlock(it, null)}
+      <div class="two"><button class="btn ghost" id="dbad">Была ошибка</button><button class="btn" id="dok">Всё верно</button></div>`);
+    const fin = ok => { dictRec(it, ok, null); D.res[D.i] = { ok }; D.i++; dictShow(); };
+    $("#dok").onclick = () => fin(true); $("#dbad").onclick = () => fin(false);
+    speak(it.say);
+  }
+  function dictEnd() {
+    const { st, items, res } = D, paperEnd = st.where === "paper" && st.check === "end";
+    if (st.check === "end" && st.where === "app") res.forEach((r, i) => dictRec(items[i], r.ok > 0, r.given));
+    const okN = () => res.filter(r => r && (r.ok === true || r.ok > 0)).length;
+    let h = `<div class="ex-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h2 style="font-size:24px">${paperEnd ? "Проверочный лист" : "Диктант готов"}</h2></div>`;
+    if (paperEnd) h += `<p class="muted" style="margin:0 0 10px">Сверь каждую строку с блокнотом и отметь: верно или с ошибкой.</p>`;
+    h += `<div class="card" id="score2"></div><div class="card" style="margin-top:12px">` + items.map((it, i) => {
+      const r = res[i] || {};
+      return `<div class="sheet-row"><span class="n">${i + 1}</span><div>${answerBlock(it, st.where === "app" ? r.given : null)}
+        ${paperEnd ? `<div class="mark"><button class="ok" data-m="${i}" data-v="1">верно</button><button class="bad" data-m="${i}" data-v="0">ошибка</button></div>` :
+          `<div class="mark"><span class="w" style="font-size:13px">${r.ok === true || r.ok > 0 ? "верно" : "ошибка"}</span></div>`}</div></div>`;
+    }).join("") + `</div>`;
+    $app.innerHTML = h;
+    const upd = () => { const done = res.filter(Boolean).length; $("#score2").innerHTML = `<h3>${okN()} из ${items.length} верно</h3><p class="muted" style="margin:0">${paperEnd && done < items.length ? `Отмечено ${done} из ${items.length}` : okN() === items.length ? "Parfait ! Ни одной ошибки." : "Ошибки попадут в «Повторение»."}</p>`; };
+    upd();
+    $app.querySelectorAll("[data-m]").forEach(b => b.onclick = () => {
+      const i = +b.dataset.m, v = b.dataset.v === "1";
+      if (res[i] && res[i].ok === v) return;
+      res[i] = { ok: v };
+      $app.querySelectorAll(`[data-m="${i}"]`).forEach(x => x.classList.toggle("on", x === b));
+      dictRec(items[i], v, null); upd();
+    });
+    $("#bk").onclick = dictSetup;
+    showDock("", `<div class="two"><button class="btn ghost" id="dbk">Настройки</button><button class="btn" id="dag">Новый диктант</button></div>`);
+    $("#dbk").onclick = dictSetup; $("#dag").onclick = dictStart;
+    window.scrollTo(0, 0);
   }
 
   // ---------- вопросы преподавателю (Claude) во время разбора ----------
@@ -1653,6 +1873,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         { id: "p5", t: "Он или она?", d: "Выбери слово нужного рода", lvl: 1, icon: "cards", keys: () => phraseKeys(GENDER_TPL, 60), modes: ["gch"] },
         { id: "p4", t: "Диктант фраз", d: "Послушай и запиши целиком", lvl: 3, icon: "ear", keys: () => phraseKeys(tplFor(), 60), modes: ["dict"] }
       ] },
+    { id: "dict", title: "Диктант", fr: "la dictée", a: "var(--peach)", b: "var(--violet)", seed: 101, custom: true, wide: true, drills: [] },
     { id: "write", title: "Пишу сама", fr: "j'écris", a: "var(--sky)", b: "var(--violet)", seed: 83,
       count: { prefixes: ["x|", "q|", "k|"], goal: 60, unit: "заданий" },
       drills: [
@@ -1669,6 +1890,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const SEC = Object.fromEntries(SECTIONS.map(s => [s.id, s]));
   const LVL = { 1: "Легко", 2: "Средне", 3: "Сложно" };
   function mastery(s) {
+    if (s.custom) { const ok = Math.min(S.dictOk || 0, 100); return { ok, total: 100, pc: ok, unit: "верных записей" }; }
     if (s.count) {
       const ok = Object.keys(S.items).filter(k => s.count.prefixes.some(p => k.startsWith(p)) && S.items[k].ok > 0 && !S.srs[k]).length, g = s.count.goal;
       return { ok: Math.min(ok, g), total: g, pc: Math.min(100, Math.round(ok / g * 100)), unit: s.count.unit };
@@ -1793,7 +2015,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     const shape = ["tall", "", "", "", ""];
     SECTIONS.forEach((s, i) => {
       const m = mastery(s);
-      h += `<button class="tile ${shape[i]}" data-sec="${s.id}" style="--a:${s.a}">${art(s.b, s.seed, i % 3, 200, shape[i] === "tall" ? 250 : 120)}
+      h += `<button class="tile ${s.wide ? "wide" : shape[i]}" data-sec="${s.id}" style="--a:${s.a}">${art(s.b, s.seed, i % 3, s.wide ? 400 : 200, shape[i] === "tall" ? 250 : 120)}
         <span class="fr-t">${s.fr}</span><span class="pcb">${m.pc}%</span><span class="lbl"><b class="${(s.short || s.title).length > 11 ? "long" : ""}">${s.short || s.title}</b></span></button>`;
     });
     h += `<button class="tile" id="bigtest" style="--a:var(--ink)">${art("var(--lime)", 77, 1, 200, 120)}<span class="fr-t">le test</span><span class="pcb">${SIZE} заданий</span><span class="lbl"><b style="color:#fff">Общий тест</b></span></button>`;
@@ -1817,6 +2039,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   }
 
   function section(id) {
+    if (SEC[id].custom) return dictSetup();
     const s = SEC[id], m = mastery(s);
     let h = `<div class="hero" style="--a:${s.a}">${art(s.b, s.seed + 7, 2, 400, 170)}
         <div class="bar-top"><button class="round" id="bk" aria-label="Назад">${ICON.back}</button><h1 class="fr">${s.fr}</h1></div></div>
