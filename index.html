@@ -38,6 +38,26 @@ window.COURSE = {
         { fr: "Il habite en France.", ru: "Он живёт во Франции.", p: "il" },
         { fr: "Nous habitons au Canada.", ru: "Мы живём в Канаде.", p: "nous" }
       ] },
+    { inf: "parler", group: 1, ru: "говорить, разговаривать",
+      forms: { je: "parle", tu: "parles", il: "parle", nous: "parlons", vous: "parlez", ils: "parlent" },
+      ruForms: { je: "я говорю", tu: "ты говоришь", il: "он говорит", elle: "она говорит", nous: "мы говорим", vous: "вы говорите", ils: "они говорят", elles: "они говорят" },
+      examples: [
+        { fr: "Je parle français et anglais.", ru: "Я говорю по-французски и по-английски.", p: "je" },
+        { fr: "Quelles langues parlez-vous ?", ru: "На каких языках вы говорите?", v: "parlez" }
+      ] },
+    { inf: "préférer", group: 1, ru: "предпочитать", note: "é → è: je préfère, но nous préférons",
+      forms: { je: "préfère", tu: "préfères", il: "préfère", nous: "préférons", vous: "préférez", ils: "préfèrent" },
+      ruForms: { je: "я предпочитаю", tu: "ты предпочитаешь", il: "он предпочитает", elle: "она предпочитает", nous: "мы предпочитаем", vous: "вы предпочитаете", ils: "они предпочитают", elles: "они предпочитают" },
+      examples: [
+        { fr: "Quel film préférez-vous ?", ru: "Какой фильм вы предпочитаете?", v: "préférez" },
+        { fr: "Je préfère la musique.", ru: "Я предпочитаю музыку.", p: "je" }
+      ] },
+    { inf: "aimer", group: 1, ru: "любить, нравиться",
+      forms: { je: "aime", tu: "aimes", il: "aime", nous: "aimons", vous: "aimez", ils: "aiment" },
+      ruForms: { je: "я люблю", tu: "ты любишь", il: "он любит", elle: "она любит", nous: "мы любим", vous: "вы любите", ils: "они любят", elles: "они любят" },
+      examples: [
+        { fr: "J'aime la nature et le sport.", ru: "Я люблю природу и спорт.", p: "je" }
+      ] },
     { inf: "aller", group: 3, ru: "идти / ехать",
       forms: { je: "vais", tu: "vas", il: "va", nous: "allons", vous: "allez", ils: "vont" },
       ruForms: { je: "я иду / еду", tu: "ты идёшь / едешь", il: "он идёт / едет", elle: "она идёт / едет", nous: "мы идём / едем", vous: "вы идёте / едете", ils: "они идут / едут", elles: "они идут / едут" },
@@ -78,7 +98,17 @@ window.COURSE = {
     ]
   },
 
-  themes: ["Приветствия", "Вопросы", "Анкета", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Полезные слова", "Притяжательные", "Предлоги места", "Фразы"],
+  // национальности: м.р. / ж.р. (и язык = форма м.р.: je parle français)
+  nations: [
+    { m: "français", f: "française", rm: "француз", rf: "француженка", lang: "по-французски" },
+    { m: "russe", f: "russe", rm: "русский", rf: "русская", lang: "по-русски" },
+    { m: "anglais", f: "anglaise", rm: "англичанин", rf: "англичанка", lang: "по-английски" },
+    { m: "italien", f: "italienne", rm: "итальянец", rf: "итальянка", lang: "по-итальянски" },
+    { m: "espagnol", f: "espagnole", rm: "испанец", rf: "испанка", lang: "по-испански" },
+    { m: "allemand", f: "allemande", rm: "немец", rf: "немка", lang: "по-немецки" },
+    { m: "japonais", f: "japonaise", rm: "японец", rf: "японка", lang: "по-японски" }
+  ],
+  themes: ["Приветствия", "Вопросы", "Анкета", "Семья", "Профессии", "Дом и вещи", "Город", "Еда", "Время", "Досуг", "Национальности и языки", "Полезные слова", "Притяжательные", "Предлоги места", "Фразы"],
 
   nouns: [
     { theme: "Семья", w: "père", g: "m", pl: "pères", ru: "отец", rupl: "отцы", rg: "m", pair: "mère" },
@@ -104,6 +134,9 @@ window.COURSE = {
     { theme: "Профессии", w: "serveur", g: "m", pl: "serveurs", ru: "официант", rupl: "официанты", ins: "официантом", pair: "serveuse", rg: "m" },
     { theme: "Профессии", w: "serveuse", g: "f", pl: "serveuses", ru: "официантка", rupl: "официантки", ins: "официанткой", pair: "serveur", rg: "f" },
     { theme: "Профессии", w: "vendeur", g: "m", pl: "vendeurs", ru: "продавец", rupl: "продавцы", ins: "продавцом", pair: "vendeuse", rg: "m" },
+    { theme: "Профессии", w: "photographe", g: "m", both: true, pl: "photographes", ru: "фотограф", rupl: "фотографы", rg: "m", ins: "фотографом" },
+    { theme: "Профессии", w: "musicien", g: "m", pl: "musiciens", ru: "музыкант", rupl: "музыканты", rg: "m", ins: "музыкантом", pair: "musicienne" },
+    { theme: "Профессии", w: "musicienne", g: "f", pl: "musiciennes", ru: "музыкант", rupl: "музыканты", rg: "f", ins: "музыкантом", pair: "musicien" },
     { theme: "Профессии", w: "vendeuse", g: "f", pl: "vendeuses", ru: "продавщица", rupl: "продавщицы", ins: "продавщицей", pair: "vendeur", rg: "f" },
 
     { theme: "Дом и вещи", w: "maison", g: "f", pl: "maisons", ru: "дом", rupl: "дома", rg: "m" },
@@ -145,9 +178,14 @@ window.COURSE = {
     { theme: "Время", w: "matin", g: "m", pl: "matins", ru: "утро", rupl: "утра", rg: "n" },
     { theme: "Время", w: "soir", g: "m", pl: "soirs", ru: "вечер", rupl: "вечера", rg: "m" },
 
+    { theme: "Досуг", w: "nature", g: "f", noPl: true, ru: "природа", rg: "f", racc: "природу" },
+    { theme: "Досуг", w: "lecture", g: "f", noPl: true, ru: "чтение", rg: "n", racc: "чтение" },
+    { theme: "Досуг", w: "loisir", g: "m", pl: "loisirs", ru: "увлечение, хобби", rupl: "увлечения", rg: "n" },
+    { theme: "Национальности и языки", w: "langue", g: "f", pl: "langues", ru: "язык", rupl: "языки", rg: "m", gpl: "языков" },
+    { theme: "Семья", w: "parent", g: "m", pl: "parents", ru: "родитель", rupl: "родители", rg: "m", gpl: "родителей" },
     { theme: "Досуг", w: "film", g: "m", pl: "films", ru: "фильм", rupl: "фильмы", rg: "m", gpl: "фильмов" },
-    { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка", rg: "f" },
-    { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", rg: "m" },
+    { theme: "Досуг", w: "musique", g: "f", noPl: true, ru: "музыка", racc: "музыку", rg: "f" },
+    { theme: "Досуг", w: "sport", g: "m", noPl: true, ru: "спорт", racc: "спорт", rg: "m" },
     { theme: "Дом и вещи", w: "fleur", g: "f", pl: "fleurs", ru: "цветок", rupl: "цветы", rg: "m", gpl: "цветов" },
     { theme: "Дом и вещи", w: "vase", g: "m", pl: "vases", ru: "ваза", rupl: "вазы", rg: "f", gpl: "ваз" },
     { theme: "Дом и вещи", w: "bouteille", g: "f", pl: "bouteilles", ru: "бутылка", rupl: "бутылки", rg: "f", gpl: "бутылок" },
@@ -227,6 +265,9 @@ window.COURSE = {
     { fr: "n'est-ce pas ?", ru: "не так ли?", theme: "Вопросы" },
     { fr: "dans", ru: "в (внутри)", theme: "Вопросы" },
     { fr: "Je m'appelle…", ru: "Меня зовут…", theme: "Анкета" },
+    { fr: "mais", ru: "но", theme: "Полезные слова" },
+    { fr: "et", ru: "и", theme: "Полезные слова" },
+    { fr: "adresse e-mail", ru: "электронная почта (адрес)", theme: "Анкета" },
     { fr: "Ça va ?", ru: "Как дела? (безлично)", theme: "Фразы" },
     { fr: "Comment vas-tu ?", ru: "Как ты?", theme: "Фразы" },
     { fr: "Comment allez-vous ?", ru: "Как вы?", theme: "Фразы" },
@@ -651,7 +692,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 <script>
 (() => {
   const C = window.COURSE;
-  const VERSION = "15 · 20.11";
+  const VERSION = "16 · 20.11";
   const $app = document.getElementById("app");
   const $dock = document.getElementById("dock");
   const $dockIn = document.getElementById("dockIn");
@@ -806,7 +847,11 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const headOf = (v, ex) => cap(pf(ex.p, formOf(v, ex.p)));
   const stemOf = v => (v.group === 1 || v.group === 2) ? v.inf.slice(0, -2) : null;
   // форма с выделенным окончанием (для I и II группы)
+  const ENDS1 = ["ent", "ons", "ez", "es", "e"];
+  const end1 = (v, f) => v.group === 1 ? ENDS1.find(e => f.endsWith(e) && f.length > e.length) : null;
   function markForm(v, f) {
+    const e1 = end1(v, f);
+    if (e1) return esc(f.slice(0, -e1.length)) + `<span class="end">${esc(e1)}</span>`;
     const st = stemOf(v);
     return st && f.startsWith(st) && f.length > st.length ? esc(st) + `<span class="end">${esc(f.slice(st.length))}</span>` : esc(f);
   }
@@ -863,20 +908,27 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 
   // словарик: слова + существительные (с артиклем un/une — сразу виден род)
   const nounLabel = n => `${indefOf(n)} ${n.w}`;
-  const VOCAB = C.vocab.concat(C.nouns.map(n => ({ fr: nounLabel(n), ru: n.ru, theme: n.theme, noun: n })), (C.preps || []).map(x => ({ fr: x.de ? x.fr + " de" : x.fr, ru: x.ru, theme: "Предлоги места" })));
+  const NAT = C.nations || [];
+  const VOCAB = NAT.flatMap(x => x.m === x.f ? [{ fr: x.m, ru: `${x.rm} / ${x.rf}; ${x.lang}`, theme: "Национальности и языки" }] :
+    [{ fr: x.m, ru: `${x.rm}; ${x.lang} (язык)`, theme: "Национальности и языки" }, { fr: x.f, ru: x.rf, theme: "Национальности и языки" }]).concat(C.vocab).concat(C.nouns.map(n => ({ fr: nounLabel(n), ru: n.ru, theme: n.theme, noun: n })), (C.preps || []).map(x => ({ fr: x.de ? x.fr + " de" : x.fr, ru: x.ru, theme: "Предлоги места" })));
   const WORD = Object.fromEntries(VOCAB.map(w => [w.fr, w]));
 
   // ================================================================
   //  ФРАЗЫ ИЗ ВСЕХ СЛОВ (шаблоны)
   // ================================================================
   const HAVE_TH = ["Семья", "Дом и вещи"];
-  const POSS_NOUNS = () => C.nouns.filter(n => n.rg);
+  const POSS_NOUNS = () => C.nouns.filter(n => n.rg && !["nature", "lecture", "âge"].includes(n.w));
   const OWN = ["je", "tu", "il", "elle", "nous", "vous", "ils"];
   // «наша жена», «их муж», «des maris» — не строим
   const odd = (p, w) => ["mari", "femme"].includes(w) && ["nous", "ils", "elles"].includes(p);
-  const FAM = () => C.nouns.filter(n => n.theme === "Семья" && n.rg && n.w !== "enfant");
+  const FAM = () => C.nouns.filter(n => n.theme === "Семья" && n.rg && n.w !== "enfant" && n.w !== "parent");
   const FAV = () => ["film", "musique", "sport", "livre", "ville", "pays", "café", "restaurant", "gâteau", "fromage", "salade"].map(w => NOUN[w]).filter(Boolean);
   const RU_LUB = { m: "любимый", f: "любимая", n: "любимое" };
+  const LIKES = () => ["nature", "sport", "musique", "lecture"].filter(w => NOUN[w] && NOUN[w].racc);
+  function likeBuild(inf, p, w) {
+    const v = VERB[inf], n = NOUN[w]; if (!v || !n || !n.racc) return null; const f = formOf(v, p), d = withDef(defOf(n), n.w);
+    return { fr: `${cap(pf(p, f))} ${d}.`, ru: `${cap(ruOf(v, p))} ${n.racc}.`, slots: [{ w: f, k: "verb" }, { w: n.w, k: "noun" }] };
+  }
   const NO_POSS_PL = ["père", "mère", "mari", "femme"];
   const P4 = ["je", "tu", "il", "elle"];
   const profsM = () => C.nouns.filter(n => n.theme === "Профессии" && n.g === "m");
@@ -888,7 +940,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     cesont: { verb: "être", make: () => ["cesont", pick(C.nouns.filter(n => !n.noPl && n.theme !== "Анкета" && !["mari", "femme"].includes(n.w))).w],
       build: ([, w]) => { const n = NOUN[w]; if (!n || n.noPl) return null;
         return { fr: `Ce sont des ${n.pl}.`, ru: `Это ${n.rupl}.`, slots: [{ w: "des", k: "art" }, { w: n.pl, k: "noun" }] }; } },
-    avoir: { verb: "avoir", make: () => ["avoir", pick(PRON), pick(C.nouns.filter(n => HAVE_TH.includes(n.theme))).w],
+    avoir: { verb: "avoir", make: () => ["avoir", pick(PRON), pick(C.nouns.filter(n => HAVE_TH.includes(n.theme) && n.w !== "parent")).w],
       build: ([, p, w]) => { if (odd(p, w)) return null; const n = NOUN[w], v = VERB.avoir; if (!n || !v) return null; const f = formOf(v, p), a = indefOf(n);
         return { fr: `${cap(pf(p, f))} ${a} ${n.w}.`, ru: `У ${RU_GEN[p]} есть ${n.ru}.`, slots: [{ w: f, k: "verb" }, { w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
     age: { verb: "avoir", make: () => ["age", pick(PRON), String(rnd(2, NMAX))],
@@ -897,7 +949,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     aller: { verb: "aller", make: () => ["aller", pick(PRON), pick(C.places).name],
       build: ([, p, name]) => { const pl = PLACE[name], v = VERB.aller; if (!pl || !v) return null; const f = formOf(v, p), pr = PREP[pl.kind];
         return { fr: `${cap(pf(p, f))} ${pr} ${name}.`, ru: `${RU_GO[p]} ${pl.ru}.`, slots: [{ w: f, k: "verb" }, { w: pr, k: "prep" }] }; } },
-    poss: { verb: "être", make: () => { const n = pick(POSS_NOUNS()); const pl = !n.noPl && !NO_POSS_PL.includes(n.w) && Math.random() < .3; return ["poss", pick(PRON), n.w, pl ? "1" : "0"]; },
+    poss: { verb: "être", make: () => { const n = pick(POSS_NOUNS()); const pl = n.w === "parent" || (!n.noPl && !NO_POSS_PL.includes(n.w) && Math.random() < .3); return ["poss", pick(PRON), n.w, pl ? "1" : "0"]; },
       build: ([, p, w, pls]) => { if (odd(p, w)) return null; const n = NOUN[w]; if (!n || !n.rg || !FRP[p]) return null; const pl = pls === "1" && !n.noPl, ps = possFr(p, n, pl), rw = pl ? n.rupl : n.ru;
         return { fr: pl ? `Ce sont ${ps} ${n.pl}.` : `C'est ${ps} ${n.w}.`, ru: `Это ${possRu(p, n, pl)} ${rw}.`, ruAmb: `Это ${possRu(p, n, pl, true)} ${rw}.`,
           slots: [{ w: ps, k: "poss" }, { w: pl ? n.pl : n.w, k: "noun" }] }; } },
@@ -951,6 +1003,14 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         const ch = chunkOf(x, o);
         return { fr: `${S1} ${V} ${glue(ch, o.w)}.`, ru: `${cap(sRu)} ${rw}.`, chunk: ch, head: `${S1} ${V}`, noun: o.w, prep: x, subj: S1, verb: V, sRu,
           slots: [{ w: sub.w, k: "noun" }, { w: o.w, k: "noun" }].concat(x.de ? [] : [{ w: x.fr, k: "prep" }]) }; } },
+    nation: { verb: "être", make: () => { const p = pick(P4), g = p === "il" ? "m" : p === "elle" ? "f" : pick(["m", "f"]); return ["nation", p, String(rnd(0, NAT.length - 1)), g]; },
+      build: ([, p, i, g]) => { const x = NAT[+i], v = VERB["être"]; if (!x || !v || !["m", "f"].includes(g)) return null; const w = x[g], f = formOf(v, p);
+        return { fr: `${cap(pf(p, f))} ${w}.`, ru: `${RU_NOM[p]} ${g === "f" ? x.rf : x.rm}.`, slots: [{ w, k: "noun" }, { w: f, k: "verb" }] }; } },
+    langues: { verb: "parler", make: () => { const a = shuffle(NAT.map((_, i) => i)); return ["langues", pick(PRON), String(a[0]), Math.random() < .6 ? String(a[1]) : "-"]; },
+      build: ([, p, i, j]) => { const v = VERB.parler, x = NAT[+i], y = j !== "-" && NAT[+j]; if (!v || !x) return null; const f = formOf(v, p);
+        return { fr: `${cap(pf(p, f))} ${x.m}${y ? " et " + y.m : ""}.`, ru: `${cap(ruOf(v, p))} ${x.lang}${y ? " и " + y.lang : ""}.`, slots: [{ w: f, k: "verb" }, { w: x.m, k: "noun" }] }; } },
+    aime: { verb: "aimer", make: () => ["aime", pick(PRON), pick(LIKES())], build: ([, p, w]) => likeBuild("aimer", p, w) },
+    prefere: { verb: "préférer", make: () => ["prefere", pick(PRON), pick(LIKES())], build: ([, p, w]) => likeBuild("préférer", p, w) },
     travdans: { verb: "travailler", make: () => ["travdans", pick(PRON), pick(C.nouns.filter(n => n.rin)).w],
       build: ([, p, w]) => { const n = NOUN[w], v = VERB.travailler; if (!n || !n.rin || !v) return null; const f = formOf(v, p), a = indefOf(n);
         return { fr: `${cap(pf(p, f))} dans ${a} ${n.w}.`, ru: `${cap(ruOf(v, p))} ${n.rin}.`, slots: [{ w: f, k: "verb" }, { w: "dans", k: "prep" }, { w: a, k: "art" }, { w: n.w, k: "noun" }] }; } },
@@ -969,6 +1029,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const LAST = [["Martin", "Мартен"], ["Dubois", "Дюбуа"], ["Bernard", "Бернар"], ["Petit", "Пти"]];
   const ADDR_CITY = [["Lyon", "в Лионе"], ["Paris", "в Париже"], ["Nice", "в Ницце"], ["Lille", "в Лилле"]];
   const VT = () => pick(["vous", "tu"]);
+  const FILMS = [["Amélie", "Амели"], ["Titanic", "Титаник"], ["Le Petit Prince", "Маленький принц"], ["Intouchables", "1+1"]];
   const tv = (t, a, b) => t === "vous" ? a : b;
   const two = () => String(rnd(10, 99));
   const QA = {
@@ -1014,6 +1075,13 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
         return [`Où ${s.verb} ${low} ?`, `${s.subj} ${s.verb} où ?`]; },
       qru: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); return s ? `Где ${s.sRu}?` : ""; },
       a: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); return s ? [s.fr] : []; }, aru: ([, ...sp]) => { const s = TPL.lieu.build(["lieu", ...sp]); return s ? s.ru : ""; } },
+    langues: { hint: "языки", make: () => { const a = shuffle(NAT.map((_, i) => i)); return [VT(), String(a[0]), String(a[1])]; },
+      q: ([t]) => tv(t, ["Quelles langues parlez-vous ?"], ["Quelles langues parles-tu ?"]), qru: ([t]) => tv(t, "На каких языках вы говорите?", "На каких языках ты говоришь?"),
+      a: ([, i, j]) => NAT[+i] && NAT[+j] ? [`Je parle ${NAT[+i].m} et ${NAT[+j].m}.`] : [], aru: ([, i, j]) => NAT[+i] && NAT[+j] ? `Я говорю ${NAT[+i].lang} и ${NAT[+j].lang}.` : "" },
+    film: { hint: "любимый фильм", make: () => [VT(), String(rnd(0, FILMS.length - 1))],
+      q: ([t]) => tv(t, ["Quel est votre film préféré ?", "Quel film préférez-vous ?"], ["Quel est ton film préféré ?", "Quel film préfères-tu ?"]),
+      qru: ([t]) => tv(t, "Какой ваш любимый фильм?", "Какой твой любимый фильм?"),
+      a: ([, i]) => FILMS[+i] ? [`Mon film préféré est ${FILMS[+i][0]}.`, `Je préfère ${FILMS[+i][0]}.`] : [], aru: ([, i]) => FILMS[+i] ? `Мой любимый фильм — «${FILMS[+i][1]}».` : "" },
     cava: { hint: "дела", make: () => [VT()],
       q: ([t]) => tv(t, ["Comment allez-vous ?", "Comment ça va ?", "Ça va ?"], ["Comment vas-tu ?", "Comment ça va ?", "Ça va ?"]), qru: ([t]) => tv(t, "Как у вас дела?", "Как у тебя дела?"),
       a: () => ["Je vais bien.", "Ça va bien.", "Ça va."], aru: () => "У меня всё хорошо." }
@@ -1051,10 +1119,11 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
     const sibNm = pick(FIRST.filter(x => x[0] !== nm && FEM_NAMES.includes(x[0]) === sf)), sibAge = rnd(15, 50);
     const sibPlace = pick(C.places.filter(x => x.name !== city.name)), sJob0 = pick(profsM().filter(x => x !== job0)), sJob = sf ? (pairOf(sJob0) || sJob0) : sJob0;
     const SP = sf ? "Elle" : "Il", SPru = sf ? "Она" : "Он", sp = PREP[sibPlace.kind];
+    const nat = pick(NAT), natW = fem ? nat.f : nat.m, natRu = fem ? nat.rf : nat.rm, nat2 = pick(NAT.filter(x => x !== nat)), t3 = Math.random() < .5;
     const lines = [
       [`Bonjour ! Je m'appelle ${nm}.`, `Привет! Меня зовут ${nmRu}.`],
       [`J'ai ${nword(age)} ans.`, `Мне ${age} ${ruYears(age)}.`],
-      [`J'habite à ${city.name}.`, `Я живу ${city.ruIn}.`],
+      [`Je suis ${natW}, mais j'habite à ${city.name}.`, `Я ${natRu}, но живу ${city.ruIn}.`],
       [`Je suis ${job.w}, je travaille dans ${indefOf(at)} ${at.w}.`, `Я ${job.ru}, работаю ${at.rin}.`],
       [`${cap(possFr("je", sib))} ${sib.w} s'appelle ${sibNm[0]}.`, `${cap(possRu("je", sib))} ${sib.ru} — ${sibNm[1]}.`],
       [`${SP} a ${nword(sibAge)} ans.`, `${SPru === "Она" ? "Ей" : "Ему"} ${sibAge} ${ruYears(sibAge)}.`],
@@ -1073,6 +1142,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       { prompt: `Comment s'appelle ${sf ? "la sœur" : "le frère"} de ${nm} ?`, options: [sibNm[0], ...shuffle(FIRST.filter(x => x[0] !== sibNm[0] && x[0] !== nm)).slice(0, 2).map(x => x[0])], answer: sibNm[0], star: true,
         explain: `★ s'appelle — «его/её зовут» (как je m'appelle). В тексте: «${esc(lines[4][0])}»` },
       { prompt: `Quel âge a ${sibNm[0]} ?`, options: [String(sibAge), ...near(sibAge)], answer: String(sibAge), explain: `В тексте: «${esc(lines[5][0])}» — ${sibAge}.` },
+      VF(`${nm} est ${t3 ? natW : (fem ? nat2.f : nat2.m)}.`, t3, lines[2][0]),
       VF(`${sibNm[0]} habite ${t2 ? `${sp} ${sibPlace.name}` : `à ${city.name}`}.`, t2, lines[6][0])
     ];
     return shuffle(pool).slice(0, 4).map(q => ({ type: "choice", kind: "Чтение", reading: text, readingRu: textRu, say: q.answer, explain: q.explain, prompt: q.prompt, options: q.options, answer: q.answer, star: q.star }));
@@ -1397,8 +1467,8 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
   const lKeys = (n = 40, deOnly) => phraseKeys(["lieu"], n * 2).map(k => k.slice(2)).filter(k => { const pr = PREPS[+k.split("~")[2]]; return pr && pr.fr !== "entre" && (!deOnly || pr.de); }).map(k => "l|" + k.split("~").slice(1).join("~")).slice(0, n);
   const qaKeys = (n = 40) => uniq(Array.from({ length: n }, () => { const k = pick(Object.keys(QA)); return "q|" + [k, ...QA[k].make()].join("~"); }));
   const xKeys = (tpls, n = 40) => phraseKeys(tpls, n).map(k => "x|" + k.slice(2));
-  const oKeys = (n = 50) => uniq(Array.from({ length: n }, () => { const nn = pick(POSS_NOUNS()); return `o|${pick(PRON)}~${nn.w}~${!nn.noPl && !NO_POSS_PL.includes(nn.w) && Math.random() < .3 ? 1 : 0}`; }));
-  const K_NOUNS = () => C.nouns.filter(n => n.rg && (["Анкета", "Дом и вещи", "Досуг"].includes(n.theme) || n.w === "ami" || n.w === "amie"));
+  const oKeys = (n = 50) => uniq(Array.from({ length: n }, () => { const nn = pick(POSS_NOUNS()); return `o|${pick(PRON)}~${nn.w}~${nn.w === "parent" || (!nn.noPl && !NO_POSS_PL.includes(nn.w) && Math.random() < .3) ? 1 : 0}`; }));
+  const K_NOUNS = () => C.nouns.filter(n => n.rg && !["nature", "lecture", "parent"].includes(n.w) && (["Анкета", "Дом и вещи", "Досуг"].includes(n.theme) || n.w === "ami" || n.w === "amie"));
   const kKeys = (n = 40) => uniq(Array.from({ length: n }, () => {
     if (Math.random() < .2) return `k|${pick(["ville", "pays"])}~0~${VT()}~d`;
     const nn = pick(K_NOUNS()); return `k|${nn.w}~${!nn.noPl && Math.random() < .3 ? 1 : 0}~${VT()}`;
@@ -1485,14 +1555,14 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
 
   const tplFor = infs => Object.keys(TPL).filter(t => VERB[TPL[t].verb] && (!infs || infs.includes(TPL[t].verb)));
   // та же фраза в другом роде: il ↔ elle, ami ↔ amie, acteur ↔ actrice…
-  const SWAPP = { il: "elle", elle: "il", ils: "elles", elles: "ils" };
+  const SWAPP = { il: "elle", elle: "il", ils: "elles", elles: "ils", m: "f", f: "m" };
   const twinSpec = parts => parts.map((x, i) => i === 0 ? x : SWAPP[x] || (NOUN[x] && NOUN[x].pair) || x);
   function twinOf(parts) {
     const T = TPL[parts[0]]; if (!T) return null;
     const tp = twinSpec(parts), s = T.build(parts), t = T.build(tp);
     return s && t && t.fr !== s.fr ? { s, t, tp } : null;
   }
-  const GENDER_TPL = ["etre", "travail", "famjob", "famlive", "famwork", "famgo", "cest", "avoir", "poss", "ou", "de"];
+  const GENDER_TPL = ["nation", "etre", "travail", "famjob", "famlive", "famwork", "famgo", "cest", "avoir", "poss", "ou", "de"];
   function phraseKeys(tpls, n = 40) {
     const out = [];
     for (let i = 0; i < n * 2 && out.length < n; i++) {
@@ -1537,15 +1607,15 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
       const f = formOf(v, p); if (!f) return null;
       const st = stemOf(v);
       const avail = ["conj", "conjc", "pron", "dict"];
-      if (st && f.startsWith(st)) avail.push("end");
+      if (end1(v, f)) avail.push("end");
       const m = pickMode(avail, modes); if (!m) return null;
       const full = pf(p, f), ru = ruOf(v, p);
       const base = { say: full, sayRu: ru, sayHtml: markPf(v, p), explain: `${inf} — ${esc(v.ru)}, ${GROUP[v.group]}.` };
       const blankP = elides(p, f) ? "j'___" : p + " ___";
       if (m === "end") {
-        const ends = uniq(prons(v).map(q => formOf(v, q).slice(st.length)));
-        const mine = f.slice(st.length);
-        return { ...base, type: "choice", kind: "Окончание", ask: `${inf}: основа ${st} + окончание`, prompt: `${pdisp(p, f)}${elides(p, f) ? "" : " "}${st}___`, ru,
+        const ends = uniq(prons(v).map(q => end1(v, formOf(v, q))).filter(Boolean));
+        const mine = end1(v, f), stem = f.slice(0, -mine.length);
+        return { ...base, type: "choice", kind: "Окончание", ask: `${inf}: основа + окончание`, prompt: `${pdisp(p, f)}${elides(p, f) ? "" : " "}${stem}___`, ru,
           options: [mine, ...shuffle(ends.filter(x => x !== mine)).slice(0, 2)].map(x => "-" + x), answer: "-" + mine,
           explain: `I группа: ${esc(p)} → <b>-${esc(mine)}</b>.` };
       }
@@ -1950,6 +2020,7 @@ details.verb[open] .body { animation: rise .3s cubic-bezier(.2,.8,.2,1); }
           h += `<div class="scheme"><span class="w">${esc(st)}<span class="end">er</span></span><span class="arr">→</span><span class="w dark">${esc(st)}</span><span class="arr">+</span><span class="w"><span class="end">окончание</span></span></div>
             <div class="egrid">${["je", "nous", "tu", "vous", "il", "ils"].map(p => `<span class="w">${markPf(v1, p)}</span>`).join("")}</div>`;
         }
+        if (VERB["préférer"]) h += `<div class="scheme"><span class="w">préf<b>é</b>rer</span><span class="arr">→</span><span class="w">je préf<b>è</b>re</span><span class="w">ils préf<b>è</b>rent</span><span class="arr">·</span><span class="w">nous préf<b>é</b>rons</span></div>`;
       }
       if (!vGroup() || vGroup() === 2) {
         if (!vGroup()) h += `<div class="rule-sep"></div>`;
